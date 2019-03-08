@@ -1,0 +1,865 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+
+
+<head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="utf-8">
+    <meta name="keywords" content="MYSQL基础, 我是一个热爱技术的程序猿，觉得编程是很屌的工作，比尔盖茨用自己的window改变了整个世界，扎克伯格用facebook连接了全世界...我想做的是有很多人使用我所编写的软件，框架，或者只是看看我的博客。">
+    <meta name="description" content="mysql的特点
+关系型数据库，免费使用。
+插入式存储引擎。
+性能高。
+mysql的版本 5.0-5.1:早期产品的延续，升级维护 5.4 - 5.x :  MySQL整合了三方公司的新存储引擎 （推荐5.5）
+安装mysql
+下载安装包 ">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="renderer" content="webkit|ie-stand|ie-comp">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>MYSQL基础 | 陈豪 - JAVA软件开发工程师</title>
+    <link rel="icon" type="image/jpeg" href="/images/chenhao1.jpg">
+
+    <link rel="stylesheet" type="text/css" href="/libs/awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/materialize/materialize.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/aos/aos.css">
+    <link rel="stylesheet" type="text/css" href="/libs/animate/animate.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/lightGallery/css/lightgallery.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/matery.css">
+    <link rel="stylesheet" type="text/css" href="/css/my.css">
+    <style type="text/css">
+        
+    </style>
+
+    <script src="/libs/jquery/jquery-2.2.0.min.js"></script>
+<link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css"></head>
+
+
+<body>
+
+<header class="navbar-fixed">
+    <nav id="headNav" class="bg-color nav-transparent">
+        <div id="navContainer" class="nav-wrapper container">
+            <div class="brand-logo">
+                <a href="/" class="waves-effect waves-light">
+                    
+                    <img src="/medias/logo.png" class="logo-img" alt="LOGO">
+                    
+                    <span class="logo-span">陈豪 - JAVA软件开发工程师</span>
+                </a>
+            </div>
+            
+
+<a href="#" data-target="mobile-nav" class="sidenav-trigger button-collapse"><i class="fa fa-navicon"></i></a>
+<ul class="right">
+    
+    <li class="hide-on-med-and-down">
+        <a href="/" class="waves-effect waves-light">
+            
+            <i class="fa fa-home"></i>
+            
+            <span>主页</span>
+        </a>
+    </li>
+    
+    <li class="hide-on-med-and-down">
+        <a href="/categories" class="waves-effect waves-light">
+            
+            <i class="fa fa-bookmark"></i>
+            
+            <span>分类</span>
+        </a>
+    </li>
+    
+    <li class="hide-on-med-and-down">
+        <a href="/archives" class="waves-effect waves-light">
+            
+            <i class="fa fa-archive"></i>
+            
+            <span>归档</span>
+        </a>
+    </li>
+    
+    <li class="hide-on-med-and-down">
+        <a href="/about" class="waves-effect waves-light">
+            
+            <i class="fa fa-user-circle-o"></i>
+            
+            <span>关于我</span>
+        </a>
+    </li>
+    
+    <li>
+        <a href="#searchModal" class="modal-trigger waves-effect waves-light">
+            <i id="searchIcon" class="fa fa-search" title="搜索"></i>
+        </a>
+    </li>
+</ul>
+
+<div id="mobile-nav" class="side-nav sidenav">
+
+    <div class="mobile-head bg-color">
+        
+        <img src="/medias/logo.png" class="logo-img circle responsive-img">
+        
+        <div class="logo-name">陈豪 - JAVA软件开发工程师</div>
+        <div class="logo-desc">
+            
+            我是一个热爱技术的程序猿，觉得编程是很屌的工作，比尔盖茨用自己的window改变了整个世界，扎克伯格用facebook连接了全世界...我想做的是有很多人使用我所编写的软件，框架，或者只是看看我的博客。
+            
+        </div>
+    </div>
+
+    
+
+    <ul class="menu-list mobile-menu-list">
+        
+        <li>
+            <a href="/" class="waves-effect waves-light">
+                
+                <i class="fa fa-fw fa-home"></i>
+                
+                主页
+            </a>
+        </li>
+        
+        <li>
+            <a href="/categories" class="waves-effect waves-light">
+                
+                <i class="fa fa-fw fa-bookmark"></i>
+                
+                分类
+            </a>
+        </li>
+        
+        <li>
+            <a href="/archives" class="waves-effect waves-light">
+                
+                <i class="fa fa-fw fa-archive"></i>
+                
+                归档
+            </a>
+        </li>
+        
+        <li>
+            <a href="/about" class="waves-effect waves-light">
+                
+                <i class="fa fa-fw fa-user-circle-o"></i>
+                
+                关于我
+            </a>
+        </li>
+        
+        
+    </ul>
+</div>
+
+        </div>
+
+        
+    </nav>
+
+</header>
+
+
+
+
+
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/8.jpg')">
+    <div class="container">
+        <div class="row">
+            <div class="col s12 m12 l12">
+                <div class="brand">
+                    <div class="description center-align post-title">
+                        MYSQL基础
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<main class="post-container content">
+
+    
+    <link rel="stylesheet" href="/libs/tocbot/tocbot.css">
+<style>
+    #articleContent h1::before,
+    #articleContent h2::before,
+    #articleContent h3::before,
+    #articleContent h4::before,
+    #articleContent h5::before,
+    #articleContent h6::before {
+        display: block;
+        content: " ";
+        height: 100px;
+        margin-top: -100px;
+        visibility: hidden;
+    }
+
+    #articleContent :focus {
+        outline: none;
+    }
+
+    .toc-fixed {
+        position: fixed;
+        top: 64px;
+    }
+
+    .toc-widget {
+        padding-left: 20px;
+    }
+
+    .toc-widget .toc-title {
+        margin: 35px 0 15px 0;
+        padding-left: 17px;
+        font-size: 1.5rem;
+        font-weight: bold;
+        line-height: 1.5rem;
+    }
+
+    .toc-widget ol {
+        padding: 0;
+        list-style: none;
+    }
+
+    #toc-content ol {
+        padding-left: 10px;
+    }
+
+    #toc-content ol li {
+        padding-left: 10px;
+    }
+
+    #toc-content .toc-link:hover {
+        color: #42b983;
+        font-weight: 700;
+        text-decoration: underline;
+    }
+
+    #toc-content .toc-link::before {
+        background-color: transparent;
+        max-height: 25px;
+    }
+
+    #toc-content .is-active-link {
+        color: #42b983;
+    }
+
+    #toc-content .is-active-link::before {
+        background-color: #42b983;
+    }
+</style>
+<div class="row">
+    <div class="col s12 m12 l9">
+        <!-- 文章内容详情 -->
+<div id="artDetail">
+    <div class="card">
+        <div class="card-content article-info">
+            <div class="row tag-cate">
+                <div class="col s7">
+                    
+                    <div class="article-tag">
+                        
+                            <a href="/tags/mysql数据库/" target="_blank">
+                                <span class="chip bg-color">mysql数据库</span>
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+                <div class="col s5 right-align">
+                    
+                    <div class="post-cate">
+                        <i class="fa fa-bookmark fa-fw icon-category"></i>
+                        
+                            <a href="/categories/数据库/" class="post-category" target="_blank">
+                                数据库
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+            </div>
+
+            <div class="post-info">
+                <div class="post-date info-break-policy">
+                    <i class="fa fa-calendar-minus-o fa-fw"></i>发布日期:&nbsp;&nbsp;
+                    2018-03-05
+                </div>
+
+                
+				
+				
+            </div>
+        </div>
+        <hr class="clearfix">
+        <div class="card-content article-card-content">
+            <div id="articleContent">
+                <h2 id="mysql的特点"><a href="#mysql的特点" class="headerlink" title="mysql的特点"></a>mysql的特点</h2><ol>
+<li>关系型数据库，免费使用。</li>
+<li>插入式存储引擎。</li>
+<li><p>性能高。</p>
+<h2 id="mysql的版本"><a href="#mysql的版本" class="headerlink" title="mysql的版本"></a>mysql的版本</h2><p> 5.0-5.1:早期产品的延续，升级维护<br> 5.4 - 5.x :  MySQL整合了三方公司的新存储引擎 （推荐5.5）</p>
+<h2 id="安装mysql"><a href="#安装mysql" class="headerlink" title="安装mysql"></a>安装mysql</h2></li>
+<li><p>下载安装包 <a href="https://www.mysql.com/" target="_blank" rel="noopener">官网下载地址</a>2.  Windows 安装(傻瓜式安装工)需要注意：安装时，如果出现未响应：  则重新打开D:\MySQL\MySQL Server 5.5\bin\MySQLInstanceConfig</p>
+<h3 id="linux-centos-安装方法"><a href="#linux-centos-安装方法" class="headerlink" title="linux -centos 安装方法"></a>linux -centos 安装方法</h3><p>首先需要先把安装包通过文件传输方式传输到centos服务器上<br>安装命令：rpm -ivh rpm软件名<br>如果安装时 与某个软件  xxx冲突，则需要将冲突的软件卸载掉：yun -y remove xxx<br>安装时 有日志提示我们可以修改密码：/usr/bin/mysqladmin -u root password ‘new-password’<br>注意：如果提示“GPG keys…”安装失败，解决方案：rpm -ivh rpm软件名<br>验证：mysqladmin version<br>启动mysql应用： service mysql start<br>关闭： service mysql stop<br>重启： service mysql restart<br>在计算机reboot后 登陆MySQL :  mysql<br>可能会报错：   var/lib/mysql/mysql.sock不存在 </p>
+<pre><code>原因：是Mysql服务没有启动
+</code></pre><p>解决 ：启动服务： </p>
+<pre><code>1.每次使用前 手动启动服务   /etc/init.d/mysql start
+2.开机自启   chkconfig mysql on    ,  chkconfig mysql off    
+检查开机是否自动启动： ntsysv        
+</code></pre><p>给mysql 的超级管理员root 增加密码：/usr/bin/mysqladmin -u root password root</p>
+<p>登陆：<br>mysql -u root -p<br>数据库存放目录：<br>ps -ef|grep mysql  可以看到：</p>
+<pre><code>数据库目录：     datadir=/var/lib/mysql 
+pid文件目录： --pid-file=/var/lib/mysql/bigdata01.pid
+
+MySQL核心目录：
+    /var/lib/mysql :mysql 安装目录
+    /usr/share/mysql:  配置文件
+    /usr/bin：命令目录（mysqladmin、mysqldump等）
+    /etc/init.d/mysql启停脚本
+</code></pre><p>  MySQL配置文件</p>
+<pre><code>     my-huge.cnf    高端服务器  2G内存
+     my-large.cnf   中等规模
+     my-medium.cnf  一般
+     my-small.cnf   较小
+    但是，以上配置文件mysql默认不能识别，默认只能识别 /etc/my.cnf
+    采用 my-huge.cnf ：
+    cp /usr/share/mysql/my-huge.cnf /etc/my.cnf
+    注意：mysql5.5默认配置文件/etc/my.cnf；Mysql5.6 默认配置文件/etc/mysql-default.cnf
+</code></pre><p>默认端口3306<br>mysql字符编码：</p>
+<pre><code>sql  :  show variables like &#39;%char%&#39;；
+可以发现部分编码是 latin,需要统一设置为utf-8
+设置编码：
+vi /etc/my.cnf:
+[mysql]
+default-character-set=utf8
+[client]
+default-character-set=utf8
+
+[mysqld]
+character_set_server=utf8
+character_set_client=utf8
+collation_server=utf8_general_ci
+</code></pre><p>重启Mysql:  service mysql restart</p>
+<pre><code>sql :  show variables like &#39;%char%&#39;；
+</code></pre><p>注意事项：修改编码 只对“之后”创建的数据库生效，因此 我们建议 在mysql安装完毕后，第一时间 统一编码。</p>
+<p>mysql:清屏    ctrl+L    , system clear</p>
+</li>
+</ol>
+<pre><code>## mysql 相关原理
+
+&lt;pre&gt;` MYSQL逻辑分层 ：连接层 服务层 引擎层 存储层
+ 引擎：
+    InnoDB(默认) ：事务优先 （适合高并发操作；行锁）
+     MyISAM ：性能优先  （表锁）
+ 查询数据库引擎：  支持哪些引擎？ &lt;span class=&quot;hljs-operator&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;show&lt;/span&gt; &lt;span class=&quot;hljs-keyword&quot;&gt;engines&lt;/span&gt; ;&lt;/span&gt;
+ 查看当前使用的引擎   &lt;span class=&quot;hljs-operator&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;show&lt;/span&gt; &lt;span class=&quot;hljs-keyword&quot;&gt;variables&lt;/span&gt; &lt;span class=&quot;hljs-keyword&quot;&gt;like&lt;/span&gt; &lt;span class=&quot;hljs-string&quot;&gt;&#39;%storage_engine%&#39;&lt;/span&gt; ;&lt;/span&gt;
+ 指定数据库对象的引擎：
+    &lt;span class=&quot;hljs-operator&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;create&lt;/span&gt; &lt;span class=&quot;hljs-keyword&quot;&gt;table&lt;/span&gt; tb(
+        id &lt;span class=&quot;hljs-built_in&quot;&gt;int&lt;/span&gt;(&lt;span class=&quot;hljs-number&quot;&gt;4&lt;/span&gt;) auto_increment ,
+        name &lt;span class=&quot;hljs-built_in&quot;&gt;varchar&lt;/span&gt;(&lt;span class=&quot;hljs-number&quot;&gt;5&lt;/span&gt;),
+        dept &lt;span class=&quot;hljs-built_in&quot;&gt;varchar&lt;/span&gt;(&lt;span class=&quot;hljs-number&quot;&gt;5&lt;/span&gt;) ,
+        &lt;span class=&quot;hljs-keyword&quot;&gt;primary&lt;/span&gt; &lt;span class=&quot;hljs-keyword&quot;&gt;key&lt;/span&gt;(id)        
+    )&lt;span class=&quot;hljs-keyword&quot;&gt;ENGINE&lt;/span&gt;=MyISAM AUTO_INCREMENT=&lt;span class=&quot;hljs-number&quot;&gt;1&lt;/span&gt;
+     &lt;span class=&quot;hljs-keyword&quot;&gt;DEFAULT&lt;/span&gt; &lt;span class=&quot;hljs-keyword&quot;&gt;CHARSET&lt;/span&gt;=utf8   ;&lt;/span&gt;
+`&lt;/pre&gt;
+
+## 基础的增删改查
+</code></pre><ol>
+<li>ddl语句，数据定义语句<pre>    <span class="hljs-operator"><span class="hljs-keyword">create</span> <span class="hljs-keyword">database</span> test1;</span><pre><code>&lt;span class=&quot;hljs-operator&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;drop&lt;/span&gt; &lt;span class=&quot;hljs-keyword&quot;&gt;database&lt;/span&gt; test1;&lt;/span&gt;
+&lt;span class=&quot;hljs-operator&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;use&lt;/span&gt; test1;&lt;/span&gt;
+&lt;span class=&quot;hljs-operator&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;create&lt;/span&gt; &lt;span class=&quot;hljs-keyword&quot;&gt;table&lt;/span&gt; emp(ename &lt;span class=&quot;hljs-built_in&quot;&gt;varchar&lt;/span&gt;(&lt;span class=&quot;hljs-number&quot;&gt;10&lt;/span&gt;),hiredate &lt;span class=&quot;hljs-built_in&quot;&gt;date&lt;/span&gt;,sal &lt;span class=&quot;hljs-built_in&quot;&gt;decimal&lt;/span&gt;(&lt;span class=&quot;hljs-number&quot;&gt;10&lt;/span&gt;,&lt;span class=&quot;hljs-number&quot;&gt;2&lt;/span&gt;),deptno &lt;span class=&quot;hljs-built_in&quot;&gt;int&lt;/span&gt;(&lt;span class=&quot;hljs-number&quot;&gt;2&lt;/span&gt;));&lt;/span&gt;
+&lt;span class=&quot;hljs-operator&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;drop&lt;/span&gt; &lt;span class=&quot;hljs-keyword&quot;&gt;table&lt;/span&gt; emp;&lt;/span&gt;
+&lt;span class=&quot;hljs-operator&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;alter&lt;/span&gt; &lt;span class=&quot;hljs-keyword&quot;&gt;table&lt;/span&gt; emp modify ename &lt;span class=&quot;hljs-built_in&quot;&gt;varchar&lt;/span&gt;(&lt;span class=&quot;hljs-number&quot;&gt;20&lt;/span&gt;);&lt;/span&gt;
+&lt;span class=&quot;hljs-operator&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;alter&lt;/span&gt; &lt;span class=&quot;hljs-keyword&quot;&gt;table&lt;/span&gt; emp &lt;span class=&quot;hljs-keyword&quot;&gt;add&lt;/span&gt; &lt;span class=&quot;hljs-keyword&quot;&gt;column&lt;/span&gt; age &lt;span class=&quot;hljs-built_in&quot;&gt;int&lt;/span&gt;(&lt;span class=&quot;hljs-number&quot;&gt;3&lt;/span&gt;);&lt;/span&gt;
+&lt;span class=&quot;hljs-operator&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;alter&lt;/span&gt; &lt;span class=&quot;hljs-keyword&quot;&gt;table&lt;/span&gt; emp &lt;span class=&quot;hljs-keyword&quot;&gt;drop&lt;/span&gt; &lt;span class=&quot;hljs-keyword&quot;&gt;column&lt;/span&gt; age;&lt;/span&gt;
+&lt;span class=&quot;hljs-operator&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;alter&lt;/span&gt; &lt;span class=&quot;hljs-keyword&quot;&gt;table&lt;/span&gt; emp &lt;span class=&quot;hljs-keyword&quot;&gt;change&lt;/span&gt; age age1 &lt;span class=&quot;hljs-built_in&quot;&gt;int&lt;/span&gt;(&lt;span class=&quot;hljs-number&quot;&gt;4&lt;/span&gt;);&lt;/span&gt;
+&lt;span class=&quot;hljs-operator&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;alter&lt;/span&gt; &lt;span class=&quot;hljs-keyword&quot;&gt;table&lt;/span&gt; emp &lt;span class=&quot;hljs-keyword&quot;&gt;add&lt;/span&gt; birth &lt;span class=&quot;hljs-built_in&quot;&gt;date&lt;/span&gt; &lt;span class=&quot;hljs-keyword&quot;&gt;after&lt;/span&gt; ename;&lt;/span&gt;
+&lt;span class=&quot;hljs-operator&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;alter&lt;/span&gt; &lt;span class=&quot;hljs-keyword&quot;&gt;table&lt;/span&gt; emp modify age &lt;span class=&quot;hljs-built_in&quot;&gt;int&lt;/span&gt;(&lt;span class=&quot;hljs-number&quot;&gt;3&lt;/span&gt;) &lt;span class=&quot;hljs-keyword&quot;&gt;first&lt;/span&gt;;&lt;/span&gt;
+&lt;span class=&quot;hljs-operator&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;alter&lt;/span&gt; &lt;span class=&quot;hljs-keyword&quot;&gt;table&lt;/span&gt; emp &lt;span class=&quot;hljs-keyword&quot;&gt;rename&lt;/span&gt; emp1;&lt;/span&gt;
+</code></pre>`</pre></li>
+<li>dml语句，数据操纵语句<pre>`    <span class="hljs-operator"><span class="hljs-keyword">insert</span> <span class="hljs-keyword">into</span> emp(ename,hiredate,sal,deptno) <span class="hljs-keyword">values</span>(<span class="hljs-string">‘zzx1’</span>,<span class="hljs-string">‘2000-10-11’</span>,<span class="hljs-number">2000</span>,<span class="hljs-number">1</span>);</span><pre><code>&lt;span class=&quot;hljs-operator&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;insert&lt;/span&gt; &lt;span class=&quot;hljs-keyword&quot;&gt;into&lt;/span&gt; emp &lt;span class=&quot;hljs-keyword&quot;&gt;values&lt;/span&gt;(&lt;span class=&quot;hljs-string&quot;&gt;&#39;lisa&#39;&lt;/span&gt;,&lt;span class=&quot;hljs-string&quot;&gt;&#39;2004-05-09&#39;&lt;/span&gt;,&lt;span class=&quot;hljs-number&quot;&gt;3000&lt;/span&gt;,&lt;span class=&quot;hljs-number&quot;&gt;2&lt;/span&gt;);&lt;/span&gt;
+&lt;span class=&quot;hljs-operator&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;insert&lt;/span&gt; &lt;span class=&quot;hljs-keyword&quot;&gt;into&lt;/span&gt; dept &lt;span class=&quot;hljs-keyword&quot;&gt;values&lt;/span&gt;(&lt;span class=&quot;hljs-number&quot;&gt;5&lt;/span&gt;,&lt;span class=&quot;hljs-string&quot;&gt;&#39;dept5&#39;&lt;/span&gt;),(&lt;span class=&quot;hljs-number&quot;&gt;6&lt;/span&gt;,&lt;span class=&quot;hljs-string&quot;&gt;&#39;dept6&#39;&lt;/span&gt;);&lt;/span&gt;
+&lt;span class=&quot;hljs-operator&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;update&lt;/span&gt; emp &lt;span class=&quot;hljs-keyword&quot;&gt;set&lt;/span&gt; sal=&lt;span class=&quot;hljs-number&quot;&gt;4000&lt;/span&gt; &lt;span class=&quot;hljs-keyword&quot;&gt;where&lt;/span&gt; ename=&lt;span class=&quot;hljs-string&quot;&gt;&#39;lisa&#39;&lt;/span&gt;;&lt;/span&gt;
+&lt;span class=&quot;hljs-operator&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;update&lt;/span&gt; emp a,dept b &lt;span class=&quot;hljs-keyword&quot;&gt;set&lt;/span&gt; a.sal=a.sal*b.deptno,b.deptname=a.ename &lt;span class=&quot;hljs-keyword&quot;&gt;where&lt;/span&gt; a.deptno=b.deptno;&lt;/span&gt;
+&lt;span class=&quot;hljs-operator&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;delete&lt;/span&gt; &lt;span class=&quot;hljs-keyword&quot;&gt;from&lt;/span&gt; emp &lt;span class=&quot;hljs-keyword&quot;&gt;where&lt;/span&gt; ename=&lt;span class=&quot;hljs-string&quot;&gt;&#39;dony&#39;&lt;/span&gt;;&lt;/span&gt;
+&lt;span class=&quot;hljs-operator&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;delete&lt;/span&gt; a,b &lt;span class=&quot;hljs-keyword&quot;&gt;from&lt;/span&gt; emp a,dept b &lt;span class=&quot;hljs-keyword&quot;&gt;where&lt;/span&gt; a.deptno=b.deptno &lt;span class=&quot;hljs-keyword&quot;&gt;and&lt;/span&gt; a.deptno=&lt;span class=&quot;hljs-number&quot;&gt;3&lt;/span&gt;;&lt;/span&gt;
+&lt;span class=&quot;hljs-operator&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;select&lt;/span&gt; * &lt;span class=&quot;hljs-keyword&quot;&gt;from&lt;/span&gt; emp &lt;span class=&quot;hljs-keyword&quot;&gt;where&lt;/span&gt; ename=&lt;span class=&quot;hljs-string&quot;&gt;&#39;lisa&#39;&lt;/span&gt;;&lt;/span&gt;
+&lt;span class=&quot;hljs-operator&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;select&lt;/span&gt; &lt;span class=&quot;hljs-keyword&quot;&gt;distinct&lt;/span&gt; deptno &lt;span class=&quot;hljs-keyword&quot;&gt;from&lt;/span&gt; emp;&lt;/span&gt;
+&lt;span class=&quot;hljs-operator&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;select&lt;/span&gt; * &lt;span class=&quot;hljs-keyword&quot;&gt;from&lt;/span&gt; emp &lt;span class=&quot;hljs-keyword&quot;&gt;order&lt;/span&gt; &lt;span class=&quot;hljs-keyword&quot;&gt;by&lt;/span&gt; sal(&lt;span class=&quot;hljs-keyword&quot;&gt;desc&lt;/span&gt;);&lt;/span&gt;
+&lt;span class=&quot;hljs-operator&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;select&lt;/span&gt; * &lt;span class=&quot;hljs-keyword&quot;&gt;from&lt;/span&gt; emp &lt;span class=&quot;hljs-keyword&quot;&gt;order&lt;/span&gt; &lt;span class=&quot;hljs-keyword&quot;&gt;by&lt;/span&gt; sal &lt;span class=&quot;hljs-keyword&quot;&gt;limit&lt;/span&gt; &lt;span class=&quot;hljs-number&quot;&gt;5&lt;/span&gt;;&lt;/span&gt;
+&lt;span class=&quot;hljs-operator&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;select&lt;/span&gt; * &lt;span class=&quot;hljs-keyword&quot;&gt;from&lt;/span&gt; emp &lt;span class=&quot;hljs-keyword&quot;&gt;order&lt;/span&gt; &lt;span class=&quot;hljs-keyword&quot;&gt;by&lt;/span&gt; sal &lt;span class=&quot;hljs-keyword&quot;&gt;limit&lt;/span&gt; &lt;span class=&quot;hljs-number&quot;&gt;1&lt;/span&gt;,&lt;span class=&quot;hljs-number&quot;&gt;5&lt;/span&gt;;&lt;/span&gt;ss
+</code></pre>`</pre></li>
+<li><p>dcl语句，数据控制语句</p>
+<h2 id="sql优化"><a href="#sql优化" class="headerlink" title="sql优化"></a>sql优化</h2></li>
+<li><p>尽量使用 prepareStatement(java)，利用预处理功能。</p>
+</li>
+<li>在进行多条记录的增加、修改、删除时，建议使用批处理功能，批处理的次数以整个 SQL 语句不超过相应数据库的 SQL 语句大小的限制为准。</li>
+<li>建议每条 SQL 语句中 in 中的元素个数在 200 以下，如果个数超过时，应拆分为多条 SQL 语句。禁止使用 xx in(‘’,’’….) or xx in(‘’,’’,’’)。 ★</li>
+<li>禁止使用 or 超过 200，如 xx =’123’ or xx=’456’。 ★</li>
+<li>尽量不使用外连接。</li>
+<li>禁止使用 not in 语句，建议用 not exist。 ★</li>
+<li>禁止使用 Union, 如果有业务需要，请拆分为两个查询。 ★</li>
+<li>禁止在一条 SQL 语句中使用 3 层以上的嵌套查询，如果有，请考虑使用临时表或中间结果集。</li>
+<li>尽量避免在一条 SQL 语句中从&gt;= 4 个表中同时取数， 对于仅是作为过滤条件关联，但不涉及取数的表，不参与表个数计算</li>
+<li>查询条件里任何对列的操作都将导致表扫描，所以应尽量将数据库函数、计算表达式写在逻辑操作符右边。</li>
+<li>在对 char 类型比较时,建议不要使用 rtrim()函数,应该在程序中将不足的长度补齐。</li>
+<li>用多表连接代替 EXISTS 子句。</li>
+<li>如果有多表连接时， 应该有主从之分， 并尽量从一个表取数， 如 select a.col1, a.col2 from a join b on a.col3=b.col4 where b.col5 = ‘a’。</li>
+<li>在使用 Like 时，建议 Like 的一边是字符串，表列在一边出现。</li>
+<li>不允许将 where 子句的条件放到 having 中。</li>
+<li>将更新操作放到事务的最后执行。<br>17.一个事务需更新多个对象时，需保证更新的顺序一致以避免死锁的发生。如总是先更新子表再更新主表，根据存货档案批量更新现存量时，对传入的存货档案 PK 进行排序，再做更新处理等。</li>
+<li>禁止随意使用临时表，在临时数据不超过 200 行的情况下禁止使用临时表。</li>
+<li><p>禁止随意使用 distinct，避免造成不必要的排序。</p>
+<h2 id="索引优化"><a href="#索引优化" class="headerlink" title="索引优化"></a>索引优化</h2></li>
+<li><p>创建索引，删除索引<pre>`    <span class="hljs-operator"><span class="hljs-keyword">create</span> <span class="hljs-keyword">index</span> cityname <span class="hljs-keyword">on</span> city(city(<span class="hljs-number">10</span>));</span></pre></p>
+<pre><code>&lt;span class=&quot;hljs-operator&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;drop&lt;/span&gt; &lt;span class=&quot;hljs-keyword&quot;&gt;index&lt;/span&gt; cityname &lt;span class=&quot;hljs-keyword&quot;&gt;on&lt;/span&gt; city;&lt;/span&gt;
+</code></pre></li>
+<li><p>搜索的索引列最好在where的字句或者连接子句</p>
+</li>
+<li>使用唯一索引</li>
+<li>使用短索引，对于较长的字段，使用其前缀做索引</li>
+<li>不要过度使用索引，索引引起额外的性能开销和维护</li>
+</ol>
+<h2 id="高级优化措施"><a href="#高级优化措施" class="headerlink" title="高级优化措施"></a>高级优化措施</h2><p>未完待续。。。</p>
+<h2 id="集群搭建"><a href="#集群搭建" class="headerlink" title="集群搭建"></a>集群搭建</h2><p>未完待续。。。</p>
+
+            </div>
+            <hr>
+
+            
+            <style>
+    #reward {
+        margin: 40px 0;
+        text-align: center;
+    }
+
+    #reward .reward-link {
+        font-size: 1.88rem;
+    }
+
+    #reward .btn-floating:hover {
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2), 0 5px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    #rewardModal {
+        width: 320px;
+        height: 350px;
+    }
+
+    #rewardModal .reward-title {
+        margin: 15px auto;
+        padding-bottom: 5px;
+    }
+
+    #rewardModal .modal-content {
+        padding: 10px;
+    }
+
+    #rewardModal .close {
+        position: absolute;
+        right: 15px;
+        top: 15px;
+        color: rgba(0, 0, 0, 0.5);
+        font-size: 1.3rem;
+        line-height: 20px;
+        cursor: pointer;
+    }
+
+    #rewardModal .close:hover {
+        color: #ef5350;
+        transform: scale(1.3);
+        -moz-transform:scale(1.3);
+        -webkit-transform:scale(1.3);
+        -o-transform:scale(1.3);
+    }
+
+    #rewardModal .reward-tabs {
+        margin: 0 auto;
+        width: 210px;
+    }
+
+    .reward-tabs .tabs {
+        height: 38px;
+        margin: 10px auto;
+        padding-left: 0;
+    }
+
+    .reward-content ul {
+        padding-left: 0 !important;
+    }
+
+    .reward-tabs .tabs .tab {
+        height: 38px;
+        line-height: 38px;
+    }
+
+    .reward-tabs .tab a {
+        color: #fff;
+        background-color: #ccc;
+    }
+
+    .reward-tabs .tab a:hover {
+        background-color: #ccc;
+        color: #fff;
+    }
+
+    .reward-tabs .wechat-tab .active {
+        color: #fff !important;
+        background-color: #22AB38 !important;
+    }
+
+    .reward-tabs .alipay-tab .active {
+        color: #fff !important;
+        background-color: #019FE8 !important;
+    }
+
+    .reward-tabs .reward-img {
+        width: 210px;
+        height: 210px;
+    }
+</style>
+
+<div id="reward">
+    <a href="#rewardModal" class="reward-link modal-trigger btn-floating btn-large waves-effect waves-light red">赏</a>
+
+    <!-- Modal Structure -->
+    <div id="rewardModal" class="modal">
+        <div class="modal-content">
+            <a class="close modal-close"><i class="fa fa-close"></i></a>
+            <h4 class="reward-title">你的赏识是我前进的动力</h4>
+            <div class="reward-content">
+                <div class="reward-tabs">
+                    <ul class="tabs row">
+                        <li class="tab col s6 alipay-tab waves-effect waves-light"><a href="#alipay">支付宝</a></li>
+                        <li class="tab col s6 wechat-tab waves-effect waves-light"><a href="#wechat">微 信</a></li>
+                    </ul>
+                    <div id="alipay">
+                        <img src="/medias/reward/alipay.jpg" class="reward-img" alt="支付宝打赏二维码">
+                    </div>
+                    <div id="wechat">
+                        <img src="/medias/reward/wechat.png" class="reward-img" alt="微信打赏二维码">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(function () {
+        $('.tabs').tabs();
+    });
+</script>
+            
+
+            <link rel="stylesheet" type="text/css" href="/libs/share/css/share.min.css">
+
+<div id="article-share">
+    
+    <div class="social-share" data-disabled="qzone" data-wechat-qrcode-helper="<p>微信里点“发现”->“扫一扫”二维码便可查看分享。</p>"></div>
+    
+</div>
+
+<script src="/libs/share/js/social-share.min.js"></script>
+
+            <div class="reprint">
+                <p>
+                    <span class="reprint-tip">
+                        <i class="fa fa-exclamation-circle"></i>&nbsp;&nbsp;转载请注明:
+                    </span>
+                    <a href="http://yoursite.com" class="b-link-green">陈豪 - JAVA软件开发工程师</a>
+                    <i class="fa fa-angle-right fa-lg fa-fw text-color"></i>
+                    <a href="/2018/03/05/mysql-basic/" class="b-link-green">MYSQL基础</a>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+<article id="prenext-posts" class="prev-next articles">
+    <div class="row article-row">
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge left-badge text-color">
+                <i class="fa fa-chevron-left"></i>&nbsp;上一篇</div>
+            <div class="card">
+                <a href="/2018/04/04/java-date/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/18.jpg" class="responsive-img" alt="Java和javascript日期详解">
+                        
+                        <span class="card-title">Java和javascript日期详解</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary">java，js日期转换：
+日期表示类型
+获取long类型的日期格式long time = System.currentTimeMillis();
+System.out.printf(time+&quot;&quot;);
+Date date</div>
+                    <div class="publish-info">
+                        <span class="publish-date">
+                            <i class="fa fa-clock-o fa-fw icon-date"></i>2018-04-04
+                        </span>
+                        <span class="publish-author">
+                            
+                            <i class="fa fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/算法/" class="post-category" target="_blank">
+                                    算法
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/日期转换/" target="_blank">
+                        <span class="chip bg-color">日期转换</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge right-badge text-color">
+                下一篇&nbsp;<i class="fa fa-chevron-right"></i>
+            </div>
+            <div class="card">
+                <a href="/2018/03/04/git-config-study/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/15.jpg" class="responsive-img" alt="Git常用操作">
+                        
+                        <span class="card-title">Git常用操作</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary">git学习笔记：&nbsp;&nbsp;不止包含git的日常操作，还有高级技巧哦。
+安装git
+下载安装包&nbsp;下载地址 
+安装git
+进入命令行,输入git看看是否成功
+
+配置git
+配置全局用户名和密码(此处请修改为你自己的git</div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="fa fa-clock-o fa-fw icon-date"></i>2018-03-04
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fa fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/命令/" class="post-category" target="_blank">
+                                    命令
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/git命令/" target="_blank">
+                        <span class="chip bg-color">git命令</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+    </div>
+</article>
+</div>
+
+
+<script>
+    $('#articleContent').on('copy', function (e) {
+        // IE8 or earlier browser is 'undefined'
+        if (typeof window.getSelection === 'undefined') return;
+
+        var selection = window.getSelection();
+        // if the selection is short let's not annoy our users.
+        if (('' + selection).length < Number.parseInt('50')) {
+            return;
+        }
+
+        // create a div outside of the visible area and fill it with the selected text.
+        var bodyElement = document.getElementsByTagName('body')[0];
+        var newdiv = document.createElement('div');
+        newdiv.style.position = 'absolute';
+        newdiv.style.left = '-99999px';
+        bodyElement.appendChild(newdiv);
+        newdiv.appendChild(selection.getRangeAt(0).cloneContents());
+
+        // we need a <pre> tag workaround.
+        // otherwise the text inside "pre" loses all the line breaks!
+        if (selection.getRangeAt(0).commonAncestorContainer.nodeName === 'PRE') {
+            newdiv.innerHTML = "<pre>" + newdiv.innerHTML + "</pre>";
+        }
+
+        var url = document.location.href;
+        newdiv.innerHTML += '<br />'
+            + '来源: 陈豪 - JAVA软件开发工程师<br />'
+            + '作者: Chen Hao<br />'
+            + '链接: <a href="' + url + '">' + url + '</a><br />'
+            + '本文章著作权归陈豪所有，任何形式的转载都请注明出处。';
+
+        selection.selectAllChildren(newdiv);
+        window.setTimeout(function () {bodyElement.removeChild(newdiv);}, 200);
+    });
+</script>
+
+    </div>
+    <div class="col l3 hide-on-med-and-down">
+        <div class="toc-widget">
+            <div class="toc-title"><i class="fa fa-list-alt"></i>&nbsp;&nbsp;目录</div>
+            <div id="toc-content"></div>
+        </div>
+    </div>
+</div>
+
+<script src="/libs/tocbot/tocbot.min.js"></script>
+<script>
+    $(function () {
+        tocbot.init({
+            tocSelector: '#toc-content',
+            contentSelector: '#articleContent',
+            headingsOffset: -($(window).height() * 0.4 - 45),
+            // headingsOffset: -205,
+            headingSelector: 'h2, h3, h4'
+        });
+
+        // modify the toc link href to support Chinese.
+        let i = 0;
+        let tocHeading = 'toc-heading-';
+        $('#toc-content a').each(function () {
+            $(this).attr('href', '#' + tocHeading + (++i));
+        });
+
+        // modify the heading title id to support Chinese.
+        i = 0;
+        $('#articleContent').children('h2, h3, h4').each(function () {
+            $(this).attr('id', tocHeading + (++i));
+        });
+
+        // Set scroll toc fixed.
+        let tocHeight = parseInt($(window).height() * 0.4 - 64);
+        let $tocWidget = $('.toc-widget');
+        $(window).scroll(function () {
+            let scroll = $(window).scrollTop();
+            /* add post toc fixed. */
+            if (scroll > tocHeight) {
+                $tocWidget.addClass('toc-fixed');
+            } else {
+                $tocWidget.removeClass('toc-fixed');
+            }
+        });
+    });
+</script>
+    
+
+</main>
+
+
+<footer class="page-footer bg-color">
+    <div class="container row center-align">
+        <div class="col s12 m8 l8 copy-right">
+            本站由&copy;<a href="https://chenhaocto.github.io/" target="_blank">ChenHao</a>搭建
+			<br>
+			GitHub提供计算服务
+            
+            
+			
+        </div>
+        <div class="col s12 m4 l4 social-link ">
+
+
+    <a href="mailto:1400675645@qq.com" class="tooltipped" target="_blank" data-tooltip="邮件联系我" data-position="top" data-delay="50">
+        <i class="fa fa-envelope-open"></i>
+    </a>
+
+
+
+    <a href="tencent://AddContact/?fromId=50&fromSubId=1&subcmd=all&uin=1400675645" class="tooltipped" data-tooltip="QQ联系我: 1400675645" data-position="top" data-delay="50">
+        <i class="fa fa-qq"></i>
+    </a>
+
+
+</div>
+    </div>
+</footer>
+
+<div class="progress-bar"></div>
+
+
+<!-- 搜索遮罩框 -->
+<div id="searchModal" class="modal">
+    <div class="modal-content">
+        <div class="search-header">
+            <span class="title"><i class="fa fa-search"></i>&nbsp;&nbsp;搜索</span>
+            <input type="search" id="searchInput" name="s" placeholder="请输入搜索的关键字" class="search-input">
+        </div>
+        <div id="searchResult"></div>
+    </div>
+</div>
+
+<script src="/js/search.js"></script>
+<script type="text/javascript">
+$(function () {
+    searchFunc("/" + "search.xml", 'searchInput', 'searchResult');
+});
+</script>
+<!-- 回到顶部按钮 -->
+<div id="backTop" class="top-scroll">
+    <a class="btn-floating btn-large waves-effect waves-light" href="#!">
+        <i class="fa fa-angle-up"></i>
+    </a>
+</div>
+
+
+<script src="/libs/materialize/materialize.min.js"></script>
+<script src="/libs/masonry/masonry.pkgd.min.js"></script>
+<script src="/libs/aos/aos.js"></script>
+<script src="/libs/scrollprogress/scrollProgress.min.js"></script>
+<script src="/libs/lightGallery/js/lightgallery-all.min.js"></script>
+<script src="/js/matery.js"></script>
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+
+
+
+    <script src="/libs/others/clicklove.js"></script>
+
+
+
+</body>
+</html>

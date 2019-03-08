@@ -4,15 +4,14 @@
 
 <head><meta name="generator" content="Hexo 3.8.0">
     <meta charset="utf-8">
-    <meta name="keywords" content="Git常用操作, 我是一个热爱技术的程序猿，觉得编程是很屌的工作，比尔盖茨用自己的window改变了整个世界，扎克伯格用facebook连接了全世界...我想做的是有很多人使用我所编写的软件，框架，或者只是看看我的博客。">
-    <meta name="description" content="git学习笔记：&amp;nbsp;&amp;nbsp;不止包含git的日常操作，还有高级技巧哦。
-安装git
-下载安装包&amp;nbsp;下载地址 
-安装git
-进入命令行,输入git看看是否成功
-
-配置git
-配置全局用户名和密码(此处请修改为你自己的git">
+    <meta name="keywords" content="MYSQL常用优化, 我是一个热爱技术的程序猿，觉得编程是很屌的工作，比尔盖茨用自己的window改变了整个世界，扎克伯格用facebook连接了全世界...我想做的是有很多人使用我所编写的软件，框架，或者只是看看我的博客。">
+    <meta name="description" content="mysql优化：mysql的优化措施，从sql优化做起。
+优化sql的一般步骤
+通过show status了解各种sql的执行频率
+定位执行效率低的sql语句
+通过explain分析效率低的sql
+通过show profile分析sql
+通">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -20,7 +19,7 @@
     <meta name="format-detection" content="telephone=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>Git常用操作 | 陈豪 - JAVA软件开发工程师</title>
+    <title>MYSQL常用优化 | 陈豪 - JAVA软件开发工程师</title>
     <link rel="icon" type="image/jpeg" href="/images/chenhao1.jpg">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/font-awesome.min.css">
@@ -168,13 +167,13 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/15.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/0.jpg')">
     <div class="container">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
                     <div class="description center-align post-title">
-                        Git常用操作
+                        MYSQL常用优化
                     </div>
                 </div>
             </div>
@@ -266,8 +265,8 @@
                     
                     <div class="article-tag">
                         
-                            <a href="/tags/git命令/" target="_blank">
-                                <span class="chip bg-color">git命令</span>
+                            <a href="/tags/mysql数据库/" target="_blank">
+                                <span class="chip bg-color">mysql数据库</span>
                             </a>
                         
                     </div>
@@ -278,8 +277,8 @@
                     <div class="post-cate">
                         <i class="fa fa-bookmark fa-fw icon-category"></i>
                         
-                            <a href="/categories/命令/" class="post-category" target="_blank">
-                                命令
+                            <a href="/categories/数据库/" class="post-category" target="_blank">
+                                数据库
                             </a>
                         
                     </div>
@@ -290,7 +289,7 @@
             <div class="post-info">
                 <div class="post-date info-break-policy">
                     <i class="fa fa-calendar-minus-o fa-fw"></i>发布日期:&nbsp;&nbsp;
-                    2018-03-04
+                    2018-09-05
                 </div>
 
                 
@@ -301,73 +300,46 @@
         <hr class="clearfix">
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <p>git学习笔记：<br>&nbsp;&nbsp;不止包含git的日常操作，还有高级技巧哦。</p>
-<h2 id="安装git"><a href="#安装git" class="headerlink" title="安装git"></a>安装git</h2><ol>
-<li>下载安装包&nbsp;<a href="https://git-scm.com/" target="_blank" rel="noopener">下载地址</a> </li>
-<li>安装git</li>
-<li>进入命令行,输入git看看是否成功</li>
+                <p>mysql优化：mysql的优化措施，从sql优化做起。</p>
+<h2 id="优化sql的一般步骤"><a href="#优化sql的一般步骤" class="headerlink" title="优化sql的一般步骤"></a>优化sql的一般步骤</h2><ol>
+<li>通过show status了解各种sql的执行频率</li>
+<li>定位执行效率低的sql语句</li>
+<li>通过explain分析效率低的sql</li>
+<li>通过show profile分析sql</li>
+<li>通过trace分析优化器如何选择执行计划</li>
+<li>确定问题，采取措施优化</li>
 </ol>
-<h2 id="配置git"><a href="#配置git" class="headerlink" title="配置git"></a>配置git</h2><ol>
-<li>配置全局用户名和密码(此处请修改为你自己的git用户名和邮箱)<pre><code>git config –global user.name “Chen Hao”
-git config –global user.email 1400675645@qq.com
+<h2 id="索引优化措施"><a href="#索引优化措施" class="headerlink" title="索引优化措施"></a>索引优化措施</h2><ol>
+<li>mysql中使用索引的典型场景<ol>
+<li>匹配全值，条件所有列都在索引中而且是等值匹配</li>
+<li>匹配值的范围查找，字段必须在索引中</li>
+<li>匹配最左前缀，复合索引只会根据最左列进行查找</li>
+<li>仅仅对索引进行查询，即查询的所有字段都在索引上</li>
+<li>匹配列前缀，比如like ‘ABC%’,如果是like ‘%aaa’就不可以</li>
+<li>如果列名是索引，使用column is null会使用索引</li>
+</ol>
+</li>
+<li>存在索引但不会使用索引的典型场景<ol>
+<li>以%开头的like查询不能使用b树索引</li>
+<li>数据类型出现隐式转换不能使用索引</li>
+<li>复合索引，查询条件不符合最左列原则</li>
+<li>用or分割的条件，如果前面的条件有索引，而后面的条件没有索引</li>
+</ol>
+</li>
+<li>查看索引使用的情况<pre><code>show status like &#39;Handler_read%&#39;;
+</code></pre>如果Handler_read_rnd_next的值比较高，说明索引不正确或者查询没有使用到索引</li>
+</ol>
+<h2 id="简单实用的优化方法"><a href="#简单实用的优化方法" class="headerlink" title="简单实用的优化方法"></a>简单实用的优化方法</h2><ol>
+<li>定期检查表和分析表<pre><code>    分析表语法：
+    analyze table 表名；
+    检查表语法：
+    check table 表名；
 </code></pre></li>
-<li><p>配置ssh公钥</p>
-<pre><code>cd ~/.ssh 然后ls
-如果没有,直接生成,一路点击enter
-ssh-keygen
-cat ~/.ssh/id_rsa.pub
-把公钥配置到github的个人设置
-</code></pre><h2 id="常用的命令"><a href="#常用的命令" class="headerlink" title="常用的命令"></a>常用的命令</h2></li>
-<li>repository操作<pre><code>1. 检出（clone）仓库代码：git clone repository-url / git clone repository-url local-directoryname
-    1. 例如，clone jquery 仓库到本地： git clone git://github.com/jquery/jquery.git
-    2. lone jquery 仓库到本地，并且重命名为 my-jquery ：git clone git://github.com/jquery/jquery.git my-jquery
-2. 查看远程仓库：git remote -v
-3. 添加远程仓库：git remote add [name] [repository-url]
-4. 删除远程仓库：git remote rm [name]
-5. 修改远程仓库地址：git remote set-url origin new-repository-url
-6. 拉取远程仓库： git pull [remoteName] [localBranchName]
-7. 推送远程仓库： git push [remoteName] [localBranchName]
-</code></pre></li>
-<li><p>提交/拉取/合并/删除</p>
-<pre><code>1. 添加文件到暂存区（staged）：git add filename / git stage filename
-2. 将所有修改文件添加到暂存区（staged）： git add --all / git add -A
-3. 提交修改到暂存区（staged）：git commit -m &#39;commit message&#39; / git commit -a -m &#39;commit message&#39; 注意理解 -a 参数的意义
-4. 从Git仓库中删除文件：git rm filename
-5. 从Git仓库中删除文件，但本地文件保留：git rm --cached filename
-6. 重命名某个文件：git mv filename newfilename 或者直接修改完毕文件名 ，进行git add -A &amp;&amp; git commit -m &#39;commit message&#39; Git会自动识别是重命名了文件
-7. 获取远程最新代码到本地：git pull (origin branchname) 可以指定分支名，也可以忽略。pull 命令自动 fetch 远程代码并且 merge，如果有冲突，会显示在状态栏，需要手动处理。更推荐使用：git fetch 之后 git merge --no-ff origin branchname 拉取最新的代码到本地仓库，并手动 merge 。
-</code></pre></li>
-<li><p>日志查看</p>
-<pre><code>1. 查看日志：git log
-2. 查看日志，并查看每次的修改内容：git log -p
-3. 查看日志，并查看每次文件的简单修改状态：git log --stat
-4. 一行显示日志：git log --pretty=oneline / git log --pretty=&#39;format:&quot;%h - %an, %ar : %s&#39;
-5. 查看日志范围：
-    1. 查看最近10条日志：git log -10
-    2. 查看2周前：git log --until=2week 或者指定2周的明确日期，比如：git log --until=2015-08-12
-    3. 查看最近2周内：git log --since=2week 或者指定2周明确日志，比如：git log --since=2015-08-12
-    4. 只查看某个用户的提交：git log --committer=user.name / git log --author=user.name
-</code></pre></li>
-<li><p>取消操作</p>
-<pre><code>1. 上次提交msg错误/有未提交的文件应该同上一次一起提交，需要重新提交备注：git commit --amend -m &#39;new msg&#39;
-2. 一次git add -A后，需要将某个文件撤回到工作区，即：某个文件不应该在本次commit中：git reset HEAD filename
-3. 撤销某些文件的修改内容：git checkout -- filename 注意：一旦执行，所有的改动都没有了，谨慎！谨慎！谨慎！
-4. 将工作区内容回退到远端的某个版本：git reset --hard &lt;sha1-of-commit&gt;
-    1. --hard：reset stage and working directory , 以来所有的变更全部丢弃，并将 HEAD 指向
-    2. --soft：nothing changed to stage and working directory ,仅仅将HEAD指向 ，所有变更显示在”changed to be committed”中
-    3. --mixed：default,reset stage ,nothing to working directory ，这也就是第二个例子的原因
+<li>定期优化表<ol>
+<li>对于字节大小不固定的字段，数据更新和删除会造成磁盘空间不释放，这时候就行优化表，可以整理磁盘碎片，提高性能语法如下：<pre><code>ptimize table user(表名)；
 </code></pre></li>
 </ol>
-<ol start="5">
-<li><p>比较差异</p>
-<pre><code>1. 查看工作区（working directory）和暂存区（staged）之间差异：git diff
-2. 查看工作区（working directory）与当前仓库版本（repository）HEAD版本差异：git diff HEAD
-3. 查看暂存区（staged）与当前仓库版本（repository）差异：git diff --cached / git diff --staged
-</code></pre></li>
-<li><p>合并操作</p>
-<pre><code>1. 解决冲突后/获取远程最新代码后合并代码：git merge branchname
-2. 保留该存在版本合并log：git merge --no-ff branchname 参数--no-ff防止 fast-forward 的提交
-</code></pre></li>
+</li>
 </ol>
 
             </div>
@@ -516,7 +488,7 @@ cat ~/.ssh/id_rsa.pub
                     </span>
                     <a href="http://yoursite.com" class="b-link-green">陈豪 - JAVA软件开发工程师</a>
                     <i class="fa fa-angle-right fa-lg fa-fw text-color"></i>
-                    <a href="/2018/03/04/git-config-study/" class="b-link-green">Git常用操作</a>
+                    <a href="/2018/09/05/mysql-optimization/" class="b-link-green">MYSQL常用优化</a>
                 </p>
             </div>
         </div>
@@ -539,29 +511,30 @@ cat ~/.ssh/id_rsa.pub
         
         <div class="article col s12 m6" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="fa fa-chevron-left"></i>&nbsp;上一篇</div>
+                <i class="fa fa-dot-circle-o"></i>&nbsp;本篇
+            </div>
             <div class="card">
-                <a href="/2018/03/05/mysql-basic/">
+                <a href="/2018/09/05/mysql-optimization/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/8.jpg" class="responsive-img" alt="MYSQL基础">
+                        <img src="/medias/featureimages/0.jpg" class="responsive-img" alt="MYSQL常用优化">
                         
-                        <span class="card-title">MYSQL基础</span>
+                        <span class="card-title">MYSQL常用优化</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
-                    <div class="summary">mysql的特点
-关系型数据库，免费使用。
-插入式存储引擎。
-性能高。
-mysql的版本 5.0-5.1:早期产品的延续，升级维护 5.4 - 5.x :  MySQL整合了三方公司的新存储引擎 （推荐5.5）
-安装mysql
-下载安装包 </div>
+                    <div class="summary">mysql优化：mysql的优化措施，从sql优化做起。
+优化sql的一般步骤
+通过show status了解各种sql的执行频率
+定位执行效率低的sql语句
+通过explain分析效率低的sql
+通过show profile分析sql
+通</div>
                     <div class="publish-info">
-                        <span class="publish-date">
-                            <i class="fa fa-clock-o fa-fw icon-date"></i>2018-03-05
-                        </span>
+                            <span class="publish-date">
+                                <i class="fa fa-clock-o fa-fw icon-date"></i>2018-09-05
+                            </span>
                         <span class="publish-author">
                             
                             <i class="fa fa-bookmark fa-fw icon-category"></i>
@@ -574,6 +547,7 @@ mysql的版本 5.0-5.1:早期产品的延续，升级维护 5.4 - 5.x :  MySQL�
                         </span>
                     </div>
                 </div>
+
                 
                 <div class="card-action article-tags">
                     
@@ -592,22 +566,21 @@ mysql的版本 5.0-5.1:早期产品的延续，升级维护 5.4 - 5.x :  MySQL�
                 下一篇&nbsp;<i class="fa fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="/2018/03/04/numtochinese/">
+                <a href="/2018/06/03/java-reptile-6/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/17.jpg" class="responsive-img" alt="数字转汉字写法">
+                        <img src="/medias/featureimages/11.jpg" class="responsive-img" alt="java爬虫从入门到熟练(六)开源框架篇二">
                         
-                        <span class="card-title">数字转汉字写法</span>
+                        <span class="card-title">java爬虫从入门到熟练(六)开源框架篇二</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
-                    <div class="summary">题目来源:&nbsp;&nbsp; 找工作时看到某金融公司的题目，把一个int的数字转为汉字的读法，比如123，转成一百二十三，限时20分钟。
-
-题目要求：&nbsp;&nbsp;用java实现，把int的数字转为汉字读音，比如123，转成</div>
+                    <div class="summary">写在前边&nbsp;&nbsp;上一篇我们使用WebMagic开源框架爬取了csdn上博客的信息。现在这篇我们继续使用WebMagic来爬取
+webmagic爬取人民网信息目标抓取http://bj.people.com.cn/所有分类的新</div>
                     <div class="publish-info">
                             <span class="publish-date">
-                                <i class="fa fa-clock-o fa-fw icon-date"></i>2018-03-04
+                                <i class="fa fa-clock-o fa-fw icon-date"></i>2018-06-03
                             </span>
                         <span class="publish-author">
                             
@@ -624,8 +597,8 @@ mysql的版本 5.0-5.1:早期产品的延续，升级维护 5.4 - 5.x :  MySQL�
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/数字转汉字算法/" target="_blank">
-                        <span class="chip bg-color">-数字转汉字算法</span>
+                    <a href="/tags/java爬虫/" target="_blank">
+                        <span class="chip bg-color">java爬虫</span>
                     </a>
                     
                 </div>
