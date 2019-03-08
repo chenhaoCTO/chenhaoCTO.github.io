@@ -1,0 +1,257 @@
+<?xml version="1.0" encoding="utf-8"?>
+<search> 
+  
+  
+    
+    <entry>
+      <title>java爬虫从入门到熟练(六)开源框架篇二</title>
+      <link href="/2018/06/03/java-reptile-6/"/>
+      <url>/2018/06/03/java-reptile-6/</url>
+      
+        <content type="html"><![CDATA[<h2 id="写在前边"><a href="#写在前边" class="headerlink" title="写在前边"></a>写在前边</h2><p>&nbsp;&nbsp;上一篇我们使用WebMagic开源框架爬取了csdn上博客的信息。现在这篇我们继续使用WebMagic来爬取</p><h2 id="webmagic爬取人民网信息"><a href="#webmagic爬取人民网信息" class="headerlink" title="webmagic爬取人民网信息"></a>webmagic爬取人民网信息</h2><h3 id="目标抓取http-bj-people-com-cn-所有分类的新闻"><a href="#目标抓取http-bj-people-com-cn-所有分类的新闻" class="headerlink" title="目标抓取http://bj.people.com.cn/所有分类的新闻"></a>目标抓取<a href="http://bj.people.com.cn/所有分类的新闻" target="_blank" rel="noopener">http://bj.people.com.cn/所有分类的新闻</a></h3><p><img src="/images/java-reptile/7.png" height="330" width="495"><br>每个分类的列表链接如 <a href="http://bj.people.com.cn/GB/233088/index1.html" target="_blank" rel="noopener">http://bj.people.com.cn/GB/233088/index1.html</a> </p><h3 id="源码实现"><a href="#源码实现" class="headerlink" title="源码实现"></a>源码实现</h3><p>1.导入依赖</p><pre><code>&lt;dependency&gt;    &lt;groupId&gt;us.codecraft&lt;/groupId&gt;    &lt;artifactId&gt;webmagic-core&lt;/artifactId&gt;    &lt;version&gt;0.5.3&lt;/version&gt;    &lt;exclusions&gt;        &lt;exclusion&gt;            &lt;groupId&gt;org.slf4j&lt;/groupId&gt;            &lt;artifactId&gt;slf4j-log4j12&lt;/artifactId&gt;        &lt;/exclusion&gt;    &lt;/exclusions&gt;&lt;/dependency&gt;&lt;dependency&gt;    &lt;groupId&gt;us.codecraft&lt;/groupId&gt;    &lt;artifactId&gt;webmagic-extension&lt;/artifactId&gt;    &lt;version&gt;0.5.3&lt;/version&gt;&lt;/dependency&gt;&lt;dependency&gt;    &lt;groupId&gt;commons-lang&lt;/groupId&gt;    &lt;artifactId&gt;commons-lang&lt;/artifactId&gt;    &lt;version&gt;2.6&lt;/version&gt;&lt;/dependency&gt;</code></pre><p>2.PageProcesso实现代码</p><pre><code>@Servicepublic class NewsProcessor implements PageProcessor {    // 入口url    public static final String URL_ENTER = &quot;http://bj.people.com.cn/&quot;;    // 类别导航    private String URL_INDEX = &quot;http://bj\\.people\\.com\\.cn/GB/\\d+/index\\.html&quot;;    // 列表    private String URL_LIST = &quot;http://bj\\.people\\.com\\.cn/GB/\\d+/index\\d*\\.html&quot;;    // 文章    private String URL_POST = &quot;http://bj\\.people\\.com\\.cn/n2/2016/\\d+/.+\\.html&quot;;    // 设置    private Site site = Site.me().setRetryTimes(10).setSleepTime(1000).setCycleRetryTimes(3);    @Override    public void process(Page page) {        if (page.getUrl().get().equals(URL_ENTER)) {            // 类别            page.addTargetRequests(page.getHtml().xpath(&quot;//div[@class=&#39;pd_nav w1000 white  clear clearfix&#39;]&quot;).links().regex(URL_INDEX).all());            System.out.println(&quot;enter&quot;+page.getUrl().get());        } else {            System.out.println(&quot;enter&quot;+page.getUrl().get());            // 列表页            if (page.getUrl().regex(URL_LIST).match()) {                page.addTargetRequests(page.getHtml().xpath(&quot;//div[@class=&#39;ej_list_box clear&#39;]&quot;).links().regex(URL_POST).all());                page.addTargetRequests(page.getHtml().links().regex(URL_LIST).all());            } else {                // 匹配当前域名                String currentDomain = page.getUrl().regex(&quot;http.+\\.com\\.cn&quot;).toString();                String title = page.getHtml().xpath(&quot;//div[@class=&#39;clearfix w1000_320 text_title&#39;]/h1/text()&quot;).toString();                String contentTime = page.getHtml().xpath(&quot;//div[@class=&#39;box01&#39;]/div[@class=&#39;fl&#39;]/text()&quot;).regex(&quot;\\d{4}年\\d{2}月\\d{2}日\\s*\\d{2}:\\d{2}&quot;).toString();                String content = page.getHtml().xpath(&quot;//div[@class=&#39;box_con&#39;]&quot;).toString();                List&lt;String&gt; imgList = page.getHtml().xpath(&quot;//div[@class=&#39;box_con&#39;]//img/@src&quot;).all();                List&lt;String&gt; result = new ArrayList&lt;&gt;();                for (String img : imgList) {                    // 匹配是否是绝对路劲                    Pattern r = Pattern.compile(&quot;^http&quot;);                    Matcher m = r.matcher(img);                    if (!m.find()) {                        // 不是绝对路径 拼接当前域名                        result.add(currentDomain + img);                    } else {                        result.add(img);                    }                }                News news = new News();                news.setSourceUrl(page.getUrl().regex(URL_POST).toString());                news.setContent(content);                news.setContentTime(contentTime);                news.setTitle(title);                news.setImage(new Gson().toJson(result));                if (news.getTitle() == null) {                    page.setSkip(true);                } else {                    page.putField(&quot;news&quot;, news);                }            }        }    }    @Override    public Site getSite() {        return site;    }}</code></pre><p>3.Pipeline持久化数据代码</p><pre><code>@Servicepublic class NewsPipeline implements Pipeline {    @Autowired    private NewsService newsService;    @Override    public void process(ResultItems resultItems, Task task) {        News news = (News) resultItems.get(&quot;news&quot;);        if (!newsService.isExist(news)) {            newsService.create(news);        }    }}</code></pre><p>4.爬虫启动代码</p><pre><code>@RequestMapping(&quot;/start&quot;)private String start() {    Spider.create(newsProcessor)// 创建抽取内容类            .addUrl(NewsProcessor.URL_ENTER)// 添加入口url            .addPipeline(newsPipeline)// 添加持久化类            .thread(5)// 开启5个线程            .run();// 启动    return &quot;success&quot;;}</code></pre>]]></content>
+      
+      
+      <categories>
+          
+          <category> 算法 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> java爬虫 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>java爬虫从入门到熟练(五)开源框架篇一</title>
+      <link href="/2018/06/02/java-reptile-5/"/>
+      <url>/2018/06/02/java-reptile-5/</url>
+      
+        <content type="html"><![CDATA[<h2 id="写在前边"><a href="#写在前边" class="headerlink" title="写在前边"></a>写在前边</h2><p>&nbsp;&nbsp;前几篇着重讲解了爬虫的基本概念和相关用法。毕竟在中小型公司中，还是使用开源框架的比较多。所以这篇文章来讲解讲解关于java爬虫的相关开源框架</p><h2 id="爬虫框架介绍"><a href="#爬虫框架介绍" class="headerlink" title="爬虫框架介绍"></a>爬虫框架介绍</h2><p>&nbsp;&nbsp;java爬虫框架非常多，比如较早的有Heritrix，轻量级的crawler4j，还有现在最火的WebMagic。他们各有各的优势和劣势，我这里顺便简单介绍一下吧。<br><img src="/images/java-reptile/6.png" height="330" width="495"><br>&nbsp;&nbsp;对于爬虫框架本身来说，都是很优秀的，说那个更好，不如说那个更适合公司的业务需求。比如javaweb项目中需要某些网站的金融系列新闻，得每天定时去抓取一些数据，你就可以考虑WebMagic框架，能够轻松的将爬虫代码逻辑模块化到项目中，毫无违和感。</p><h2 id="webmagic上手使用"><a href="#webmagic上手使用" class="headerlink" title="webmagic上手使用"></a>webmagic上手使用</h2><p>&nbsp;&nbsp;WebMagic的结构分为Downloader、PageProcessor、Scheduler、Pipeline四大组件，并由Spider将它们彼此组织起来。这四大组件对应爬虫生命周期中的下载、处理、管理和持久化等功能。在这四个组件中我们需要做的就是在PageProcessor中写自己的业务逻辑，比如如何解析当前页面，抽取有用信息，以及发现新的链接。</p><p>1.Downloader<br>Downloader负责从互联网上下载页面，以便后续处理。WebMagic默认使用了Apache HttpClient作为下载工具。</p><p>2.PageProcessor<br>PageProcessor负责解析页面，抽取有用信息，以及发现新的链接。WebMagic使用Jsoup作为HTML解析工具，并基于其开发了解析XPath的工具Xsoup。</p><p>在这四个组件中，PageProcessor对于每个站点每个页面都不一样，是需要使用者定制的部分。</p><p>3.Scheduler<br>Scheduler负责管理待抓取的URL，以及一些去重的工作。WebMagic默认提供了JDK的内存队列来管理URL，并用集合来进行去重。也支持使用Redis进行分布式管理。</p><p>除非项目有一些特殊的分布式需求，否则无需自己定制Scheduler。</p><p>4.Pipeline<br>Pipeline负责抽取结果的处理，包括计算、持久化到文件、数据库等。WebMagic默认提供了“输出到控制台”和“保存到文件”两种结果处理方案。</p><p>Pipeline定义了结果保存的方式，如果你要保存到指定数据库，则需要编写对应的Pipeline。对于一类需求一般只需编写一个Pipeline。</p><p>webmagic来爬取CSDN上某一个博主的文章信息</p><p>下面我们通过一个简单的例子来观察webmagic的使用方法以及执行流程。需求：输入作者的用户名，得到该作者文章总数（最简单的办法是直接从首页拿到，我们是爬到一篇文章记录一次），得到所有文章信息（文章名称，发布日期，阅读量，评论数…..）</p><p>首先加入webmagic依赖，然后写一个Processor就搞定了：修改不同的username可以爬取不同的作者。</p><pre><code>    public class CsdnBlogProcessor implements PageProcessor {    private static String username = &quot;yixiao1874&quot;;// 设置csdn用户名    private static int size = 0;// 共抓取到的文章数量    // 抓取网站的相关配置，包括：编码、抓取间隔、重试次数等    private Site site = Site.me().setRetryTimes(3).setSleepTime(1000);    @Override    public void process(Page page) {        if (!page.getUrl().regex(&quot;http://blog.csdn.net/&quot; + username + &quot;/article/details/\\d+&quot;).match()) {            //获取当前页码            String number = page.getHtml().xpath(&quot;//li[@class=&#39;page-item active&#39;]//a[@class=&#39;page-link&#39;]/text()&quot;).toString();            //匹配当前页码+1的页码也就是下一页，加入爬取列表中            String targetUrls = page.getHtml().links()                    .regex(&quot;http://blog.csdn.net/&quot;+username+&quot;/article/list/&quot;+(Integer.parseInt(number)+1)).get();            page.addTargetRequest(targetUrls);            List&lt;String&gt; detailUrls = page.getHtml().xpath(&quot;//li[@class=&#39;blog-unit&#39;]//a/@href&quot;).all();            for(String list :detailUrls){                System.out.println(list);            }            page.addTargetRequests(detailUrls);        }else {            size++;// 文章数量加1            CsdnBlog csdnBlog = new CsdnBlog();            String path = page.getUrl().get();            int id = Integer.parseInt(path.substring(path.lastIndexOf(&quot;/&quot;)+1));            String title = page.getHtml().xpath(&quot;//h1[@class=&#39;csdn_top&#39;]/text()&quot;).get();            String date = page.getHtml().xpath(&quot;//div[@class=&#39;artical_tag&#39;]//span[@class=&#39;time&#39;]/text()&quot;).get();            String copyright = page.getHtml().xpath(&quot;//div[@class=&#39;artical_tag&#39;]//span[@class=&#39;original&#39;]/text()&quot;).get();            int view = Integer.parseInt(page.getHtml().xpath(&quot;//button[@class=&#39;btn-noborder&#39;]//span[@class=&#39;txt&#39;]/text()&quot;).get());            csdnBlog.id(id).title(title).date(date).copyright(copyright).view(view);            System.out.println(csdnBlog);        }    }    public Site getSite() {        return site;    }    public static void main(String[] args) {        // 从用户博客首页开始抓，开启5个线程，启动爬虫        Spider.create(new CsdnBlogProcessor())                .addUrl(&quot;http://blog.csdn.net/&quot; + username)                .thread(5).run();        System.out.println(&quot;文章总数为&quot;+size);    }}</code></pre><pre><code>public class CsdnBlog {    private int id;// 编号    private String title;// 标题    private String date;// 日期    private String category;// 分类    private int view;// 阅读人数    private int comments;// 评论人数    private String copyright;// 是否原创    public CsdnBlog id(int id){        this.id = id;        return this;    }    public CsdnBlog date(String date){        this.date = date;        return this;    }    public CsdnBlog title(String title){        this.title = title;        return this;    }    public CsdnBlog category(String category){        this.category = category;        return this;    }    public CsdnBlog view(int view){        this.view = view;        return this;    }    public CsdnBlog comments(int comments){        this.comments = comments;        return this;    }    public CsdnBlog copyright(String copyright){        this.copyright = copyright;        return this;    }    @Override    public String toString() {        return &quot;CsdnBlog{&quot; +                &quot;id=&quot; + id +                &quot;, title=&#39;&quot; + title + &#39;\&#39;&#39; +                &quot;, date=&#39;&quot; + date + &#39;\&#39;&#39; +                &quot;, category=&#39;&quot; + category + &#39;\&#39;&#39; +                &quot;, view=&quot; + view +                &quot;, comments=&quot; + comments +                &quot;, copyright=&#39;&quot; + copyright + &#39;\&#39;&#39; +                &#39;}&#39;;    }}</code></pre>]]></content>
+      
+      
+      <categories>
+          
+          <category> 算法 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> java爬虫 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>java爬虫从入门到熟练(四)jsoup的使用</title>
+      <link href="/2018/05/20/java-reptile-4/"/>
+      <url>/2018/05/20/java-reptile-4/</url>
+      
+        <content type="html"><![CDATA[<h2 id="写在前边"><a href="#写在前边" class="headerlink" title="写在前边"></a>写在前边</h2><p>&nbsp;&nbsp;我最开始写的爬虫没用jsoup包，直接用java自带的httpconnect获取，用parttern，matcher加正则语法筛选标签和元素。正则语法看的晕，parttern定义的模板通用性很差。做出来的爬虫整体代码冗长，完全没有代码的美感。<br>&nbsp;&nbsp;因此本次写的爬虫调用了jsoup jar包，jsoup是优秀的HTML解析器，可通过DOM，CSS以及类似于jQuery的操作方法来取出和操作数据，而且封装了get方法，可以直接调用获取页面。结合谷歌浏览器抓取页面元素快感不断。</p><h2 id="jsoup理论"><a href="#jsoup理论" class="headerlink" title="jsoup理论"></a>jsoup理论</h2><p>&nbsp;&nbsp;jsoup最主要用到的就是的elements类和select（）方法。elements类相当于网页元素中的标签，而select（）方法用于按一定条件选取符合条件的标签，组成符合条件的标签数组。element支持转成字符串或者文本等。总之功能很强大。只需要了解一下select（）方法的过滤规则即可上手用了。但是有了谷歌浏览器！过滤规则都不用管了，方可直接上手用！</p><h2 id="jsoup上手使用"><a href="#jsoup上手使用" class="headerlink" title="jsoup上手使用"></a>jsoup上手使用</h2><p>话不多说。爬去知乎网站直接上代码：</p><pre><code>    package jsouptest;    import java.io.IOException;    import org.jsoup.Jsoup;    import org.jsoup.nodes.Document;    import org.jsoup.nodes.Element;    import org.jsoup.select.Elements;    public class JsoupTest {        public static void main(String[] args) throws IOException {            //获取编辑推荐页            Document document=Jsoup.connect(&quot;https://www.zhihu.com/explore/recommendations&quot;)                    //模拟火狐浏览器                    .userAgent(&quot;Mozilla/4.0 (compatible; MSIE 9.0; Windows NT 6.1; Trident/5.0)&quot;)                    .get();            Element main=document.getElementById(&quot;zh-recommend-list-full&quot;);            Elements url=main.select(&quot;div&quot;).select(&quot;div:nth-child(2)&quot;)                    .select(&quot;h2&quot;).select(&quot;a[class=question_link]&quot;);            for(Element question:url){                //输出href后的值，即主页上每个关注问题的链接                String URL=question.attr(&quot;abs:href&quot;);                //下载问题链接指向的页面                Document document2=Jsoup.connect(URL)                        .userAgent(&quot;Mozilla/4.0 (compatible; MSIE 9.0; Windows NT 6.1; Trident/5.0)&quot;)                        .get();                //问题                Elements title=document2.select(&quot;#zh-question-title&quot;).select(&quot;h2&quot;).select(&quot;a&quot;);                //问题描述                Elements detail=document2.select(&quot;#zh-question-detail&quot;);                //回答                Elements answer=document2.select(&quot;#zh-question-answer-wrap&quot;)                        .select(&quot;div.zm-item-rich-text.expandable.js-collapse-body&quot;)                        .select(&quot;div.zm-editable-content.clearfix&quot;);                System.out.println(&quot;\n&quot;+&quot;链接：&quot;+URL                        +&quot;\n&quot;+&quot;标题：&quot;+title.text()                        +&quot;\n&quot;+&quot;问题描述：&quot;+detail.text()                        +&quot;\n&quot;+&quot;回答：&quot;+answer.text());            }           }    }</code></pre>]]></content>
+      
+      
+      <categories>
+          
+          <category> 算法 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> java爬虫 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>java爬虫从入门到熟练(三)原生代码-多线程爬虫实现</title>
+      <link href="/2018/05/15/java-reptile-3/"/>
+      <url>/2018/05/15/java-reptile-3/</url>
+      
+        <content type="html"><![CDATA[<h2 id="写在前边"><a href="#写在前边" class="headerlink" title="写在前边"></a>写在前边</h2><p>&nbsp;&nbsp;上一章我们使用了基本的原生代码爬取当当网的数据。由于往往现实中我们所爬取的数据量都是比价庞大的。因此为了提高爬虫性能，那我们就需要使用多线程来处理。</p><h2 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h2><p>这些线程需要标注出当前状态，是在等待，还是在爬取。<br>如果是等待状态，那么就需要取得集合中的一个连接，来完成爬虫操作。<br>如果是爬取状态，则在爬完以后，需要变为等待状态。<br>多线程中如果想设置等待状态，有一个方法可以实现：wait()，如果想从等待状态唤醒，则可以使用notify()。<br>因此在多个线程中间我们需要一个对象来帮助我们进行线程之间的通信，以便唤醒其它线程。</p><p>多线程同时处理时，容易出现线程不安全的问题，导致数据出现错误。<br>为了保证线程的安全，就需要使用同步关键字，来对取得连接和放入连接操作加锁。</p><h2 id="爬虫实现"><a href="#爬虫实现" class="headerlink" title="爬虫实现"></a>爬虫实现</h2><p>&nbsp;&nbsp;需要先自定义一个线程的操作类，在这个操作类中判断不同的状态，并且根据状态来决定是进行wait()等待，还是取得一个新的url进行处理。</p><pre><code>/** * 读取当当网下首页图书的数据，并进行分析 * 爬取深度为2 * 爬去数据存储到E:/dangdang_book/目录下，需自行创建 * chenhao   2018-05-15 17:11 */import java.io.*;import java.net.*;import java.util.*;import java.util.regex.*;public class URLDemo {    //提取的数据存放到该目录下    private static String savepath=&quot;E:/dangdang_book/&quot;;    //等待爬取的url    private static List&lt;String&gt; allwaiturl=new ArrayList&lt;&gt;();    //爬取过的url    private static Set&lt;String&gt; alloverurl=new HashSet&lt;&gt;();    //记录所有url的深度进行爬取判断    private static Map&lt;String,Integer&gt; allurldepth=new HashMap&lt;&gt;();    //爬取得深度    private static int maxdepth=2;    //生命对象，帮助进行线程的等待操作    private static Object obj=new Object();    //记录总线程数5条    private static int MAX_THREAD=5;    //记录空闲的线程数    private static int count=0;    public static void main(String args[]){        //确定爬取的网页地址，此处为当当网首页上的图书分类进去的网页        //网址为        http://book.dangdang.com/        // String strurl=&quot;http://search.dangdang.com/?key=%BB%FA%D0%B5%B1%ED&amp;act=input&quot;;        String strurl=&quot;http://book.dangdang.com/&quot;;        //workurl(strurl,1);        addurl(strurl,0);        for(int i=0;i&lt;MAX_THREAD;i++){            new URLDemo().new MyThread().start();        }    }    /**     * 网页数据爬取     * @param strurl     * @param depth     */    public static void workurl(String strurl,int depth){        //判断当前url是否爬取过        if(!(alloverurl.contains(strurl)||depth&gt;maxdepth)){            //检测线程是否执行            System.out.println(&quot;当前执行：&quot;+Thread.currentThread().getName()+&quot; 爬取线程处理爬取：&quot;+strurl);        //建立url爬取核心对象        try {            URL url=new URL(strurl);            //通过url建立与网页的连接            URLConnection conn=url.openConnection();            //通过链接取得网页返回的数据            InputStream is=conn.getInputStream();            //提取text类型的数据            if(conn.getContentType().startsWith(&quot;text&quot;)){            }            System.out.println(conn.getContentEncoding());            //一般按行读取网页数据，并进行内容分析            //因此用BufferedReader和InputStreamReader把字节流转化为字符流的缓冲流            //进行转换时，需要处理编码格式问题            BufferedReader br=new BufferedReader(new InputStreamReader(is,&quot;GB2312&quot;));            //按行读取并打印            String line=null;            //正则表达式的匹配规则提取该网页的链接            Pattern p=Pattern.compile(&quot;&lt;a .*href=.+&lt;/a&gt;&quot;);            //建立一个输出流，用于保存文件,文件名为执行时间，以防重复            PrintWriter pw=new PrintWriter(new File(savepath+System.currentTimeMillis()+&quot;.txt&quot;));            while((line=br.readLine())!=null){                //System.out.println(line);                //编写正则，匹配超链接地址                pw.println(line);                Matcher m=p.matcher(line);                while(m.find()){                    String href=m.group();                    //找到超链接地址并截取字符串                    //有无引号                    href=href.substring(href.indexOf(&quot;href=&quot;));                    if(href.charAt(5)==&#39;\&quot;&#39;){                        href=href.substring(6);                    }else{                        href=href.substring(5);                    }                    //截取到引号或者空格或者到&quot;&gt;&quot;结束                try{                    href=href.substring(0,href.indexOf(&quot;\&quot;&quot;));                }catch(Exception e){                    try{                        href=href.substring(0,href.indexOf(&quot; &quot;));                    }catch(Exception e1){                        href=href.substring(0,href.indexOf(&quot;&gt;&quot;));                    }                }                if(href.startsWith(&quot;http:&quot;)||href.startsWith(&quot;https:&quot;)){                    /*                    //输出该网页存在的链接                    //System.out.println(href);                    //将url地址放到队列中                    allwaiturl.add(href);                    allurldepth.put(href,depth+1);                    */                    //调用addurl方法                    addurl(href,depth);                        }                    }                }            pw.close();            br.close();        } catch (Exception e) {            // TODO Auto-generated catch block            //e.printStackTrace();        }        //将当前url归列到alloverurl中                alloverurl.add(strurl);                System.out.println(strurl+&quot;网页爬取完成，已爬取数量：&quot;+alloverurl.size()+&quot;，剩余爬取数量：&quot;+allwaiturl.size());        }        /*        //用递归的方法继续爬取其他链接        String nexturl=allwaiturl.get(0);        allwaiturl.remove(0);        workurl(nexturl,allurldepth.get(nexturl));        */        if(allwaiturl.size()&gt;0){            synchronized(obj){                obj.notify();            }        }else{            System.out.println(&quot;爬取结束.......&quot;);        }        }    /**     * 将获取的url放入等待队列中，同时判断是否已经放过     * @param href     * @param depth     */    public static synchronized void addurl(String href,int depth){        //将url放到队列中        allwaiturl.add(href);        //判断url是否放过        if(!allurldepth.containsKey(href)){            allurldepth.put(href, depth+1);        }    }    /**     * 移除爬取完成的url，获取下一个未爬取得url     * @return     */    public static synchronized String geturl(){        String nexturl=allwaiturl.get(0);        allwaiturl.remove(0);        return nexturl;    }    /**     * 线程分配任务     */    public class MyThread extends Thread{        @Override        public void run(){            //设定一个死循环，让线程一直存在            while(true){                //判断是否新链接，有则获取                if(allwaiturl.size()&gt;0){                    //获取url进行处理                    String url=geturl();                    //调用workurl方法爬取                    workurl(url,allurldepth.get(url));                }else{                    System.out.println(&quot;当前线程准备就绪，等待连接爬取：&quot;+this.getName());                    count++;                    //建立一个对象，让线程进入等待状态，即wait（）                    synchronized(obj){                        try{                            obj.wait();                        }catch(Exception e){                        }                    }                    count--;                }            }        }    }}</code></pre><h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>&nbsp;&nbsp;<strong>对于网页数据爬取，用到了线程，类集处理，继承，正则表达式等各方面的知识，从一个网页以深度为主，广度为基本进行爬取，获取每一个网页的源代码，并写入到一个本地的目录下。<br></strong><br><span style="color:red"><br>1、给出一个网页链接，创建一个本地目录；<br>2、用URL类本地连接，用字符流进行读取，并写入到本地；<br>3、利用正则表达式在按行读取时获取该网页所存在的所有链接，以便进行深度+1的数据收集；<br>4、利用递归的方法，借助容器list，Set，Map来对链接进行爬取和未爬取得划分；<br>5、每次爬取一个网页时，所获得的所有链接在当前基础上深度+1，并且从未爬取队列中移除，加入到已爬取队列中；<br>6、为提升性能，在进行递归的时候，可以利用线程，复写Thread的run()方法，用多线程进行网页数据爬取；<br>7、直到爬取得网页深度达到你期望的深度时，爬取结束，此时可以查看本地目录生成的文件；<br>8、后续对本地生成的文件进行数据分析，即可获取你想要的信息。<br></span><br>&nbsp;&nbsp;借此，我们就可以对这些数据进行归约，分析，处理，来获取我们想要的信息。这也是大数据数据收集的一个基础。</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 算法 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> java爬虫 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>java爬虫从入门到熟练(二)原生代码 URL类</title>
+      <link href="/2018/05/12/java-reptile-2/"/>
+      <url>/2018/05/12/java-reptile-2/</url>
+      
+        <content type="html"><![CDATA[<h2 id="写在前边"><a href="#写在前边" class="headerlink" title="写在前边"></a>写在前边</h2><p>&nbsp;&nbsp;使用原生代码实现爬虫<br><img src="/images/java-reptile/3.png" width="100%"></p><h2 id="使用URL类代码"><a href="#使用URL类代码" class="headerlink" title="使用URL类代码"></a>使用URL类代码</h2><pre><code>    /**     * 读取当当网下联想电脑的数据，并进行分析     * chenhao   2018-05-12 19:01     */    import java.io.*;    import java.net.*;    public class URLReptile {        public static void main(String args[]){            //确定爬取的网页地址，此处为当当网搜联想电脑显示的网页            //网址为       http://search.dangdang.com/?key=%C1%AA%CF%EB%B5%E7%C4%D4            String strurl=&quot;http://search.dangdang.com/?key=%C1%AA%CF%EB%B5%E7%C4%D4&quot;;            //建立url爬取核心对象            try {                URL url=new URL(strurl);                //通过url建立与网页的连接                URLConnection conn=url.openConnection();                //通过链接取得网页返回的数据                InputStream is=conn.getInputStream();                System.out.println(conn.getContentEncoding());                //一般按行读取网页数据，并进行内容分析                //因此用BufferedReader和InputStreamReader把字节流转化为字符流的缓冲流                //进行转换时，需要处理编码格式问题                BufferedReader br=new BufferedReader(new InputStreamReader(is,&quot;UTF-8&quot;));                //按行读取并打印                String line=null;                while((line=br.readLine())!=null){                    System.out.println(line);                }                br.close();            } catch (Exception e) {                // TODO Auto-generated catch block                e.printStackTrace();            }        }    }</code></pre><p>&nbsp;&nbsp;结果显示：<br><img src="/images/java-reptile/4.png" width="100%"></p><h2 id="离线分析"><a href="#离线分析" class="headerlink" title="离线分析"></a>离线分析</h2><p>&nbsp;&nbsp;爬取源代码不是我们的最终目的，接着使用正则表达式来分析爬爬取的代码。</p><h3 id="正则表达式"><a href="#正则表达式" class="headerlink" title="正则表达式"></a>正则表达式</h3><p>Java.util包下提供了<span style="color:blue">Pattern</span>和<span style="color:blue">Matcher</span>这两个类，可以根据我们给定的条件来进行数据的匹配和提取。</p><p>通过Pattern类中提供的规则字符或字符串，我们需要自己拼凑出我们的匹配规则。</p><p>正则表达式<span style="color:blue">最常用的地方是用来做表单提交的数据格式验证的</span>。<br><span style="color:red"><br>常用的正则表达式规则一般分为两类：<br>1） 内容匹配<br>　　a) \d：是否是数字<br>　　b) \w：匹配 字母、数字或下划线<br>　　c) .：任意字符<br>　　d) [a-z]：字符是否在给定范围内。<br>2） 数量匹配<br>　　a) +：1个或以上<br>　　b) *：0个或以上<br>　　c) ?：0或1次<br>　　d) {n,m}：n-m次<br></span><br><strong>列如：</strong>(提取一段内容中点电话号码)<br>匹配手机电话号码(规则)：1\d{10} (此处我们只做了初级验证，以1开头的11位数字)</p><pre class=" language-/**"><code class="language-/**">     * 爬取一段文本中的电话号码     * chenhao   2018-05-12 19:06     */    import java.util.HashSet;    import java.util.Set;    import java.util.regex.Matcher;    import java.util.regex.Pattern;    public class Patterndemo {        public static void  main(String[] args){            Pattern p = Pattern.compile("1\\d{10}");             String content = "<div>[转让]<a href='/17610866588' title='手机号码 15025642965 估价评估_值多少钱_归购转让信息' class='lj44'>由 张宝红 600元求购,联系电话：15026815169qq:22203</div>";            Matcher m = p.matcher(content);            Set<String> set = new HashSet<>();            // 通过Matcher类的group方法和find方法来进行查找和匹配            while (m.find()) {                     String value = m.group();                     set.add(value);            }            System.out.println(set);        }    }</code></pre><p><img src="/images/java-reptile/5.png" width="100%"></p><h3 id="超连接的连接匹配和提取"><a href="#超连接的连接匹配和提取" class="headerlink" title="超连接的连接匹配和提取"></a>超连接的连接匹配和提取</h3><pre><code>对爬取的HTML页面来说，如果想提取连接地址，就必须找到所有超连接的标签和对应的属性。超连接标签是&lt;a&gt;&lt;/a&gt;，保存连接的属性是：href。&lt;a href=”…”&gt;…&lt;/a&gt;规则：&lt;a .*href=.+&lt;/a&gt;</code></pre><h3 id="广度优先遍历"><a href="#广度优先遍历" class="headerlink" title="广度优先遍历"></a>广度优先遍历</h3><p>需要有一个队列（这里直接使用ArrayList来作为队列）保存所有等待爬取的连接。<br>还需要一个Set集合记录下所有已经爬取过的连接。<br>还需要一个深度值，记录当前爬取的网页深度，判断是否满足要求</p><p><strong>列如：</strong>(对当当网首页分类里的图书进行深度为2的网页爬取，利用递归的方式进行数据获取存到E:/dangdang_book/目录下)</p><pre><code>/** * 读取当当网下首页图书的数据，并进行分析 * 爬取深度为2 * 爬去数据存储到E:/dangdang_book/目录下，需自行创建 * chenhao   2018-05-12 20:11 */import java.io.*;import java.net.*;import java.util.*;import java.util.regex.*;public class URLDemo {    //提取的数据存放到该目录下    private static String savepath=&quot;E:/dangdang_book/&quot;;    //等待爬取的url    private static List&lt;String&gt; allwaiturl=new ArrayList&lt;&gt;();    //爬取过的url    private static Set&lt;String&gt; alloverurl=new HashSet&lt;&gt;();    //记录所有url的深度进行爬取判断    private static Map&lt;String,Integer&gt; allurldepth=new HashMap&lt;&gt;();    //爬取得深度    private static int maxdepth=2;    public static void main(String args[]){        //确定爬取的网页地址，此处为当当网首页上的图书分类进去的网页        //网址为        http://book.dangdang.com/        //String strurl=&quot;http://search.dangdang.com/?key=%BB%FA%D0%B5%B1%ED&amp;act=input&quot;;        String strurl=&quot;http://book.dangdang.com/&quot;;        workurl(strurl,1);    }    public static void workurl(String strurl,int depth){        //判断当前url是否爬取过        if(!(alloverurl.contains(strurl)||depth&gt;maxdepth)){        //建立url爬取核心对象        try {            URL url=new URL(strurl);            //通过url建立与网页的连接            URLConnection conn=url.openConnection();            //通过链接取得网页返回的数据            InputStream is=conn.getInputStream();            System.out.println(conn.getContentEncoding());            //一般按行读取网页数据，并进行内容分析            //因此用BufferedReader和InputStreamReader把字节流转化为字符流的缓冲流            //进行转换时，需要处理编码格式问题            BufferedReader br=new BufferedReader(new InputStreamReader(is,&quot;GB2312&quot;));            //按行读取并打印            String line=null;            //正则表达式的匹配规则提取该网页的链接            Pattern p=Pattern.compile(&quot;&lt;a .*href=.+&lt;/a&gt;&quot;);            //建立一个输出流，用于保存文件,文件名为执行时间，以防重复            PrintWriter pw=new PrintWriter(new File(savepath+System.currentTimeMillis()+&quot;.txt&quot;));            while((line=br.readLine())!=null){                //System.out.println(line);                //编写正则，匹配超链接地址                pw.println(line);                Matcher m=p.matcher(line);                while(m.find()){                    String href=m.group();                    //找到超链接地址并截取字符串                    //有无引号                    href=href.substring(href.indexOf(&quot;href=&quot;));                    if(href.charAt(5)==&#39;\&quot;&#39;){                        href=href.substring(6);                    }else{                        href=href.substring(5);                    }                    //截取到引号或者空格或者到&quot;&gt;&quot;结束                try{                    href=href.substring(0,href.indexOf(&quot;\&quot;&quot;));                }catch(Exception e){                    try{                        href=href.substring(0,href.indexOf(&quot; &quot;));                    }catch(Exception e1){                        href=href.substring(0,href.indexOf(&quot;&gt;&quot;));                    }                }                if(href.startsWith(&quot;http:&quot;)||href.startsWith(&quot;https:&quot;)){                    //输出该网页存在的链接                    //System.out.println(href);                    //将url地址放到队列中                    allwaiturl.add(href);                    allurldepth.put(href,depth+1);                        }                    }                }            pw.close();            br.close();        } catch (Exception e) {            // TODO Auto-generated catch block            e.printStackTrace();        }        //将当前url归列到alloverurl中        alloverurl.add(strurl);        System.out.println(strurl+&quot;网页爬取完成，已爬取数量：&quot;+alloverurl.size()+&quot;，剩余爬取数量：&quot;+allwaiturl.size());        }        //用递归的方法继续爬取其他链接        String nexturl=allwaiturl.get(0);        allwaiturl.remove(0);        workurl(nexturl,allurldepth.get(nexturl));                        }}</code></pre>]]></content>
+      
+      
+      <categories>
+          
+          <category> 算法 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> java爬虫 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>java爬虫从入门到熟练(一)爬虫理论基础</title>
+      <link href="/2018/05/12/java-reptile-1/"/>
+      <url>/2018/05/12/java-reptile-1/</url>
+      
+        <content type="html"><![CDATA[<h2 id="初识爬虫"><a href="#初识爬虫" class="headerlink" title="初识爬虫"></a>初识爬虫</h2><p>&nbsp;&nbsp;随着互联网的迅速发展，网络资源越来越丰富，信息需求者如何从网络中抽取信息变得至关重要。目前，有效的获取网络数据资源的重要方式，便是网络爬虫技术。简单的理解，比如您对百度贴吧的一个帖子内容特别感兴趣，而帖子的回复却有1000多页，这时采用逐条复制的方法便不可行。而采用网络爬虫便可以很轻松地采集到该帖子下的所有内容。<br>&nbsp;&nbsp;网络爬虫技术最广泛的应用是在搜索引擎中，如百度、Google、Bing 等，它完成了搜索过程中的最关键的步骤，即网页内容的抓取。下图为简单搜索引擎原理图。<br><img src="/images/java-reptile/1.png" height="330" width="495"></p><p>网络爬虫的作用，我总结为以下几点:<br>    &nbsp;&nbsp;1.<strong>舆情分析</strong>：企业或政府利用爬取的数据，采用数据挖掘的相关方法，发掘用户讨论的内容、实行事件监测、舆情引导等。<br>    &nbsp;&nbsp;2.<strong>企业的用户分析</strong>：企业利用网络爬虫，采集用户对其企业或商品的看法、观点以及态度，进而分析用户的需求、自身产品的优劣势、顾客抱怨等。<br>    &nbsp;&nbsp;3.<strong>科研工作者的必备技术</strong>：现有很多研究都以网络大数据为基础，而采集网络大数据的必备技术便是网络爬虫。利用网络爬虫技术采集的数据可用于研究产品个性化推荐、文本挖掘、用户行为模式挖掘等。</p><h2 id="网络爬虫的基本概念"><a href="#网络爬虫的基本概念" class="headerlink" title="网络爬虫的基本概念"></a>网络爬虫的基本概念</h2><p>&nbsp;&nbsp;网络爬虫（Web Crawler），又称为网络蜘蛛（Web Spider）或 Web 信息采集器，是一种按照一定规则，自动抓取或下载网络信息的计算机程序或自动化脚本，是目前搜索引擎的重要组成部分。<br>    &nbsp;&nbsp;1.<strong>狭义上理解</strong>：利用标准的 HTTP 协议，根据网络超链接（如<a href="https://www.baidu.com/）和" target="_blank" rel="noopener">https://www.baidu.com/）和</a> Web 文档检索的方法（如深度优先）遍历万维网信息空间的软件程序。<br>    &nbsp;&nbsp;2.<strong>功能上理解</strong>：确定待爬的 URL 队列，获取每个 URL 对应的网页内容（如 HTML/JSON），解析网页内容，并存储对应的数据。</p><h2 id="网络爬虫的流程"><a href="#网络爬虫的流程" class="headerlink" title="网络爬虫的流程"></a>网络爬虫的流程</h2><p><img src="/images/java-reptile/2.png" height="330" width="495"><br>&nbsp;&nbsp;具体流程为：<br>    &nbsp;&nbsp;1.需求者选取一部分种子 URL（或初始 URL），将其放入待爬取的队列中。如在 Java 网络爬虫中，可以放入 LinkedList 或 List 中。<br>    &nbsp;&nbsp;2.判断 URL 队列是否为空，如果为空则结束程序的执行，否则执行第三步骤。<br>    &nbsp;&nbsp;3.从待爬取的 URL 队列中取出待爬的一个 URL，获取 URL 对应的网页内容。在此步骤需要使用响应的状态码（如200，403等）判断是否获取数据，如响应成功则执行解析操作；如响应不成功，则将其重新放入待爬取队列（注意这里需要移除无效 URL)。<br>    &nbsp;&nbsp;4.针对已经响应成功后获取到的数据，执行页面解析操作。此步骤根据用户需求获取网页内容里的部分数据，如汽车论坛帖子的标题、发表的时间等。<br>    &nbsp;&nbsp;5.针对3步骤已解析的数据，将其进行存储。</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 算法 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> java爬虫 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>Java和javascript日期详解</title>
+      <link href="/2018/04/04/java-date/"/>
+      <url>/2018/04/04/java-date/</url>
+      
+        <content type="html"><![CDATA[<p>java，js日期转换：</p><h2 id="日期表示类型"><a href="#日期表示类型" class="headerlink" title="日期表示类型"></a>日期表示类型</h2><ol><li>获取long类型的日期格式<pre><code>long time = System.currentTimeMillis();System.out.printf(time+&quot;&quot;);Date date =new Date();System.out.println(date.getTime());</code></pre></li><li><p>获取制定格式的日期</p><pre><code>  SimpleDateFormat sdf = new SimpleDateFormat(&quot;yyyy-MM-dd hh:mm:ss&quot;);  Date date =new Date();  System.out.println(sdf.format(date) );</code></pre></li><li><p>把制定格式的日期转为date或者毫秒值</p><pre><code>  SimpleDateFormat sdf = new SimpleDateFormat(&quot;yyyy-MM-dd hh:mm:ss&quot;);    Date date = sdf.parse(&quot;2016-05-22 10:15:21&quot;);    long mills = date.getTime();</code></pre><h2 id="日期计算"><a href="#日期计算" class="headerlink" title="日期计算"></a>日期计算</h2></li><li><p>最方便的方式是将时间转为毫秒值进行计算</p><pre><code>Date from =new Date();Thread.sleep(200);//线程休眠2msDate to =new Date();System.out.println(to.getTime()-from.getTime());</code></pre></li></ol><h2 id="高精度时间"><a href="#高精度时间" class="headerlink" title="高精度时间"></a>高精度时间</h2><ol><li>最方便的方式是将时间转为毫秒值进行计算<pre><code>long time1 =System.nanoTime();System.out.printf(time1+&quot;&quot;);</code></pre></li></ol><h2 id="javascript日期"><a href="#javascript日期" class="headerlink" title="javascript日期"></a>javascript日期</h2><ol><li>获取时间的毫秒值，获取月份，时间<pre><code>var myDate = new Date();myDate.getYear(); //获取当前年份(2位)myDate.getFullYear(); //获取完整的年份(4位,1970-????)myDate.getMonth(); //获取当前月份(0-11,0代表1月)myDate.getDate(); //获取当前日(1-31)myDate.getDay(); //获取当前星期X(0-6,0代表星期天)myDate.getTime(); //获取当前时间(从1970.1.1开始的毫秒数)myDate.getHours(); //获取当前小时数(0-23)myDate.getMinutes(); //获取当前分钟数(0-59)myDate.getSeconds(); //获取当前秒数(0-59)myDate.getMilliseconds(); //获取当前毫秒数(0-999)myDate.toLocaleDateString(); //获取当前日期var mytime=myDate.toLocaleTimeString(); //获取当前时间myDate.toLocaleString( ); //获取日期与时间</code></pre></li><li><p>时间戳获取   –&gt;注意，java，php等生成的时间戳是秒，不是毫秒，所以需要签名时间戳的时候，需要转为秒时间戳</p><pre><code> var time = new Date();var timestamp = parseInt(time.getTime()/1000);</code></pre></li><li><p>格式化时间</p><pre><code> //获取当前时间，格式YYYY-MM-DDfunction getNowFormatDate() {    var date = new Date();    var seperator1 = &quot;-&quot;;    var year = date.getFullYear();    var month = date.getMonth() + 1;    var strDate = date.getDate();    if (month &gt;= 1 &amp;&amp; month &lt;= 9) {        month = &quot;0&quot; + month;    }    if (strDate &gt;= 0 &amp;&amp; strDate &lt;= 9) {        strDate = &quot;0&quot; + strDate;    }    var currentdate = year + seperator1 + month + seperator1 + strDate;    return currentdate;}</code></pre></li></ol>]]></content>
+      
+      
+      <categories>
+          
+          <category> 算法 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 日期转换 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>Git常用操作</title>
+      <link href="/2018/03/04/git-config-study/"/>
+      <url>/2018/03/04/git-config-study/</url>
+      
+        <content type="html"><![CDATA[<p>git学习笔记：<br>&nbsp;&nbsp;不止包含git的日常操作，还有高级技巧哦。</p><h2 id="安装git"><a href="#安装git" class="headerlink" title="安装git"></a>安装git</h2><ol><li>下载安装包&nbsp;<a href="https://git-scm.com/" target="_blank" rel="noopener">下载地址</a> </li><li>安装git</li><li>进入命令行,输入git看看是否成功</li></ol><h2 id="配置git"><a href="#配置git" class="headerlink" title="配置git"></a>配置git</h2><ol><li>配置全局用户名和密码(此处请修改为你自己的git用户名和邮箱)<pre><code>git config –global user.name “Chen Hao”git config –global user.email 1400675645@qq.com</code></pre></li><li><p>配置ssh公钥</p><pre><code>cd ~/.ssh 然后ls如果没有,直接生成,一路点击enterssh-keygencat ~/.ssh/id_rsa.pub把公钥配置到github的个人设置</code></pre><h2 id="常用的命令"><a href="#常用的命令" class="headerlink" title="常用的命令"></a>常用的命令</h2></li><li>repository操作<pre><code>1. 检出（clone）仓库代码：git clone repository-url / git clone repository-url local-directoryname    1. 例如，clone jquery 仓库到本地： git clone git://github.com/jquery/jquery.git    2. lone jquery 仓库到本地，并且重命名为 my-jquery ：git clone git://github.com/jquery/jquery.git my-jquery2. 查看远程仓库：git remote -v3. 添加远程仓库：git remote add [name] [repository-url]4. 删除远程仓库：git remote rm [name]5. 修改远程仓库地址：git remote set-url origin new-repository-url6. 拉取远程仓库： git pull [remoteName] [localBranchName]7. 推送远程仓库： git push [remoteName] [localBranchName]</code></pre></li><li><p>提交/拉取/合并/删除</p><pre><code>1. 添加文件到暂存区（staged）：git add filename / git stage filename2. 将所有修改文件添加到暂存区（staged）： git add --all / git add -A3. 提交修改到暂存区（staged）：git commit -m &#39;commit message&#39; / git commit -a -m &#39;commit message&#39; 注意理解 -a 参数的意义4. 从Git仓库中删除文件：git rm filename5. 从Git仓库中删除文件，但本地文件保留：git rm --cached filename6. 重命名某个文件：git mv filename newfilename 或者直接修改完毕文件名 ，进行git add -A &amp;&amp; git commit -m &#39;commit message&#39; Git会自动识别是重命名了文件7. 获取远程最新代码到本地：git pull (origin branchname) 可以指定分支名，也可以忽略。pull 命令自动 fetch 远程代码并且 merge，如果有冲突，会显示在状态栏，需要手动处理。更推荐使用：git fetch 之后 git merge --no-ff origin branchname 拉取最新的代码到本地仓库，并手动 merge 。</code></pre></li><li><p>日志查看</p><pre><code>1. 查看日志：git log2. 查看日志，并查看每次的修改内容：git log -p3. 查看日志，并查看每次文件的简单修改状态：git log --stat4. 一行显示日志：git log --pretty=oneline / git log --pretty=&#39;format:&quot;%h - %an, %ar : %s&#39;5. 查看日志范围：    1. 查看最近10条日志：git log -10    2. 查看2周前：git log --until=2week 或者指定2周的明确日期，比如：git log --until=2015-08-12    3. 查看最近2周内：git log --since=2week 或者指定2周明确日志，比如：git log --since=2015-08-12    4. 只查看某个用户的提交：git log --committer=user.name / git log --author=user.name</code></pre></li><li><p>取消操作</p><pre><code>1. 上次提交msg错误/有未提交的文件应该同上一次一起提交，需要重新提交备注：git commit --amend -m &#39;new msg&#39;2. 一次git add -A后，需要将某个文件撤回到工作区，即：某个文件不应该在本次commit中：git reset HEAD filename3. 撤销某些文件的修改内容：git checkout -- filename 注意：一旦执行，所有的改动都没有了，谨慎！谨慎！谨慎！4. 将工作区内容回退到远端的某个版本：git reset --hard &lt;sha1-of-commit&gt;    1. --hard：reset stage and working directory , 以来所有的变更全部丢弃，并将 HEAD 指向    2. --soft：nothing changed to stage and working directory ,仅仅将HEAD指向 ，所有变更显示在”changed to be committed”中    3. --mixed：default,reset stage ,nothing to working directory ，这也就是第二个例子的原因</code></pre></li></ol><ol start="5"><li><p>比较差异</p><pre><code>1. 查看工作区（working directory）和暂存区（staged）之间差异：git diff2. 查看工作区（working directory）与当前仓库版本（repository）HEAD版本差异：git diff HEAD3. 查看暂存区（staged）与当前仓库版本（repository）差异：git diff --cached / git diff --staged</code></pre></li><li><p>合并操作</p><pre><code>1. 解决冲突后/获取远程最新代码后合并代码：git merge branchname2. 保留该存在版本合并log：git merge --no-ff branchname 参数--no-ff防止 fast-forward 的提交</code></pre></li></ol>]]></content>
+      
+      
+      <categories>
+          
+          <category> 命令 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> git命令 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>数字转汉字写法</title>
+      <link href="/2018/03/04/numtochinese/"/>
+      <url>/2018/03/04/numtochinese/</url>
+      
+        <content type="html"><![CDATA[<h2 id="题目来源"><a href="#题目来源" class="headerlink" title="题目来源:"></a>题目来源:</h2><p>&nbsp;&nbsp; 找工作时看到某金融公司的题目，把一个int的数字转为汉字的读法，比如123，转成一百二十三，限时20分钟。</p><hr><h2 id="题目要求："><a href="#题目要求：" class="headerlink" title="题目要求："></a>题目要求：</h2><p>&nbsp;&nbsp;用java实现，把int的数字转为汉字读音，比如123，转成一百二十三，10020转为一万零二十。</p><hr><h2 id="思路分析"><a href="#思路分析" class="headerlink" title="思路分析:"></a>思路分析:</h2><p>&nbsp;&nbsp;中文计数的特点，以万为小节，万以内的都是以“十百千”为权位单独计数，比如一千百，一千千都是非法的。而“十百千”这样的权位可以与“万”，“亿”进行搭配，二十亿，五千万等等。。</p><hr><h2 id="中文数字的零"><a href="#中文数字的零" class="headerlink" title="中文数字的零:"></a>中文数字的零:</h2><p>&nbsp;&nbsp;中文的零的使用总结起来有三个规则:</p><ol><li>以10000为小节，结尾是0，不使用零，比如1020</li><li>以10000为小节，小节内两个非0数字之间需要零</li><li>小节的千位是0，若小节前无其他数字，不用零，否者用零</li></ol><hr><h2 id="完整代码"><a href="#完整代码" class="headerlink" title="完整代码:"></a>完整代码:</h2><pre><code>public class NumberTransfer {    public final String[] chnNumChar = new String[]{&quot;零&quot;, &quot;一&quot;, &quot;二&quot;, &quot;三&quot;, &quot;四&quot;, &quot;五&quot;, &quot;六&quot;, &quot;七&quot;, &quot;八&quot;, &quot;九&quot;};    public final String[] chnUnitSection = new String[]{&quot;&quot;, &quot;万&quot;, &quot;亿&quot;, &quot;万亿&quot;};    public final String[] chnUnitChar = new String[]{&quot;&quot;, &quot;十&quot;, &quot;百&quot;, &quot;千&quot;};    @Test    public void testNumberToChinese() {        int[] nums = new int[]{304, 4006, 4000, 10003, 10030, 21010011, 101101101};        for (int i = 0; i &lt; nums.length; i++) {            System.out.println(numberToChinese(nums[i]));        }    }    public String numberToChinese(int num) {        String strIns;        String chnStr = &quot;&quot;;        int unitPos = 0;        boolean needZero = false;        if (num == 0)            return &quot;零&quot;;        while (num &gt; 0) {            strIns = &quot;&quot;;            int section = num % 10000;            if (needZero) {                chnStr = chnNumChar[0] + chnStr;            }            // 添加节权（万，亿）            strIns += (section != 0) ? chnUnitSection[unitPos] : chnUnitSection[0];            chnStr = strIns + chnStr;            // 以万为单位，求万以内的权位            chnStr = sectionToChinese(section, chnStr);            needZero = (section &lt; 1000) &amp;&amp; (section &gt; 0);            num = num / 10000;            unitPos++;        }        return chnStr;    }    private String sectionToChinese(int section, String chnStr) {        String strIns;        int unitPos = 0;        boolean zero = true;        while (section &gt; 0) {            int v = section % 10;            if (v == 0) {                if (section == 0 || !zero) {                    zero = true;// zero确保不会出现多个零                    chnStr = chnNumChar[v] + chnStr;                }            } else {                zero = false;                strIns = chnNumChar[v]; // 此位置对应等中文数字                strIns += chnUnitChar[unitPos];// 此位置对应的权位                chnStr = strIns + chnStr;            }            unitPos++;            section = section / 10;        }        return chnStr;    }}</code></pre>]]></content>
+      
+      
+      <categories>
+          
+          <category> 算法 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> -数字转汉字算法 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>常用排序算法学习</title>
+      <link href="/2018/03/01/java-sort/"/>
+      <url>/2018/03/01/java-sort/</url>
+      
+        <content type="html"><![CDATA[<h2 id="排序算法的分类"><a href="#排序算法的分类" class="headerlink" title="排序算法的分类"></a>排序算法的分类</h2><ol><li>排序分内排序和外排序。</li><li>内排序:指在排序期间数据对象全部存放在内存的排序。</li><li>外排序:指在排序期间全部对象个数太多,不能同时存放在内存,必须根据排序过程的要求,不断在内、外存之间移动的排序。</li><li>内排序的方法有许多种,按所用策略不同,可归纳为五类:插入排序、选择排序、交换排序、归并排序、分配排序和计数排序。</li><li>插入排序主要包括直接插入排序，折半插入排序和希尔排序两种。</li><li>选择排序主要包括直接选择排序和堆排序。</li><li>交换排序主要包括冒泡排序和快速排序。</li><li>归并排序主要包括二路归并(常用的归并排序)和自然归并。</li><li>分配排序主要包括箱排序和基数排序。</li></ol><hr><p><strong>冒泡排序：</strong>冒泡排序就是把小的元素往前调或者把大的元素往后调。比较是相邻的两个元素比较，交换也发生在这两个元素之间。所以，如果两个元素相等，是不用交换的；如果两个相等的元素没有相邻，那么即使通过前面的两两交换把两个相邻起来，这时候也不会交换，所以相同元素的前后顺序并没有改变，所以冒泡排序是一种稳定排序算法。</p><pre><code>// js代码function sort(arr) {if (arr.length == 0) {    return [];}var length = arr.length;for (var i = 0; i &lt; length; i++) {        for (var j = 0; j &lt; length - i - 1; j++) {            if (arr[j] &gt; arr[j + 1]) {                var temp = arr[j];                arr[j] = arr[j + 1];                arr[j + 1] = temp;                console.log(arr);            }        }    }}</code></pre><p><strong>快速排序：</strong>快速排序是对冒泡排序的一种改进。它的基本思想是：通过一趟排序将要排序的数据分割成独立的两部分，其中一部分的所有数据都比另外一部分的所有数据都要小，然后再按此方法对这两部分数据分别进行快速排序，整个排序过程可以递归进行，以此达到整个数据变成有序序列。</p><pre><code>// js递归实现function quickSort(arr) {    if (arr.length == 0) {        return [];    }    var left = [];    var right = [];    var pivot = arr[0];    for (var i = 1; i &lt; arr.length; i++) {        if (arr[i] &lt; pivot) {            left.push(arr[i]);        } else {            right.push(arr[i]);        }    }    return quickSort(left).concat(pivot, quickSort(right));}var a = [];for (var i = 0; i &lt; 10; ++i) {    a[i] = Math.floor((Math.random() * 100) + 1);}console.log(a);console.log(quickSort(a));</code></pre><p><strong>直接插入排序：</strong>直接插入排序(straight insertion sort)的作法是：每次从无序表中取出第一个元素，把它插入到有序表的合适位置，使有序表仍然有序。</p><pre><code>function insertionSort(arr) {    var temp, inner;    for (var outer = 1; outer &lt;= arr.length - 1; ++outer) {        temp = arr[outer];        inner = outer;        while (inner &gt; 0 &amp;&amp; (arr[inner - 1] &gt;= temp)) {            arr[inner] = arr[inner - 1];            --inner;        }        arr[inner] = temp;    }    return arr;}var a = [];for (var i = 0; i &lt; 10; ++i) {    a[i] = Math.floor((Math.random() * 100) + 1);}console.log(a);console.log(insertionSort(a));</code></pre><p><strong>折半插入排序：</strong>折半插入排序算法的具体操作为：在将一个新元素插入已排好序的数组的过程中，寻找插入点时，将待插入区域的首元素设置为a[low],末元素设置为 a[high]，则轮比较时将待插入元素与a[m],其中m=(low+high)/2相比较,如果比参考元素小，则选择a[low]到a[m-1]为新 的插入区域(即high=m-1)，否则选择a[m+1]到a[high]为新的插入区域（即low=m+1），如此直至low&lt;=high不成 立，即将此位置之后所有元素后移一位，并将新元素插入a[high+1]。</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 算法 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 排序算法 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+  
+  
+</search>

@@ -1,0 +1,914 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+
+
+<head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="utf-8">
+    <meta name="keywords" content="java爬虫从入门到熟练(二)原生代码 URL类, 我是一个热爱技术的程序猿，觉得编程是很屌的工作，比尔盖茨用自己的window改变了整个世界，扎克伯格用facebook连接了全世界...我想做的是有很多人使用我所编写的软件，框架，或者只是看看我的博客。">
+    <meta name="description" content="写在前边&amp;nbsp;&amp;nbsp;使用原生代码实现爬虫
+使用URL类代码    /**
+     * 读取当当网下联想电脑的数据，并进行分析
+     * chenhao   2018-05-12 19:01
+     */
+    impo">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="renderer" content="webkit|ie-stand|ie-comp">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>java爬虫从入门到熟练(二)原生代码 URL类 | 陈豪 - JAVA软件开发工程师</title>
+    <link rel="icon" type="image/jpeg" href="/images/chenhao1.jpg">
+
+    <link rel="stylesheet" type="text/css" href="/libs/awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/materialize/materialize.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/aos/aos.css">
+    <link rel="stylesheet" type="text/css" href="/libs/animate/animate.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/lightGallery/css/lightgallery.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/matery.css">
+    <link rel="stylesheet" type="text/css" href="/css/my.css">
+    <style type="text/css">
+        
+    </style>
+
+    <script src="/libs/jquery/jquery-2.2.0.min.js"></script>
+<link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css"></head>
+
+
+<body>
+
+<header class="navbar-fixed">
+    <nav id="headNav" class="bg-color nav-transparent">
+        <div id="navContainer" class="nav-wrapper container">
+            <div class="brand-logo">
+                <a href="/" class="waves-effect waves-light">
+                    
+                    <img src="/medias/logo.png" class="logo-img" alt="LOGO">
+                    
+                    <span class="logo-span">陈豪 - JAVA软件开发工程师</span>
+                </a>
+            </div>
+            
+
+<a href="#" data-target="mobile-nav" class="sidenav-trigger button-collapse"><i class="fa fa-navicon"></i></a>
+<ul class="right">
+    
+    <li class="hide-on-med-and-down">
+        <a href="/" class="waves-effect waves-light">
+            
+            <i class="fa fa-home"></i>
+            
+            <span>主页</span>
+        </a>
+    </li>
+    
+    <li class="hide-on-med-and-down">
+        <a href="/categories" class="waves-effect waves-light">
+            
+            <i class="fa fa-bookmark"></i>
+            
+            <span>分类</span>
+        </a>
+    </li>
+    
+    <li class="hide-on-med-and-down">
+        <a href="/archives" class="waves-effect waves-light">
+            
+            <i class="fa fa-archive"></i>
+            
+            <span>归档</span>
+        </a>
+    </li>
+    
+    <li class="hide-on-med-and-down">
+        <a href="/about" class="waves-effect waves-light">
+            
+            <i class="fa fa-user-circle-o"></i>
+            
+            <span>关于我</span>
+        </a>
+    </li>
+    
+    <li>
+        <a href="#searchModal" class="modal-trigger waves-effect waves-light">
+            <i id="searchIcon" class="fa fa-search" title="搜索"></i>
+        </a>
+    </li>
+</ul>
+
+<div id="mobile-nav" class="side-nav sidenav">
+
+    <div class="mobile-head bg-color">
+        
+        <img src="/medias/logo.png" class="logo-img circle responsive-img">
+        
+        <div class="logo-name">陈豪 - JAVA软件开发工程师</div>
+        <div class="logo-desc">
+            
+            我是一个热爱技术的程序猿，觉得编程是很屌的工作，比尔盖茨用自己的window改变了整个世界，扎克伯格用facebook连接了全世界...我想做的是有很多人使用我所编写的软件，框架，或者只是看看我的博客。
+            
+        </div>
+    </div>
+
+    
+
+    <ul class="menu-list mobile-menu-list">
+        
+        <li>
+            <a href="/" class="waves-effect waves-light">
+                
+                <i class="fa fa-fw fa-home"></i>
+                
+                主页
+            </a>
+        </li>
+        
+        <li>
+            <a href="/categories" class="waves-effect waves-light">
+                
+                <i class="fa fa-fw fa-bookmark"></i>
+                
+                分类
+            </a>
+        </li>
+        
+        <li>
+            <a href="/archives" class="waves-effect waves-light">
+                
+                <i class="fa fa-fw fa-archive"></i>
+                
+                归档
+            </a>
+        </li>
+        
+        <li>
+            <a href="/about" class="waves-effect waves-light">
+                
+                <i class="fa fa-fw fa-user-circle-o"></i>
+                
+                关于我
+            </a>
+        </li>
+        
+        
+    </ul>
+</div>
+
+        </div>
+
+        
+    </nav>
+
+</header>
+
+
+
+
+
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/21.jpg')">
+    <div class="container">
+        <div class="row">
+            <div class="col s12 m12 l12">
+                <div class="brand">
+                    <div class="description center-align post-title">
+                        java爬虫从入门到熟练(二)原生代码 URL类
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<main class="post-container content">
+
+    
+    <link rel="stylesheet" href="/libs/tocbot/tocbot.css">
+<style>
+    #articleContent h1::before,
+    #articleContent h2::before,
+    #articleContent h3::before,
+    #articleContent h4::before,
+    #articleContent h5::before,
+    #articleContent h6::before {
+        display: block;
+        content: " ";
+        height: 100px;
+        margin-top: -100px;
+        visibility: hidden;
+    }
+
+    #articleContent :focus {
+        outline: none;
+    }
+
+    .toc-fixed {
+        position: fixed;
+        top: 64px;
+    }
+
+    .toc-widget {
+        padding-left: 20px;
+    }
+
+    .toc-widget .toc-title {
+        margin: 35px 0 15px 0;
+        padding-left: 17px;
+        font-size: 1.5rem;
+        font-weight: bold;
+        line-height: 1.5rem;
+    }
+
+    .toc-widget ol {
+        padding: 0;
+        list-style: none;
+    }
+
+    #toc-content ol {
+        padding-left: 10px;
+    }
+
+    #toc-content ol li {
+        padding-left: 10px;
+    }
+
+    #toc-content .toc-link:hover {
+        color: #42b983;
+        font-weight: 700;
+        text-decoration: underline;
+    }
+
+    #toc-content .toc-link::before {
+        background-color: transparent;
+        max-height: 25px;
+    }
+
+    #toc-content .is-active-link {
+        color: #42b983;
+    }
+
+    #toc-content .is-active-link::before {
+        background-color: #42b983;
+    }
+</style>
+<div class="row">
+    <div class="col s12 m12 l9">
+        <!-- 文章内容详情 -->
+<div id="artDetail">
+    <div class="card">
+        <div class="card-content article-info">
+            <div class="row tag-cate">
+                <div class="col s7">
+                    
+                    <div class="article-tag">
+                        
+                            <a href="/tags/java爬虫/" target="_blank">
+                                <span class="chip bg-color">java爬虫</span>
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+                <div class="col s5 right-align">
+                    
+                    <div class="post-cate">
+                        <i class="fa fa-bookmark fa-fw icon-category"></i>
+                        
+                            <a href="/categories/算法/" class="post-category" target="_blank">
+                                算法
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+            </div>
+
+            <div class="post-info">
+                <div class="post-date info-break-policy">
+                    <i class="fa fa-calendar-minus-o fa-fw"></i>发布日期:&nbsp;&nbsp;
+                    2018-05-12
+                </div>
+
+                
+				
+				
+            </div>
+        </div>
+        <hr class="clearfix">
+        <div class="card-content article-card-content">
+            <div id="articleContent">
+                <h2 id="写在前边"><a href="#写在前边" class="headerlink" title="写在前边"></a>写在前边</h2><p>&nbsp;&nbsp;使用原生代码实现爬虫<br><img src="/images/java-reptile/3.png" width="100%"></p>
+<h2 id="使用URL类代码"><a href="#使用URL类代码" class="headerlink" title="使用URL类代码"></a>使用URL类代码</h2><pre><code>    /**
+     * 读取当当网下联想电脑的数据，并进行分析
+     * chenhao   2018-05-12 19:01
+     */
+    import java.io.*;
+    import java.net.*;
+
+    public class URLReptile {
+        public static void main(String args[]){
+            //确定爬取的网页地址，此处为当当网搜联想电脑显示的网页
+            //网址为       http://search.dangdang.com/?key=%C1%AA%CF%EB%B5%E7%C4%D4
+            String strurl=&quot;http://search.dangdang.com/?key=%C1%AA%CF%EB%B5%E7%C4%D4&quot;;
+            //建立url爬取核心对象
+            try {
+                URL url=new URL(strurl);
+                //通过url建立与网页的连接
+                URLConnection conn=url.openConnection();
+                //通过链接取得网页返回的数据
+                InputStream is=conn.getInputStream();
+
+                System.out.println(conn.getContentEncoding());
+                //一般按行读取网页数据，并进行内容分析
+                //因此用BufferedReader和InputStreamReader把字节流转化为字符流的缓冲流
+                //进行转换时，需要处理编码格式问题
+                BufferedReader br=new BufferedReader(new InputStreamReader(is,&quot;UTF-8&quot;));
+
+                //按行读取并打印
+                String line=null;
+                while((line=br.readLine())!=null){
+                    System.out.println(line);
+                }
+
+                br.close();
+            } catch (Exception e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+
+        }
+    }
+</code></pre><p>&nbsp;&nbsp;结果显示：<br><img src="/images/java-reptile/4.png" width="100%"></p>
+<h2 id="离线分析"><a href="#离线分析" class="headerlink" title="离线分析"></a>离线分析</h2><p>&nbsp;&nbsp;爬取源代码不是我们的最终目的，接着使用正则表达式来分析爬爬取的代码。</p>
+<h3 id="正则表达式"><a href="#正则表达式" class="headerlink" title="正则表达式"></a>正则表达式</h3><p>Java.util包下提供了<span style="color:blue">Pattern</span>和<span style="color:blue">Matcher</span>这两个类，可以根据我们给定的条件来进行数据的匹配和提取。</p>
+<p>通过Pattern类中提供的规则字符或字符串，我们需要自己拼凑出我们的匹配规则。</p>
+<p>正则表达式<span style="color:blue">最常用的地方是用来做表单提交的数据格式验证的</span>。<br><span style="color:red"><br>常用的正则表达式规则一般分为两类：<br>1） 内容匹配<br>　　a) \d：是否是数字<br>　　b) \w：匹配 字母、数字或下划线<br>　　c) .：任意字符<br>　　d) [a-z]：字符是否在给定范围内。<br>2） 数量匹配<br>　　a) +：1个或以上<br>　　b) *：0个或以上<br>　　c) ?：0或1次<br>　　d) {n,m}：n-m次<br></span><br><strong>列如：</strong>(提取一段内容中点电话号码)<br>匹配手机电话号码(规则)：1\d{10} (此处我们只做了初级验证，以1开头的11位数字)</p>
+<pre class=" language-/**"><code class="language-/**">     * 爬取一段文本中的电话号码
+     * chenhao   2018-05-12 19:06
+     */
+    import java.util.HashSet;
+    import java.util.Set;
+    import java.util.regex.Matcher;
+    import java.util.regex.Pattern;
+
+    public class Patterndemo {
+        public static void  main(String[] args){
+            Pattern p = Pattern.compile("1\\d{10}");
+             String content = "<div>[转让]<a href="/17610866588" title="手机号码 15025642965 估价评估_值多少钱_归购转让信息" class="lj44">由 张宝红 600元求购,联系电话：15026815169qq:22203</a></div>";
+
+            Matcher m = p.matcher(content);
+            Set<string> set = new HashSet<>();
+            // 通过Matcher类的group方法和find方法来进行查找和匹配
+            while (m.find()) {
+                     String value = m.group();
+                     set.add(value);
+            }
+            System.out.println(set);
+        }
+    }
+
+</string></code></pre>
+<p><img src="/images/java-reptile/5.png" width="100%"></p>
+<h3 id="超连接的连接匹配和提取"><a href="#超连接的连接匹配和提取" class="headerlink" title="超连接的连接匹配和提取"></a>超连接的连接匹配和提取</h3><pre><code>对爬取的HTML页面来说，如果想提取连接地址，就必须找到所有超连接的标签和对应的属性。
+超连接标签是&lt;a&gt;&lt;/a&gt;，保存连接的属性是：href。
+&lt;a href=”…”&gt;…&lt;/a&gt;
+规则：
+&lt;a .*href=.+&lt;/a&gt;
+</code></pre><h3 id="广度优先遍历"><a href="#广度优先遍历" class="headerlink" title="广度优先遍历"></a>广度优先遍历</h3><p>需要有一个队列（这里直接使用ArrayList来作为队列）保存所有等待爬取的连接。<br>还需要一个Set集合记录下所有已经爬取过的连接。<br>还需要一个深度值，记录当前爬取的网页深度，判断是否满足要求</p>
+<p><strong>列如：</strong>(对当当网首页分类里的图书进行深度为2的网页爬取，利用递归的方式进行数据获取存到E:/dangdang_book/目录下)</p>
+<pre><code>
+/**
+ * 读取当当网下首页图书的数据，并进行分析
+ * 爬取深度为2
+ * 爬去数据存储到E:/dangdang_book/目录下，需自行创建
+ * chenhao   2018-05-12 20:11
+ */
+import java.io.*;
+import java.net.*;
+import java.util.*;
+import java.util.regex.*;
+
+public class URLDemo {
+    //提取的数据存放到该目录下
+    private static String savepath=&quot;E:/dangdang_book/&quot;;
+    //等待爬取的url
+    private static List&lt;String&gt; allwaiturl=new ArrayList&lt;&gt;();
+    //爬取过的url
+    private static Set&lt;String&gt; alloverurl=new HashSet&lt;&gt;();
+    //记录所有url的深度进行爬取判断
+    private static Map&lt;String,Integer&gt; allurldepth=new HashMap&lt;&gt;();
+    //爬取得深度
+    private static int maxdepth=2;
+
+    public static void main(String args[]){
+        //确定爬取的网页地址，此处为当当网首页上的图书分类进去的网页
+        //网址为        http://book.dangdang.com/
+        //String strurl=&quot;http://search.dangdang.com/?key=%BB%FA%D0%B5%B1%ED&amp;act=input&quot;;
+        String strurl=&quot;http://book.dangdang.com/&quot;;
+
+        workurl(strurl,1);
+
+    }
+    public static void workurl(String strurl,int depth){
+        //判断当前url是否爬取过
+        if(!(alloverurl.contains(strurl)||depth&gt;maxdepth)){
+        //建立url爬取核心对象
+        try {
+            URL url=new URL(strurl);
+            //通过url建立与网页的连接
+            URLConnection conn=url.openConnection();
+            //通过链接取得网页返回的数据
+            InputStream is=conn.getInputStream();
+
+            System.out.println(conn.getContentEncoding());
+            //一般按行读取网页数据，并进行内容分析
+            //因此用BufferedReader和InputStreamReader把字节流转化为字符流的缓冲流
+            //进行转换时，需要处理编码格式问题
+            BufferedReader br=new BufferedReader(new InputStreamReader(is,&quot;GB2312&quot;));
+
+            //按行读取并打印
+            String line=null;
+            //正则表达式的匹配规则提取该网页的链接
+            Pattern p=Pattern.compile(&quot;&lt;a .*href=.+&lt;/a&gt;&quot;);
+            //建立一个输出流，用于保存文件,文件名为执行时间，以防重复
+            PrintWriter pw=new PrintWriter(new File(savepath+System.currentTimeMillis()+&quot;.txt&quot;));
+
+            while((line=br.readLine())!=null){
+                //System.out.println(line);
+                //编写正则，匹配超链接地址
+                pw.println(line);
+                Matcher m=p.matcher(line);
+                while(m.find()){
+                    String href=m.group();
+                    //找到超链接地址并截取字符串
+                    //有无引号
+                    href=href.substring(href.indexOf(&quot;href=&quot;));
+                    if(href.charAt(5)==&#39;\&quot;&#39;){
+                        href=href.substring(6);
+                    }else{
+                        href=href.substring(5);
+                    }
+                    //截取到引号或者空格或者到&quot;&gt;&quot;结束
+                try{
+                    href=href.substring(0,href.indexOf(&quot;\&quot;&quot;));
+                }catch(Exception e){
+                    try{
+                        href=href.substring(0,href.indexOf(&quot; &quot;));
+                    }catch(Exception e1){
+                        href=href.substring(0,href.indexOf(&quot;&gt;&quot;));
+                    }
+                }
+                if(href.startsWith(&quot;http:&quot;)||href.startsWith(&quot;https:&quot;)){
+                    //输出该网页存在的链接
+                    //System.out.println(href);
+                    //将url地址放到队列中
+                    allwaiturl.add(href);
+                    allurldepth.put(href,depth+1);
+                        }
+
+                    }
+
+                }
+            pw.close();
+            br.close();
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        //将当前url归列到alloverurl中
+        alloverurl.add(strurl);
+        System.out.println(strurl+&quot;网页爬取完成，已爬取数量：&quot;+alloverurl.size()+&quot;，剩余爬取数量：&quot;+allwaiturl.size());
+        }
+        //用递归的方法继续爬取其他链接
+        String nexturl=allwaiturl.get(0);
+        allwaiturl.remove(0);
+        workurl(nexturl,allurldepth.get(nexturl));                
+        }
+}
+
+</code></pre>
+            </div>
+            <hr>
+
+            
+            <style>
+    #reward {
+        margin: 40px 0;
+        text-align: center;
+    }
+
+    #reward .reward-link {
+        font-size: 1.88rem;
+    }
+
+    #reward .btn-floating:hover {
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2), 0 5px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    #rewardModal {
+        width: 320px;
+        height: 350px;
+    }
+
+    #rewardModal .reward-title {
+        margin: 15px auto;
+        padding-bottom: 5px;
+    }
+
+    #rewardModal .modal-content {
+        padding: 10px;
+    }
+
+    #rewardModal .close {
+        position: absolute;
+        right: 15px;
+        top: 15px;
+        color: rgba(0, 0, 0, 0.5);
+        font-size: 1.3rem;
+        line-height: 20px;
+        cursor: pointer;
+    }
+
+    #rewardModal .close:hover {
+        color: #ef5350;
+        transform: scale(1.3);
+        -moz-transform:scale(1.3);
+        -webkit-transform:scale(1.3);
+        -o-transform:scale(1.3);
+    }
+
+    #rewardModal .reward-tabs {
+        margin: 0 auto;
+        width: 210px;
+    }
+
+    .reward-tabs .tabs {
+        height: 38px;
+        margin: 10px auto;
+        padding-left: 0;
+    }
+
+    .reward-content ul {
+        padding-left: 0 !important;
+    }
+
+    .reward-tabs .tabs .tab {
+        height: 38px;
+        line-height: 38px;
+    }
+
+    .reward-tabs .tab a {
+        color: #fff;
+        background-color: #ccc;
+    }
+
+    .reward-tabs .tab a:hover {
+        background-color: #ccc;
+        color: #fff;
+    }
+
+    .reward-tabs .wechat-tab .active {
+        color: #fff !important;
+        background-color: #22AB38 !important;
+    }
+
+    .reward-tabs .alipay-tab .active {
+        color: #fff !important;
+        background-color: #019FE8 !important;
+    }
+
+    .reward-tabs .reward-img {
+        width: 210px;
+        height: 210px;
+    }
+</style>
+
+<div id="reward">
+    <a href="#rewardModal" class="reward-link modal-trigger btn-floating btn-large waves-effect waves-light red">赏</a>
+
+    <!-- Modal Structure -->
+    <div id="rewardModal" class="modal">
+        <div class="modal-content">
+            <a class="close modal-close"><i class="fa fa-close"></i></a>
+            <h4 class="reward-title">你的赏识是我前进的动力</h4>
+            <div class="reward-content">
+                <div class="reward-tabs">
+                    <ul class="tabs row">
+                        <li class="tab col s6 alipay-tab waves-effect waves-light"><a href="#alipay">支付宝</a></li>
+                        <li class="tab col s6 wechat-tab waves-effect waves-light"><a href="#wechat">微 信</a></li>
+                    </ul>
+                    <div id="alipay">
+                        <img src="/medias/reward/alipay.jpg" class="reward-img" alt="支付宝打赏二维码">
+                    </div>
+                    <div id="wechat">
+                        <img src="/medias/reward/wechat.png" class="reward-img" alt="微信打赏二维码">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(function () {
+        $('.tabs').tabs();
+    });
+</script>
+            
+
+            <link rel="stylesheet" type="text/css" href="/libs/share/css/share.min.css">
+
+<div id="article-share">
+    
+    <div class="social-share" data-disabled="qzone" data-wechat-qrcode-helper="<p>微信里点“发现”->“扫一扫”二维码便可查看分享。</p>"></div>
+    
+</div>
+
+<script src="/libs/share/js/social-share.min.js"></script>
+
+            <div class="reprint">
+                <p>
+                    <span class="reprint-tip">
+                        <i class="fa fa-exclamation-circle"></i>&nbsp;&nbsp;转载请注明:
+                    </span>
+                    <a href="http://yoursite.com" class="b-link-green">陈豪 - JAVA软件开发工程师</a>
+                    <i class="fa fa-angle-right fa-lg fa-fw text-color"></i>
+                    <a href="/2018/05/12/java-reptile-2/" class="b-link-green">java爬虫从入门到熟练(二)原生代码 URL类</a>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+<article id="prenext-posts" class="prev-next articles">
+    <div class="row article-row">
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge left-badge text-color">
+                <i class="fa fa-chevron-left"></i>&nbsp;上一篇</div>
+            <div class="card">
+                <a href="/2018/05/15/java-reptile-3/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/4.jpg" class="responsive-img" alt="java爬虫从入门到熟练(三)原生代码-多线程爬虫实现">
+                        
+                        <span class="card-title">java爬虫从入门到熟练(三)原生代码-多线程爬虫实现</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary">写在前边&nbsp;&nbsp;上一章我们使用了基本的原生代码爬取当当网的数据。由于往往现实中我们所爬取的数据量都是比价庞大的。因此为了提高爬虫性能，那我们就需要使用多线程来处理。
+注意事项这些线程需要标注出当前状态，是在等待，还是在爬取。</div>
+                    <div class="publish-info">
+                        <span class="publish-date">
+                            <i class="fa fa-clock-o fa-fw icon-date"></i>2018-05-15
+                        </span>
+                        <span class="publish-author">
+                            
+                            <i class="fa fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/算法/" class="post-category" target="_blank">
+                                    算法
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/java爬虫/" target="_blank">
+                        <span class="chip bg-color">java爬虫</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge right-badge text-color">
+                下一篇&nbsp;<i class="fa fa-chevron-right"></i>
+            </div>
+            <div class="card">
+                <a href="/2018/05/12/java-reptile-1/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/10.jpg" class="responsive-img" alt="java爬虫从入门到熟练(一)爬虫理论基础">
+                        
+                        <span class="card-title">java爬虫从入门到熟练(一)爬虫理论基础</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary">初识爬虫&nbsp;&nbsp;随着互联网的迅速发展，网络资源越来越丰富，信息需求者如何从网络中抽取信息变得至关重要。目前，有效的获取网络数据资源的重要方式，便是网络爬虫技术。简单的理解，比如您对百度贴吧的一个帖子内容特别感兴趣，而帖子的回</div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="fa fa-clock-o fa-fw icon-date"></i>2018-05-12
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fa fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/算法/" class="post-category" target="_blank">
+                                    算法
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/java爬虫/" target="_blank">
+                        <span class="chip bg-color">java爬虫</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+    </div>
+</article>
+</div>
+
+
+<script>
+    $('#articleContent').on('copy', function (e) {
+        // IE8 or earlier browser is 'undefined'
+        if (typeof window.getSelection === 'undefined') return;
+
+        var selection = window.getSelection();
+        // if the selection is short let's not annoy our users.
+        if (('' + selection).length < Number.parseInt('50')) {
+            return;
+        }
+
+        // create a div outside of the visible area and fill it with the selected text.
+        var bodyElement = document.getElementsByTagName('body')[0];
+        var newdiv = document.createElement('div');
+        newdiv.style.position = 'absolute';
+        newdiv.style.left = '-99999px';
+        bodyElement.appendChild(newdiv);
+        newdiv.appendChild(selection.getRangeAt(0).cloneContents());
+
+        // we need a <pre> tag workaround.
+        // otherwise the text inside "pre" loses all the line breaks!
+        if (selection.getRangeAt(0).commonAncestorContainer.nodeName === 'PRE') {
+            newdiv.innerHTML = "<pre>" + newdiv.innerHTML + "</pre>";
+        }
+
+        var url = document.location.href;
+        newdiv.innerHTML += '<br />'
+            + '来源: 陈豪 - JAVA软件开发工程师<br />'
+            + '作者: Chen Hao<br />'
+            + '链接: <a href="' + url + '">' + url + '</a><br />'
+            + '本文章著作权归陈豪所有，任何形式的转载都请注明出处。';
+
+        selection.selectAllChildren(newdiv);
+        window.setTimeout(function () {bodyElement.removeChild(newdiv);}, 200);
+    });
+</script>
+
+    </div>
+    <div class="col l3 hide-on-med-and-down">
+        <div class="toc-widget">
+            <div class="toc-title"><i class="fa fa-list-alt"></i>&nbsp;&nbsp;目录</div>
+            <div id="toc-content"></div>
+        </div>
+    </div>
+</div>
+
+<script src="/libs/tocbot/tocbot.min.js"></script>
+<script>
+    $(function () {
+        tocbot.init({
+            tocSelector: '#toc-content',
+            contentSelector: '#articleContent',
+            headingsOffset: -($(window).height() * 0.4 - 45),
+            // headingsOffset: -205,
+            headingSelector: 'h2, h3, h4'
+        });
+
+        // modify the toc link href to support Chinese.
+        let i = 0;
+        let tocHeading = 'toc-heading-';
+        $('#toc-content a').each(function () {
+            $(this).attr('href', '#' + tocHeading + (++i));
+        });
+
+        // modify the heading title id to support Chinese.
+        i = 0;
+        $('#articleContent').children('h2, h3, h4').each(function () {
+            $(this).attr('id', tocHeading + (++i));
+        });
+
+        // Set scroll toc fixed.
+        let tocHeight = parseInt($(window).height() * 0.4 - 64);
+        let $tocWidget = $('.toc-widget');
+        $(window).scroll(function () {
+            let scroll = $(window).scrollTop();
+            /* add post toc fixed. */
+            if (scroll > tocHeight) {
+                $tocWidget.addClass('toc-fixed');
+            } else {
+                $tocWidget.removeClass('toc-fixed');
+            }
+        });
+    });
+</script>
+    
+
+</main>
+
+
+<footer class="page-footer bg-color">
+    <div class="container row center-align">
+        <div class="col s12 m8 l8 copy-right">
+            本站由&copy;<a href="https://chenhaocto.github.io/" target="_blank">ChenHao</a>搭建
+			<br>
+			GitHub提供计算服务
+            
+            
+			
+        </div>
+        <div class="col s12 m4 l4 social-link ">
+
+
+    <a href="mailto:1400675645@qq.com" class="tooltipped" target="_blank" data-tooltip="邮件联系我" data-position="top" data-delay="50">
+        <i class="fa fa-envelope-open"></i>
+    </a>
+
+
+
+    <a href="tencent://AddContact/?fromId=50&fromSubId=1&subcmd=all&uin=1400675645" class="tooltipped" data-tooltip="QQ联系我: 1400675645" data-position="top" data-delay="50">
+        <i class="fa fa-qq"></i>
+    </a>
+
+
+</div>
+    </div>
+</footer>
+
+<div class="progress-bar"></div>
+
+
+<!-- 搜索遮罩框 -->
+<div id="searchModal" class="modal">
+    <div class="modal-content">
+        <div class="search-header">
+            <span class="title"><i class="fa fa-search"></i>&nbsp;&nbsp;搜索</span>
+            <input type="search" id="searchInput" name="s" placeholder="请输入搜索的关键字" class="search-input">
+        </div>
+        <div id="searchResult"></div>
+    </div>
+</div>
+
+<script src="/js/search.js"></script>
+<script type="text/javascript">
+$(function () {
+    searchFunc("/" + "search.xml", 'searchInput', 'searchResult');
+});
+</script>
+<!-- 回到顶部按钮 -->
+<div id="backTop" class="top-scroll">
+    <a class="btn-floating btn-large waves-effect waves-light" href="#!">
+        <i class="fa fa-angle-up"></i>
+    </a>
+</div>
+
+
+<script src="/libs/materialize/materialize.min.js"></script>
+<script src="/libs/masonry/masonry.pkgd.min.js"></script>
+<script src="/libs/aos/aos.js"></script>
+<script src="/libs/scrollprogress/scrollProgress.min.js"></script>
+<script src="/libs/lightGallery/js/lightgallery-all.min.js"></script>
+<script src="/js/matery.js"></script>
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+
+
+
+    <script src="/libs/others/clicklove.js"></script>
+
+
+
+</body>
+</html>
