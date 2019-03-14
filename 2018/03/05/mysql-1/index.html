@@ -4,9 +4,13 @@
 
 <head><meta name="generator" content="Hexo 3.8.0">
     <meta charset="utf-8">
-    <meta name="keywords" content="java爬虫从入门到熟练(六)开源框架篇二, 我是一个热爱技术的程序猿，觉得编程是很屌的工作，比尔盖茨用自己的window改变了整个世界，扎克伯格用facebook连接了全世界...我想做的是有很多人使用我所编写的软件，框架，或者只是看看我的博客。">
-    <meta name="description" content="写在前边&amp;nbsp;&amp;nbsp;上一篇我们使用WebMagic开源框架爬取了csdn上博客的信息。现在这篇我们继续使用WebMagic来爬取
-webmagic爬取人民网信息目标抓取http://bj.people.com.cn/所有分类的新">
+    <meta name="keywords" content="mysql基础, 我是一个热爱技术的程序猿，觉得编程是很屌的工作，比尔盖茨用自己的window改变了整个世界，扎克伯格用facebook连接了全世界...我想做的是有很多人使用我所编写的软件，框架，或者只是看看我的博客。">
+    <meta name="description" content="mysql的特点1.  关系型数据库，免费使用。
+2.  插入式存储引擎。
+3.  性能高。
+mysql的版本 5.0-5.1:早期产品的延续，升级维护
+ 5.4 - 5.x :  MySQL整合了三方公司的新存储引擎 （推荐5.5）
+安装">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -14,7 +18,7 @@ webmagic爬取人民网信息目标抓取http://bj.people.com.cn/所有分类的
     <meta name="format-detection" content="telephone=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>java爬虫从入门到熟练(六)开源框架篇二 | 陈豪 - JAVA软件开发工程师</title>
+    <title>mysql基础 | 陈豪 - JAVA软件开发工程师</title>
     <link rel="icon" type="image/jpeg" href="/images/chenhao1.jpg">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/font-awesome.min.css">
@@ -162,13 +166,13 @@ webmagic爬取人民网信息目标抓取http://bj.people.com.cn/所有分类的
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/11.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/8.jpg')">
     <div class="container">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
                     <div class="description center-align post-title">
-                        java爬虫从入门到熟练(六)开源框架篇二
+                        mysql基础
                     </div>
                 </div>
             </div>
@@ -260,8 +264,8 @@ webmagic爬取人民网信息目标抓取http://bj.people.com.cn/所有分类的
                     
                     <div class="article-tag">
                         
-                            <a href="/tags/java爬虫/" target="_blank">
-                                <span class="chip bg-color">java爬虫</span>
+                            <a href="/tags/mysql数据库/" target="_blank">
+                                <span class="chip bg-color">mysql数据库</span>
                             </a>
                         
                     </div>
@@ -272,8 +276,8 @@ webmagic爬取人民网信息目标抓取http://bj.people.com.cn/所有分类的
                     <div class="post-cate">
                         <i class="fa fa-bookmark fa-fw icon-category"></i>
                         
-                            <a href="/categories/算法/" class="post-category" target="_blank">
-                                算法
+                            <a href="/categories/数据库/" class="post-category" target="_blank">
+                                数据库
                             </a>
                         
                     </div>
@@ -284,7 +288,7 @@ webmagic爬取人民网信息目标抓取http://bj.people.com.cn/所有分类的
             <div class="post-info">
                 <div class="post-date info-break-policy">
                     <i class="fa fa-calendar-minus-o fa-fw"></i>发布日期:&nbsp;&nbsp;
-                    2018-06-03
+                    2018-03-05
                 </div>
 
                 
@@ -295,123 +299,119 @@ webmagic爬取人民网信息目标抓取http://bj.people.com.cn/所有分类的
         <hr class="clearfix">
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h2 id="写在前边"><a href="#写在前边" class="headerlink" title="写在前边"></a>写在前边</h2><p>&nbsp;&nbsp;上一篇我们使用WebMagic开源框架爬取了csdn上博客的信息。现在这篇我们继续使用WebMagic来爬取</p>
-<h2 id="webmagic爬取人民网信息"><a href="#webmagic爬取人民网信息" class="headerlink" title="webmagic爬取人民网信息"></a>webmagic爬取人民网信息</h2><h3 id="目标抓取http-bj-people-com-cn-所有分类的新闻"><a href="#目标抓取http-bj-people-com-cn-所有分类的新闻" class="headerlink" title="目标抓取http://bj.people.com.cn/所有分类的新闻"></a>目标抓取<a href="http://bj.people.com.cn/所有分类的新闻" target="_blank" rel="noopener">http://bj.people.com.cn/所有分类的新闻</a></h3><p><img src="/images/java-reptile/7.png" height="330" width="495"><br>每个分类的列表链接如 <a href="http://bj.people.com.cn/GB/233088/index1.html" target="_blank" rel="noopener">http://bj.people.com.cn/GB/233088/index1.html</a> </p>
-<h3 id="源码实现"><a href="#源码实现" class="headerlink" title="源码实现"></a>源码实现</h3><p>1.导入依赖</p>
-<pre><code>&lt;dependency&gt;
-    &lt;groupId&gt;us.codecraft&lt;/groupId&gt;
-    &lt;artifactId&gt;webmagic-core&lt;/artifactId&gt;
-    &lt;version&gt;0.5.3&lt;/version&gt;
-    &lt;exclusions&gt;
-        &lt;exclusion&gt;
-            &lt;groupId&gt;org.slf4j&lt;/groupId&gt;
-            &lt;artifactId&gt;slf4j-log4j12&lt;/artifactId&gt;
-        &lt;/exclusion&gt;
-    &lt;/exclusions&gt;
-&lt;/dependency&gt;
+                <h2 id="mysql的特点"><a href="#mysql的特点" class="headerlink" title="mysql的特点"></a>mysql的特点</h2><pre><code>1.  关系型数据库，免费使用。
+2.  插入式存储引擎。
+3.  性能高。
+</code></pre><h2 id="mysql的版本"><a href="#mysql的版本" class="headerlink" title="mysql的版本"></a>mysql的版本</h2><pre><code> 5.0-5.1:早期产品的延续，升级维护
+ 5.4 - 5.x :  MySQL整合了三方公司的新存储引擎 （推荐5.5）
+</code></pre><h2 id="安装mysql"><a href="#安装mysql" class="headerlink" title="安装mysql"></a>安装mysql</h2><p>  下载安装包 <a href="https://www.mysql.com/" target="_blank" rel="noopener">官网下载地址</a>2.  Windows 安装(傻瓜式安装工)需要注意：安装时，如果出现未响应：  则重新打开D:\MySQL\MySQL Server 5.5\bin\MySQLInstanceConfig</p>
+<h3 id="linux-centos-安装方法"><a href="#linux-centos-安装方法" class="headerlink" title="linux -centos 安装方法"></a>linux -centos 安装方法</h3><pre><code>首先需要先把安装包通过文件传输方式传输到centos服务器上
+安装命令：rpm -ivh rpm软件名
+如果安装时 与某个软件  xxx冲突，则需要将冲突的软件卸载掉：yun -y remove xxx
+安装时 有日志提示我们可以修改密码：/usr/bin/mysqladmin -u root password &#39;new-password&#39;
+注意：如果提示“GPG keys...”安装失败，解决方案：rpm -ivh rpm软件名    验证：mysqladmin version
+启动mysql应用： service mysql start
+关闭： service mysql stop
+重启： service mysql restart
+在计算机reboot后 登陆MySQL :  mysql
+可能会报错：   var/lib/mysql/mysql.sock不存在 原因：是Mysql服务没有启动
+解决 ：启动服务：    
+    1.每次使用前 手动启动服务   /etc/init.d/mysql start
+    2.开机自启   chkconfig mysql on  ,  chkconfig mysql off    检查开机是否自动启动： ntsysv 
+给mysql 的超级管理员root 增加密码：/usr/bin/mysqladmin -u root password root
 
-&lt;dependency&gt;
-    &lt;groupId&gt;us.codecraft&lt;/groupId&gt;
-    &lt;artifactId&gt;webmagic-extension&lt;/artifactId&gt;
-    &lt;version&gt;0.5.3&lt;/version&gt;
-&lt;/dependency&gt;
+登陆：
+mysql -u root -p
+数据库存放目录：
+ps -ef|grep mysql  可以看到：
+数据库存放目录：
+ps -ef|grep mysql  可以看到：
+    数据库目录：     datadir=/var/lib/mysql 
+    pid文件目录： --pid-file=/var/lib/mysql/bigdata01.pid
 
-&lt;dependency&gt;
-    &lt;groupId&gt;commons-lang&lt;/groupId&gt;
-    &lt;artifactId&gt;commons-lang&lt;/artifactId&gt;
-    &lt;version&gt;2.6&lt;/version&gt;
-&lt;/dependency&gt;
-</code></pre><p>2.PageProcesso实现代码</p>
-<pre><code>@Service
-public class NewsProcessor implements PageProcessor {
-    // 入口url
-    public static final String URL_ENTER = &quot;http://bj.people.com.cn/&quot;;
-    // 类别导航
-    private String URL_INDEX = &quot;http://bj\\.people\\.com\\.cn/GB/\\d+/index\\.html&quot;;
-    // 列表
-    private String URL_LIST = &quot;http://bj\\.people\\.com\\.cn/GB/\\d+/index\\d*\\.html&quot;;
-    // 文章
-    private String URL_POST = &quot;http://bj\\.people\\.com\\.cn/n2/2016/\\d+/.+\\.html&quot;;
-    // 设置
-    private Site site = Site.me().setRetryTimes(10).setSleepTime(1000).setCycleRetryTimes(3);
+    MySQL核心目录：
+        /var/lib/mysql :mysql 安装目录
+        /usr/share/mysql:  配置文件
+        /usr/bin：命令目录（mysqladmin、mysqldump等）
+        /etc/init.d/mysql启停脚本
 
-    @Override
-    public void process(Page page) {
-        if (page.getUrl().get().equals(URL_ENTER)) {
-            // 类别
-            page.addTargetRequests(page.getHtml().xpath(&quot;//div[@class=&#39;pd_nav w1000 white  clear clearfix&#39;]&quot;).links().regex(URL_INDEX).all());
-            System.out.println(&quot;enter&quot;+page.getUrl().get());
-        } else {
-            System.out.println(&quot;enter&quot;+page.getUrl().get());
-            // 列表页
-            if (page.getUrl().regex(URL_LIST).match()) {
-                page.addTargetRequests(page.getHtml().xpath(&quot;//div[@class=&#39;ej_list_box clear&#39;]&quot;).links().regex(URL_POST).all());
-                page.addTargetRequests(page.getHtml().links().regex(URL_LIST).all());
-            } else {
-                // 匹配当前域名
-                String currentDomain = page.getUrl().regex(&quot;http.+\\.com\\.cn&quot;).toString();
-                String title = page.getHtml().xpath(&quot;//div[@class=&#39;clearfix w1000_320 text_title&#39;]/h1/text()&quot;).toString();
-                String contentTime = page.getHtml().xpath(&quot;//div[@class=&#39;box01&#39;]/div[@class=&#39;fl&#39;]/text()&quot;).regex(&quot;\\d{4}年\\d{2}月\\d{2}日\\s*\\d{2}:\\d{2}&quot;).toString();
-                String content = page.getHtml().xpath(&quot;//div[@class=&#39;box_con&#39;]&quot;).toString();
-                List&lt;String&gt; imgList = page.getHtml().xpath(&quot;//div[@class=&#39;box_con&#39;]//img/@src&quot;).all();
-                List&lt;String&gt; result = new ArrayList&lt;&gt;();
-                for (String img : imgList) {
-                    // 匹配是否是绝对路劲
-                    Pattern r = Pattern.compile(&quot;^http&quot;);
-                    Matcher m = r.matcher(img);
-                    if (!m.find()) {
-                        // 不是绝对路径 拼接当前域名
-                        result.add(currentDomain + img);
-                    } else {
-                        result.add(img);
-                    }
-                }
-                News news = new News();
-                news.setSourceUrl(page.getUrl().regex(URL_POST).toString());
-                news.setContent(content);
-                news.setContentTime(contentTime);
-                news.setTitle(title);
-                news.setImage(new Gson().toJson(result));
-                if (news.getTitle() == null) {
-                    page.setSkip(true);
-                } else {
-                    page.putField(&quot;news&quot;, news);
-                }
-            }
-        }
-    }
+  MySQL配置文件
+         my-huge.cnf    高端服务器  1-2G内存
+         my-large.cnf   中等规模
+         my-medium.cnf  一般
+         my-small.cnf   较小
+        但是，以上配置文件mysql默认不能识别，默认只能识别 /etc/my.cnf
+        采用 my-huge.cnf ：
+        cp /usr/share/mysql/my-huge.cnf /etc/my.cnf
+        注意：mysql5.5默认配置文件/etc/my.cnf；Mysql5.6 默认配置文件/etc/mysql-default.cnf
 
-    @Override
-    public Site getSite() {
-        return site;
-    }
-}
-</code></pre><p>3.Pipeline持久化数据代码</p>
-<pre><code>@Service
-public class NewsPipeline implements Pipeline {
-    @Autowired
-    private NewsService newsService;
+默认端口3306
+mysql字符编码：
+    sql  :  show variables like &#39;%char%&#39; ;
+    可以发现部分编码是 latin,需要统一设置为utf-8
+    设置编码：
+    vi /etc/my.cnf:
+    [mysql]
+    default-character-set=utf8
+    [client]
+    default-character-set=utf8
 
-    @Override
-    public void process(ResultItems resultItems, Task task) {
-        News news = (News) resultItems.get(&quot;news&quot;);
-        if (!newsService.isExist(news)) {
-            newsService.create(news);
-        }
-    }
-}
-</code></pre><p>4.爬虫启动代码</p>
-<pre><code>@RequestMapping(&quot;/start&quot;)
-private String start() {
-    Spider.create(newsProcessor)// 创建抽取内容类
-            .addUrl(NewsProcessor.URL_ENTER)// 添加入口url
-            .addPipeline(newsPipeline)// 添加持久化类
-            .thread(5)// 开启5个线程
-            .run();// 启动
-    return &quot;success&quot;;
-}
+ MYSQL逻辑分层 ：连接层 服务层 引擎层 存储层
 
-</code></pre>
+  InnoDB(默认) ：事务优先 （适合高并发操作；行锁）
+  MyISAM ：性能优先  （表锁）
+
+查询数据库引擎：  支持哪些引擎？ show engines ;
+        查看当前使用的引擎   show variables like &#39;%storage_engine%&#39; ;
+
+指定数据库对象的引擎：
+create table tb(
+    id int(4) auto_increment ,
+    name varchar(5),
+    dept varchar(5) ,
+    primary key(id)        
+)ENGINE=MyISAM AUTO_INCREMENT=1
+ DEFAULT CHARSET=utf8   ;
+
+    [mysqld]
+    character_set_server=utf8
+    character_set_client=utf8
+    collation_server=utf8_general_ci
+
+重启Mysql:  service mysql restart
+    sql  :  show variables like &#39;%char%&#39; ;
+注意事项：修改编码 只对“之后”创建的数据库生效，因此 我们建议 在mysql安装完毕后，第一时间 统一编码。
+
+mysql:清屏    ctrl+L    , system clear
+</code></pre><h2 id="sql优化"><a href="#sql优化" class="headerlink" title="sql优化"></a>sql优化</h2><ol>
+<li>尽量使用 prepareStatement(java)，利用预处理功能。</li>
+<li>在进行多条记录的增加、修改、删除时，建议使用批处理功能，批处理的次数以整个 SQL 语句不超过相应数据库的 SQL 语句大小的限制为准。</li>
+<li>建议每条 SQL 语句中 in 中的元素个数在 200 以下，如果个数超过时，应拆分为多条 SQL 语句。禁止使用 xx in(‘’,’’….) or xx in(‘’,’’,’’)。 ★</li>
+<li>禁止使用 or 超过 200，如 xx =’123’ or xx=’456’。 ★</li>
+<li>尽量不使用外连接。</li>
+<li>禁止使用 not in 语句，建议用 not exist。 ★</li>
+<li>禁止使用 Union, 如果有业务需要，请拆分为两个查询。 ★</li>
+<li>禁止在一条 SQL 语句中使用 3 层以上的嵌套查询，如果有，请考虑使用临时表或中间结果集。</li>
+<li>尽量避免在一条 SQL 语句中从&gt;= 4 个表中同时取数， 对于仅是作为过滤条件关联，但不涉及取数的表，不参与表个数计算</li>
+<li>查询条件里任何对列的操作都将导致表扫描，所以应尽量将数据库函数、计算表达式写在逻辑操作符右边。</li>
+<li>在对 char 类型比较时,建议不要使用 rtrim()函数,应该在程序中将不足的长度补齐。</li>
+<li>用多表连接代替 EXISTS 子句。</li>
+<li>如果有多表连接时， 应该有主从之分， 并尽量从一个表取数， 如 select a.col1, a.col2 from a join b on a.col3=b.col4 where b.col5 = ‘a’。</li>
+<li>在使用 Like 时，建议 Like 的一边是字符串，表列在一边出现。</li>
+<li>不允许将 where 子句的条件放到 having 中。</li>
+<li>将更新操作放到事务的最后执行。<br>17.一个事务需更新多个对象时，需保证更新的顺序一致以避免死锁的发生。如总是先更新子表再更新主表，根据存货档案批量更新现存量时，对传入的存货档案 PK 进行排序，再做更新处理等。</li>
+<li>禁止随意使用临时表，在临时数据不超过 200 行的情况下禁止使用临时表。</li>
+<li>禁止随意使用 distinct，避免造成不必要的排序。</li>
+</ol>
+<h2 id="索引优化"><a href="#索引优化" class="headerlink" title="索引优化"></a>索引优化</h2><ol>
+<li>搜索的索引列最好在where的字句或者连接子句</li>
+<li>使用唯一索引</li>
+<li>使用短索引，对于较长的字段，使用其前缀做索引</li>
+<li>不要过度使用索引，索引引起额外的性能开销和维护</li>
+</ol>
+<h2 id="高级优化措施"><a href="#高级优化措施" class="headerlink" title="高级优化措施"></a>高级优化措施</h2><p>未完待续。。。</p>
+<h2 id="集群搭建"><a href="#集群搭建" class="headerlink" title="集群搭建"></a>集群搭建</h2><p>未完待续。。。</p>
+
             </div>
             <hr>
 
@@ -558,7 +558,7 @@ private String start() {
                     </span>
                     <a href="http://yoursite.com" class="b-link-green">陈豪 - JAVA软件开发工程师</a>
                     <i class="fa fa-angle-right fa-lg fa-fw text-color"></i>
-                    <a href="/2018/06/03/java-reptile-6/" class="b-link-green">java爬虫从入门到熟练(六)开源框架篇二</a>
+                    <a href="/2018/03/05/mysql-1/" class="b-link-green">mysql基础</a>
                 </p>
             </div>
         </div>
@@ -583,73 +583,25 @@ private String start() {
             <div class="article-badge left-badge text-color">
                 <i class="fa fa-chevron-left"></i>&nbsp;上一篇</div>
             <div class="card">
-                <a href="/2018/08/05/mysql-optimization-1/">
+                <a href="/2018/04/04/java-date/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/23.jpg" class="responsive-img" alt="MYSQL常用优化(一)">
+                        <img src="/medias/featureimages/18.jpg" class="responsive-img" alt="Java和javascript日期详解">
                         
-                        <span class="card-title">MYSQL常用优化(一)</span>
+                        <span class="card-title">Java和javascript日期详解</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
-                    <div class="summary">优化sql的一般步骤
-通过show status了解各种sql的执行频率
-定位执行效率低的sql语句
-通过explain分析效率低的sql
-通过show profile分析sql
-通过trace分析优化器如何选择执行计划
-确定问题，采取措施</div>
+                    <div class="summary">java，js日期转换：
+日期表示类型
+获取long类型的日期格式long time = System.currentTimeMillis();
+System.out.printf(time+&quot;&quot;);
+Date date</div>
                     <div class="publish-info">
                         <span class="publish-date">
-                            <i class="fa fa-clock-o fa-fw icon-date"></i>2018-08-05
+                            <i class="fa fa-clock-o fa-fw icon-date"></i>2018-04-04
                         </span>
-                        <span class="publish-author">
-                            
-                            <i class="fa fa-bookmark fa-fw icon-category"></i>
-                            
-                            <a href="/categories/数据库/" class="post-category" target="_blank">
-                                    数据库
-                                </a>
-                            
-                            
-                        </span>
-                    </div>
-                </div>
-                
-                <div class="card-action article-tags">
-                    
-                    <a href="/tags/mysql数据库/" target="_blank">
-                        <span class="chip bg-color">mysql数据库</span>
-                    </a>
-                    
-                </div>
-                
-            </div>
-        </div>
-        
-        
-        <div class="article col s12 m6" data-aos="fade-up">
-            <div class="article-badge right-badge text-color">
-                下一篇&nbsp;<i class="fa fa-chevron-right"></i>
-            </div>
-            <div class="card">
-                <a href="/2018/06/02/java-reptile-5/">
-                    <div class="card-image">
-                        
-                        
-                        <img src="/medias/featureimages/14.jpg" class="responsive-img" alt="java爬虫从入门到熟练(五)开源框架篇一">
-                        
-                        <span class="card-title">java爬虫从入门到熟练(五)开源框架篇一</span>
-                    </div>
-                </a>
-                <div class="card-content article-content">
-                    <div class="summary">写在前边&nbsp;&nbsp;前几篇着重讲解了爬虫的基本概念和相关用法。毕竟在中小型公司中，还是使用开源框架的比较多。所以这篇文章来讲解讲解关于java爬虫的相关开源框架
-爬虫框架介绍&nbsp;&nbsp;java爬虫框架非常多，比如较</div>
-                    <div class="publish-info">
-                            <span class="publish-date">
-                                <i class="fa fa-clock-o fa-fw icon-date"></i>2018-06-02
-                            </span>
                         <span class="publish-author">
                             
                             <i class="fa fa-bookmark fa-fw icon-category"></i>
@@ -665,8 +617,60 @@ private String start() {
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/java爬虫/" target="_blank">
-                        <span class="chip bg-color">java爬虫</span>
+                    <a href="/tags/日期转换/" target="_blank">
+                        <span class="chip bg-color">日期转换</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge right-badge text-color">
+                下一篇&nbsp;<i class="fa fa-chevron-right"></i>
+            </div>
+            <div class="card">
+                <a href="/2018/03/04/git-config-study/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/15.jpg" class="responsive-img" alt="Git常用操作">
+                        
+                        <span class="card-title">Git常用操作</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary">git学习笔记：&nbsp;&nbsp;不止包含git的日常操作，还有高级技巧哦。
+安装git
+下载安装包&nbsp;下载地址 
+安装git
+进入命令行,输入git看看是否成功
+
+配置git
+配置全局用户名和密码(此处请修改为你自己的git</div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="fa fa-clock-o fa-fw icon-date"></i>2018-03-04
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fa fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/命令/" class="post-category" target="_blank">
+                                    命令
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/git命令/" target="_blank">
+                        <span class="chip bg-color">git命令</span>
                     </a>
                     
                 </div>

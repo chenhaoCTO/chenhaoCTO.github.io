@@ -4,9 +4,14 @@
 
 <head><meta name="generator" content="Hexo 3.8.0">
     <meta charset="utf-8">
-    <meta name="keywords" content="java爬虫从入门到熟练(六)开源框架篇二, 我是一个热爱技术的程序猿，觉得编程是很屌的工作，比尔盖茨用自己的window改变了整个世界，扎克伯格用facebook连接了全世界...我想做的是有很多人使用我所编写的软件，框架，或者只是看看我的博客。">
-    <meta name="description" content="写在前边&amp;nbsp;&amp;nbsp;上一篇我们使用WebMagic开源框架爬取了csdn上博客的信息。现在这篇我们继续使用WebMagic来爬取
-webmagic爬取人民网信息目标抓取http://bj.people.com.cn/所有分类的新">
+    <meta name="keywords" content="MYSQL常用优化(一), 我是一个热爱技术的程序猿，觉得编程是很屌的工作，比尔盖茨用自己的window改变了整个世界，扎克伯格用facebook连接了全世界...我想做的是有很多人使用我所编写的软件，框架，或者只是看看我的博客。">
+    <meta name="description" content="优化sql的一般步骤
+通过show status了解各种sql的执行频率
+定位执行效率低的sql语句
+通过explain分析效率低的sql
+通过show profile分析sql
+通过trace分析优化器如何选择执行计划
+确定问题，采取措施">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -14,7 +19,7 @@ webmagic爬取人民网信息目标抓取http://bj.people.com.cn/所有分类的
     <meta name="format-detection" content="telephone=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>java爬虫从入门到熟练(六)开源框架篇二 | 陈豪 - JAVA软件开发工程师</title>
+    <title>MYSQL常用优化(一) | 陈豪 - JAVA软件开发工程师</title>
     <link rel="icon" type="image/jpeg" href="/images/chenhao1.jpg">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/font-awesome.min.css">
@@ -162,13 +167,13 @@ webmagic爬取人民网信息目标抓取http://bj.people.com.cn/所有分类的
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/11.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/23.jpg')">
     <div class="container">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
                     <div class="description center-align post-title">
-                        java爬虫从入门到熟练(六)开源框架篇二
+                        MYSQL常用优化(一)
                     </div>
                 </div>
             </div>
@@ -260,8 +265,8 @@ webmagic爬取人民网信息目标抓取http://bj.people.com.cn/所有分类的
                     
                     <div class="article-tag">
                         
-                            <a href="/tags/java爬虫/" target="_blank">
-                                <span class="chip bg-color">java爬虫</span>
+                            <a href="/tags/mysql数据库/" target="_blank">
+                                <span class="chip bg-color">mysql数据库</span>
                             </a>
                         
                     </div>
@@ -272,8 +277,8 @@ webmagic爬取人民网信息目标抓取http://bj.people.com.cn/所有分类的
                     <div class="post-cate">
                         <i class="fa fa-bookmark fa-fw icon-category"></i>
                         
-                            <a href="/categories/算法/" class="post-category" target="_blank">
-                                算法
+                            <a href="/categories/数据库/" class="post-category" target="_blank">
+                                数据库
                             </a>
                         
                     </div>
@@ -284,7 +289,7 @@ webmagic爬取人民网信息目标抓取http://bj.people.com.cn/所有分类的
             <div class="post-info">
                 <div class="post-date info-break-policy">
                     <i class="fa fa-calendar-minus-o fa-fw"></i>发布日期:&nbsp;&nbsp;
-                    2018-06-03
+                    2018-08-05
                 </div>
 
                 
@@ -295,123 +300,33 @@ webmagic爬取人民网信息目标抓取http://bj.people.com.cn/所有分类的
         <hr class="clearfix">
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h2 id="写在前边"><a href="#写在前边" class="headerlink" title="写在前边"></a>写在前边</h2><p>&nbsp;&nbsp;上一篇我们使用WebMagic开源框架爬取了csdn上博客的信息。现在这篇我们继续使用WebMagic来爬取</p>
-<h2 id="webmagic爬取人民网信息"><a href="#webmagic爬取人民网信息" class="headerlink" title="webmagic爬取人民网信息"></a>webmagic爬取人民网信息</h2><h3 id="目标抓取http-bj-people-com-cn-所有分类的新闻"><a href="#目标抓取http-bj-people-com-cn-所有分类的新闻" class="headerlink" title="目标抓取http://bj.people.com.cn/所有分类的新闻"></a>目标抓取<a href="http://bj.people.com.cn/所有分类的新闻" target="_blank" rel="noopener">http://bj.people.com.cn/所有分类的新闻</a></h3><p><img src="/images/java-reptile/7.png" height="330" width="495"><br>每个分类的列表链接如 <a href="http://bj.people.com.cn/GB/233088/index1.html" target="_blank" rel="noopener">http://bj.people.com.cn/GB/233088/index1.html</a> </p>
-<h3 id="源码实现"><a href="#源码实现" class="headerlink" title="源码实现"></a>源码实现</h3><p>1.导入依赖</p>
-<pre><code>&lt;dependency&gt;
-    &lt;groupId&gt;us.codecraft&lt;/groupId&gt;
-    &lt;artifactId&gt;webmagic-core&lt;/artifactId&gt;
-    &lt;version&gt;0.5.3&lt;/version&gt;
-    &lt;exclusions&gt;
-        &lt;exclusion&gt;
-            &lt;groupId&gt;org.slf4j&lt;/groupId&gt;
-            &lt;artifactId&gt;slf4j-log4j12&lt;/artifactId&gt;
-        &lt;/exclusion&gt;
-    &lt;/exclusions&gt;
-&lt;/dependency&gt;
+                <h2 id="优化sql的一般步骤"><a href="#优化sql的一般步骤" class="headerlink" title="优化sql的一般步骤"></a>优化sql的一般步骤</h2><ol>
+<li>通过show status了解各种sql的执行频率</li>
+<li>定位执行效率低的sql语句</li>
+<li>通过explain分析效率低的sql</li>
+<li>通过show profile分析sql</li>
+<li>通过trace分析优化器如何选择执行计划</li>
+<li>确定问题，采取措施优化</li>
+</ol>
+<h2 id="索引优化措施"><a href="#索引优化措施" class="headerlink" title="索引优化措施"></a>索引优化措施</h2><p> mysql中使用索引的典型场景</p>
+<pre><code>1.  匹配值的范围查找，字段必须在索引中
+2.  匹配最左前缀，复合索引只会根据最左列进行查找
+3.  仅仅对索引进行查询，即查询的所有字段都在索引上
+4.  匹配列前缀，比如like ‘ABC%’,如果是like ‘%aaa’就不可以
+5.  如果列名是索引，使用column is null会使用索引
+</code></pre><p> 存在索引但不会使用索引的典型场景</p>
+<pre><code>1. 以%开头的&lt;span class=&quot;hljs-keyword&quot;&gt;like&lt;/span&gt;查询不能使用b树索引
+2.数据类型出现隐式转换不能使用索引
+3.复合索引，查询条件不符合最左列原则
+4.用or分割的条件，如果前面的条件有索引，而后面的条件没有索引
+5.查看索引使用的情况show status like &#39;Handler_read%&#39;;如果Handler_read_rnd_next的值比较高，说明索引不正确或者查询没有使用到索引
+</code></pre><h2 id="简单实用的优化方法"><a href="#简单实用的优化方法" class="headerlink" title="简单实用的优化方法"></a>简单实用的优化方法</h2><ol>
+<li><p>定期检查表和分析表</p>
+</li>
+<li><p>定期优化表 对于字节大小不固定的字段，数据更新和删除会造成磁盘空间不释放，这时候就行优化表，可以整理磁盘碎片。</p>
+</li>
+</ol>
 
-&lt;dependency&gt;
-    &lt;groupId&gt;us.codecraft&lt;/groupId&gt;
-    &lt;artifactId&gt;webmagic-extension&lt;/artifactId&gt;
-    &lt;version&gt;0.5.3&lt;/version&gt;
-&lt;/dependency&gt;
-
-&lt;dependency&gt;
-    &lt;groupId&gt;commons-lang&lt;/groupId&gt;
-    &lt;artifactId&gt;commons-lang&lt;/artifactId&gt;
-    &lt;version&gt;2.6&lt;/version&gt;
-&lt;/dependency&gt;
-</code></pre><p>2.PageProcesso实现代码</p>
-<pre><code>@Service
-public class NewsProcessor implements PageProcessor {
-    // 入口url
-    public static final String URL_ENTER = &quot;http://bj.people.com.cn/&quot;;
-    // 类别导航
-    private String URL_INDEX = &quot;http://bj\\.people\\.com\\.cn/GB/\\d+/index\\.html&quot;;
-    // 列表
-    private String URL_LIST = &quot;http://bj\\.people\\.com\\.cn/GB/\\d+/index\\d*\\.html&quot;;
-    // 文章
-    private String URL_POST = &quot;http://bj\\.people\\.com\\.cn/n2/2016/\\d+/.+\\.html&quot;;
-    // 设置
-    private Site site = Site.me().setRetryTimes(10).setSleepTime(1000).setCycleRetryTimes(3);
-
-    @Override
-    public void process(Page page) {
-        if (page.getUrl().get().equals(URL_ENTER)) {
-            // 类别
-            page.addTargetRequests(page.getHtml().xpath(&quot;//div[@class=&#39;pd_nav w1000 white  clear clearfix&#39;]&quot;).links().regex(URL_INDEX).all());
-            System.out.println(&quot;enter&quot;+page.getUrl().get());
-        } else {
-            System.out.println(&quot;enter&quot;+page.getUrl().get());
-            // 列表页
-            if (page.getUrl().regex(URL_LIST).match()) {
-                page.addTargetRequests(page.getHtml().xpath(&quot;//div[@class=&#39;ej_list_box clear&#39;]&quot;).links().regex(URL_POST).all());
-                page.addTargetRequests(page.getHtml().links().regex(URL_LIST).all());
-            } else {
-                // 匹配当前域名
-                String currentDomain = page.getUrl().regex(&quot;http.+\\.com\\.cn&quot;).toString();
-                String title = page.getHtml().xpath(&quot;//div[@class=&#39;clearfix w1000_320 text_title&#39;]/h1/text()&quot;).toString();
-                String contentTime = page.getHtml().xpath(&quot;//div[@class=&#39;box01&#39;]/div[@class=&#39;fl&#39;]/text()&quot;).regex(&quot;\\d{4}年\\d{2}月\\d{2}日\\s*\\d{2}:\\d{2}&quot;).toString();
-                String content = page.getHtml().xpath(&quot;//div[@class=&#39;box_con&#39;]&quot;).toString();
-                List&lt;String&gt; imgList = page.getHtml().xpath(&quot;//div[@class=&#39;box_con&#39;]//img/@src&quot;).all();
-                List&lt;String&gt; result = new ArrayList&lt;&gt;();
-                for (String img : imgList) {
-                    // 匹配是否是绝对路劲
-                    Pattern r = Pattern.compile(&quot;^http&quot;);
-                    Matcher m = r.matcher(img);
-                    if (!m.find()) {
-                        // 不是绝对路径 拼接当前域名
-                        result.add(currentDomain + img);
-                    } else {
-                        result.add(img);
-                    }
-                }
-                News news = new News();
-                news.setSourceUrl(page.getUrl().regex(URL_POST).toString());
-                news.setContent(content);
-                news.setContentTime(contentTime);
-                news.setTitle(title);
-                news.setImage(new Gson().toJson(result));
-                if (news.getTitle() == null) {
-                    page.setSkip(true);
-                } else {
-                    page.putField(&quot;news&quot;, news);
-                }
-            }
-        }
-    }
-
-    @Override
-    public Site getSite() {
-        return site;
-    }
-}
-</code></pre><p>3.Pipeline持久化数据代码</p>
-<pre><code>@Service
-public class NewsPipeline implements Pipeline {
-    @Autowired
-    private NewsService newsService;
-
-    @Override
-    public void process(ResultItems resultItems, Task task) {
-        News news = (News) resultItems.get(&quot;news&quot;);
-        if (!newsService.isExist(news)) {
-            newsService.create(news);
-        }
-    }
-}
-</code></pre><p>4.爬虫启动代码</p>
-<pre><code>@RequestMapping(&quot;/start&quot;)
-private String start() {
-    Spider.create(newsProcessor)// 创建抽取内容类
-            .addUrl(NewsProcessor.URL_ENTER)// 添加入口url
-            .addPipeline(newsPipeline)// 添加持久化类
-            .thread(5)// 开启5个线程
-            .run();// 启动
-    return &quot;success&quot;;
-}
-
-</code></pre>
             </div>
             <hr>
 
@@ -558,7 +473,7 @@ private String start() {
                     </span>
                     <a href="http://yoursite.com" class="b-link-green">陈豪 - JAVA软件开发工程师</a>
                     <i class="fa fa-angle-right fa-lg fa-fw text-color"></i>
-                    <a href="/2018/06/03/java-reptile-6/" class="b-link-green">java爬虫从入门到熟练(六)开源框架篇二</a>
+                    <a href="/2018/08/05/mysql-optimization-1/" class="b-link-green">MYSQL常用优化(一)</a>
                 </p>
             </div>
         </div>
@@ -583,26 +498,22 @@ private String start() {
             <div class="article-badge left-badge text-color">
                 <i class="fa fa-chevron-left"></i>&nbsp;上一篇</div>
             <div class="card">
-                <a href="/2018/08/05/mysql-optimization-1/">
+                <a href="/2018/08/07/mysql-optimization-2/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/23.jpg" class="responsive-img" alt="MYSQL常用优化(一)">
+                        <img src="/medias/featureimages/3.jpg" class="responsive-img" alt="MYSQL常用优化(二)">
                         
-                        <span class="card-title">MYSQL常用优化(一)</span>
+                        <span class="card-title">MYSQL常用优化(二)</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
-                    <div class="summary">优化sql的一般步骤
-通过show status了解各种sql的执行频率
-定位执行效率低的sql语句
-通过explain分析效率低的sql
-通过show profile分析sql
-通过trace分析优化器如何选择执行计划
-确定问题，采取措施</div>
+                    <div class="summary">写在前边原因：性能低、执行时间太长、等待时间太长、SQL语句欠佳（连接查询）、索引失效、服务器参数设置不合理（缓冲、线程数）
+
+sql 编写过程 select dinstinct  ..from  ..join ..on ..where .</div>
                     <div class="publish-info">
                         <span class="publish-date">
-                            <i class="fa fa-clock-o fa-fw icon-date"></i>2018-08-05
+                            <i class="fa fa-clock-o fa-fw icon-date"></i>2018-08-07
                         </span>
                         <span class="publish-author">
                             
@@ -634,21 +545,21 @@ private String start() {
                 下一篇&nbsp;<i class="fa fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="/2018/06/02/java-reptile-5/">
+                <a href="/2018/06/03/java-reptile-6/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/14.jpg" class="responsive-img" alt="java爬虫从入门到熟练(五)开源框架篇一">
+                        <img src="/medias/featureimages/11.jpg" class="responsive-img" alt="java爬虫从入门到熟练(六)开源框架篇二">
                         
-                        <span class="card-title">java爬虫从入门到熟练(五)开源框架篇一</span>
+                        <span class="card-title">java爬虫从入门到熟练(六)开源框架篇二</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
-                    <div class="summary">写在前边&nbsp;&nbsp;前几篇着重讲解了爬虫的基本概念和相关用法。毕竟在中小型公司中，还是使用开源框架的比较多。所以这篇文章来讲解讲解关于java爬虫的相关开源框架
-爬虫框架介绍&nbsp;&nbsp;java爬虫框架非常多，比如较</div>
+                    <div class="summary">写在前边&nbsp;&nbsp;上一篇我们使用WebMagic开源框架爬取了csdn上博客的信息。现在这篇我们继续使用WebMagic来爬取
+webmagic爬取人民网信息目标抓取http://bj.people.com.cn/所有分类的新</div>
                     <div class="publish-info">
                             <span class="publish-date">
-                                <i class="fa fa-clock-o fa-fw icon-date"></i>2018-06-02
+                                <i class="fa fa-clock-o fa-fw icon-date"></i>2018-06-03
                             </span>
                         <span class="publish-author">
                             

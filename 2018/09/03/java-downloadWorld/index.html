@@ -1,0 +1,1384 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+
+
+<head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="utf-8">
+    <meta name="keywords" content="java下载world文件, 我是一个热爱技术的程序猿，觉得编程是很屌的工作，比尔盖茨用自己的window改变了整个世界，扎克伯格用facebook连接了全世界...我想做的是有很多人使用我所编写的软件，框架，或者只是看看我的博客。">
+    <meta name="description" content="写在前边&amp;nbsp;&amp;nbsp;前几天接到一个新需求，做一个导出world的功能。听到需求，我就立马想到了poi，应为之前使用过poi 操作导出excel，顺便也了解了一下导出world。相关jar包：poi-ooxml-3.7.jar ，">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="renderer" content="webkit|ie-stand|ie-comp">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>java下载world文件 | 陈豪 - JAVA软件开发工程师</title>
+    <link rel="icon" type="image/jpeg" href="/images/chenhao1.jpg">
+
+    <link rel="stylesheet" type="text/css" href="/libs/awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/materialize/materialize.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/aos/aos.css">
+    <link rel="stylesheet" type="text/css" href="/libs/animate/animate.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/lightGallery/css/lightgallery.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/matery.css">
+    <link rel="stylesheet" type="text/css" href="/css/my.css">
+    <style type="text/css">
+        
+    </style>
+
+    <script src="/libs/jquery/jquery-2.2.0.min.js"></script>
+<link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css"></head>
+
+
+<body>
+
+<header class="navbar-fixed">
+    <nav id="headNav" class="bg-color nav-transparent">
+        <div id="navContainer" class="nav-wrapper container">
+            <div class="brand-logo">
+                <a href="/" class="waves-effect waves-light">
+                    
+                    <img src="/medias/logo.png" class="logo-img" alt="LOGO">
+                    
+                    <span class="logo-span">陈豪 - JAVA软件开发工程师</span>
+                </a>
+            </div>
+            
+
+<a href="#" data-target="mobile-nav" class="sidenav-trigger button-collapse"><i class="fa fa-navicon"></i></a>
+<ul class="right">
+    
+    <li class="hide-on-med-and-down">
+        <a href="/" class="waves-effect waves-light">
+            
+            <i class="fa fa-home"></i>
+            
+            <span>主页</span>
+        </a>
+    </li>
+    
+    <li class="hide-on-med-and-down">
+        <a href="/categories" class="waves-effect waves-light">
+            
+            <i class="fa fa-bookmark"></i>
+            
+            <span>分类</span>
+        </a>
+    </li>
+    
+    <li class="hide-on-med-and-down">
+        <a href="/archives" class="waves-effect waves-light">
+            
+            <i class="fa fa-archive"></i>
+            
+            <span>归档</span>
+        </a>
+    </li>
+    
+    <li class="hide-on-med-and-down">
+        <a href="/about" class="waves-effect waves-light">
+            
+            <i class="fa fa-user-circle-o"></i>
+            
+            <span>关于我</span>
+        </a>
+    </li>
+    
+    <li>
+        <a href="#searchModal" class="modal-trigger waves-effect waves-light">
+            <i id="searchIcon" class="fa fa-search" title="搜索"></i>
+        </a>
+    </li>
+</ul>
+
+<div id="mobile-nav" class="side-nav sidenav">
+
+    <div class="mobile-head bg-color">
+        
+        <img src="/medias/logo.png" class="logo-img circle responsive-img">
+        
+        <div class="logo-name">陈豪 - JAVA软件开发工程师</div>
+        <div class="logo-desc">
+            
+            我是一个热爱技术的程序猿，觉得编程是很屌的工作，比尔盖茨用自己的window改变了整个世界，扎克伯格用facebook连接了全世界...我想做的是有很多人使用我所编写的软件，框架，或者只是看看我的博客。
+            
+        </div>
+    </div>
+
+    
+
+    <ul class="menu-list mobile-menu-list">
+        
+        <li>
+            <a href="/" class="waves-effect waves-light">
+                
+                <i class="fa fa-fw fa-home"></i>
+                
+                主页
+            </a>
+        </li>
+        
+        <li>
+            <a href="/categories" class="waves-effect waves-light">
+                
+                <i class="fa fa-fw fa-bookmark"></i>
+                
+                分类
+            </a>
+        </li>
+        
+        <li>
+            <a href="/archives" class="waves-effect waves-light">
+                
+                <i class="fa fa-fw fa-archive"></i>
+                
+                归档
+            </a>
+        </li>
+        
+        <li>
+            <a href="/about" class="waves-effect waves-light">
+                
+                <i class="fa fa-fw fa-user-circle-o"></i>
+                
+                关于我
+            </a>
+        </li>
+        
+        
+    </ul>
+</div>
+
+        </div>
+
+        
+    </nav>
+
+</header>
+
+
+
+
+
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/19.jpg')">
+    <div class="container">
+        <div class="row">
+            <div class="col s12 m12 l12">
+                <div class="brand">
+                    <div class="description center-align post-title">
+                        java下载world文件
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<main class="post-container content">
+
+    
+    <link rel="stylesheet" href="/libs/tocbot/tocbot.css">
+<style>
+    #articleContent h1::before,
+    #articleContent h2::before,
+    #articleContent h3::before,
+    #articleContent h4::before,
+    #articleContent h5::before,
+    #articleContent h6::before {
+        display: block;
+        content: " ";
+        height: 100px;
+        margin-top: -100px;
+        visibility: hidden;
+    }
+
+    #articleContent :focus {
+        outline: none;
+    }
+
+    .toc-fixed {
+        position: fixed;
+        top: 64px;
+    }
+
+    .toc-widget {
+        padding-left: 20px;
+    }
+
+    .toc-widget .toc-title {
+        margin: 35px 0 15px 0;
+        padding-left: 17px;
+        font-size: 1.5rem;
+        font-weight: bold;
+        line-height: 1.5rem;
+    }
+
+    .toc-widget ol {
+        padding: 0;
+        list-style: none;
+    }
+
+    #toc-content ol {
+        padding-left: 10px;
+    }
+
+    #toc-content ol li {
+        padding-left: 10px;
+    }
+
+    #toc-content .toc-link:hover {
+        color: #42b983;
+        font-weight: 700;
+        text-decoration: underline;
+    }
+
+    #toc-content .toc-link::before {
+        background-color: transparent;
+        max-height: 25px;
+    }
+
+    #toc-content .is-active-link {
+        color: #42b983;
+    }
+
+    #toc-content .is-active-link::before {
+        background-color: #42b983;
+    }
+</style>
+<div class="row">
+    <div class="col s12 m12 l9">
+        <!-- 文章内容详情 -->
+<div id="artDetail">
+    <div class="card">
+        <div class="card-content article-info">
+            <div class="row tag-cate">
+                <div class="col s7">
+                    
+                    <div class="article-tag">
+                        
+                            <a href="/tags/java-IO流/" target="_blank">
+                                <span class="chip bg-color">java IO流</span>
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+                <div class="col s5 right-align">
+                    
+                    <div class="post-cate">
+                        <i class="fa fa-bookmark fa-fw icon-category"></i>
+                        
+                            <a href="/categories/算法/" class="post-category" target="_blank">
+                                算法
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+            </div>
+
+            <div class="post-info">
+                <div class="post-date info-break-policy">
+                    <i class="fa fa-calendar-minus-o fa-fw"></i>发布日期:&nbsp;&nbsp;
+                    2018-09-03
+                </div>
+
+                
+				
+				
+            </div>
+        </div>
+        <hr class="clearfix">
+        <div class="card-content article-card-content">
+            <div id="articleContent">
+                <h2 id="写在前边"><a href="#写在前边" class="headerlink" title="写在前边"></a>写在前边</h2><p>&nbsp;&nbsp;前几天接到一个新需求，做一个导出world的功能。听到需求，我就立马想到了poi，应为之前使用过poi 操作导出excel，顺便也了解了一下导出world。相关jar包：poi-ooxml-3.7.jar ，poi-3.7.jar</p>
+<h2 id="使用poi-导出world原理"><a href="#使用poi-导出world原理" class="headerlink" title="使用poi 导出world原理"></a>使用poi 导出world原理</h2><p>&nbsp;&nbsp;1，制作world模板，定义需要替换的内容（在这里我用的是${…} 替换普通的文本；#{table} 替换表格中某行的数据，行数的够的添加新行。），</p>
+<h3 id="模板文件样式"><a href="#模板文件样式" class="headerlink" title="模板文件样式"></a>模板文件样式</h3><p><img src="/images/java-downloadWorld/1.png" height="330" width="495"><br><img src="/images/java-downloadWorld/2.png" height="330" width="495"></p>
+<h3 id="实现下载后样式"><a href="#实现下载后样式" class="headerlink" title="实现下载后样式"></a>实现下载后样式</h3><p><img src="/images/java-downloadWorld/3.png" height="330" width="495"><br><img src="/images/java-downloadWorld/4.png" height="330" width="495"></p>
+<h2 id="源码解析"><a href="#源码解析" class="headerlink" title="源码解析"></a>源码解析</h2><p>1.由于poi导出world 对图片的处理有点bug，所以首先我们需要 自定义  CustomXWPFDocument 类继承 XWPFDocument 重写里边的 createPicture 方法。</p>
+<pre><code>package daying;
+import org.apache.poi.openxml4j.opc.OPCPackage;
+import org.apache.poi.xwpf.usermodel.XWPFDocument;
+import org.apache.poi.xwpf.usermodel.XWPFParagraph;
+import org.apache.xmlbeans.XmlException;
+import org.apache.xmlbeans.XmlToken;
+import org.openxmlformats.schemas.drawingml.x2006.main.CTNonVisualDrawingProps;
+import org.openxmlformats.schemas.drawingml.x2006.main.CTPositiveSize2D;
+import org.openxmlformats.schemas.drawingml.x2006.wordprocessingDrawing.CTInline;
+import java.io.IOException;
+import java.io.InputStream;
+/**
+ * @author chenhao
+ * 1400675645@qq.com
+ */
+public class CustomXWPFDocument extends XWPFDocument {
+
+        public CustomXWPFDocument(InputStream in) throws IOException {
+                super(in);
+        }
+
+        public CustomXWPFDocument() {
+                super();
+        }
+
+        public CustomXWPFDocument(OPCPackage pkg) throws IOException {
+                super(pkg);
+        }
+
+        /**
+         * @param id
+         * @param width ¿í
+         * @param height ¸ß
+         * @param paragraph  ¶ÎÂä
+         */
+        public void createPicture(int id, int width, int height,XWPFParagraph paragraph) {
+        final int EMU = 9525;
+        width *= EMU;
+        height *= EMU;
+        String blipId = getAllPictures().get(id).getPackageRelationship().getId();
+        CTInline inline = paragraph.createRun().getCTR().addNewDrawing().addNewInline();
+        String picXml = &quot;&quot;
+        +&quot;&lt;a:graphic xmlns:a=\&quot;http://schemas.openxmlformats.org/drawingml/2006/main\&quot;&gt;&quot;
+        +&quot;   &lt;a:graphicData uri=\&quot;http://schemas.openxmlformats.org/drawingml/2006/picture\&quot;&gt;&quot;
+        +&quot;      &lt;pic:pic xmlns:pic=\&quot;http://schemas.openxmlformats.org/drawingml/2006/picture\&quot;&gt;&quot;
+        +&quot;         &lt;pic:nvPicPr&gt;&quot; + &quot;            &lt;pic:cNvPr id=\&quot;&quot;
+        + id
+        +&quot;\&quot; name=\&quot;Generated\&quot;/&gt;&quot;
+        +&quot;            &lt;pic:cNvPicPr/&gt;&quot;
+        +&quot;         &lt;/pic:nvPicPr&gt;&quot;
+        +&quot;         &lt;pic:blipFill&gt;&quot;
+        +&quot;            &lt;a:blip r:embed=\&quot;&quot;
+        + blipId
+        +&quot;\&quot; xmlns:r=\&quot;http://schemas.openxmlformats.org/officeDocument/2006/relationships\&quot;/&gt;&quot;
+        +&quot;            &lt;a:stretch&gt;&quot;
+        +&quot;               &lt;a:fillRect/&gt;&quot;
+        +&quot;            &lt;/a:stretch&gt;&quot;
+        +&quot;         &lt;/pic:blipFill&gt;&quot;
+        +&quot;         &lt;pic:spPr&gt;&quot;
+        +&quot;            &lt;a:xfrm&gt;&quot;
+        +&quot;               &lt;a:off x=\&quot;0\&quot; y=\&quot;0\&quot;/&gt;&quot;
+        +&quot;               &lt;a:ext cx=\&quot;&quot;
+        + width
+        +&quot;\&quot; cy=\&quot;&quot;
+        + height
+        +&quot;\&quot;/&gt;&quot;
+        +&quot;            &lt;/a:xfrm&gt;&quot;
+        +&quot;            &lt;a:prstGeom prst=\&quot;rect\&quot;&gt;&quot;
+        +&quot;               &lt;a:avLst/&gt;&quot;
+        +&quot;            &lt;/a:prstGeom&gt;&quot;
+        +&quot;         &lt;/pic:spPr&gt;&quot;
+        +&quot;      &lt;/pic:pic&gt;&quot;
+        +&quot;   &lt;/a:graphicData&gt;&quot; + &quot;&lt;/a:graphic&gt;&quot;;
+
+        inline.addNewGraphic().addNewGraphicData();
+        XmlToken xmlToken = null;
+        try{
+        xmlToken = XmlToken.Factory.parse(picXml);
+        }catch(XmlException xe) {
+        xe.printStackTrace();
+        }
+        inline.set(xmlToken);
+
+        inline.setDistT(0);
+        inline.setDistB(0);
+        inline.setDistL(0);
+        inline.setDistR(0);
+
+        CTPositiveSize2D extent = inline.addNewExtent();
+        extent.setCx(width);
+        extent.setCy(height);
+
+        CTNonVisualDrawingProps docPr = inline.addNewDocPr();
+        docPr.setId(id);
+        docPr.setName(&quot;编号&quot;+ id);
+        docPr.setDescr(&quot;测试&quot;);
+        }
+}
+</code></pre><p>2.现在就开始写用于生成world的工具代码，由于个人比较喜欢写注释，所以请跟着注释看代码。还是比较简单的。</p>
+<pre><code>package daying;
+
+import org.apache.poi.xwpf.usermodel.*;
+import javax.servlet.http.HttpServletResponse;
+import java.io.*;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+/**
+ * @author chenhao
+ * 1400675645@qq.com
+ */
+
+public class WordUtils {
+
+    /**
+     * 根据模板生成word
+     * @param path     模板的路径
+     * @param params   需要替换的参数
+     * @param tableList   需要插入的参数
+     * @param fileName 生成word文件的文件名
+     * @param response
+     */
+    public void getWord(String path, Map&lt;String, Object&gt; params, Map&lt;String, Object&gt; tablemap, String fileName, HttpServletResponse response) throws Exception {
+        File file = new File(path);
+        InputStream is = new FileInputStream(file);
+        CustomXWPFDocument doc = new CustomXWPFDocument(is);
+        this.replaceInTable(doc, params, tablemap);
+        OutputStream os = response.getOutputStream();
+        response.setHeader(&quot;Content-disposition&quot;, &quot;attachment; filename=&quot; + fileName);
+        doc.write(os);
+        this.close(os);
+        this.close(is);
+
+    }
+
+    /**
+     * 替换段落里面的变量
+     *
+     * @param para   要替换的段落
+     * @param params 参数
+     */
+    private void replaceInPara(XWPFParagraph para, Map&lt;String, Object&gt; params, CustomXWPFDocument doc) {
+        List&lt;XWPFRun&gt; runs;
+        Matcher matcher; 
+        if (this.matcher(para.getParagraphText()).find()) { 
+            runs = para.getRuns();
+            int start = -1;
+            int end = -1;
+            String str = &quot;&quot;;
+            for (int i = 0; i &lt; runs.size(); i++) {
+                XWPFRun run = runs.get(i);
+                String runText = run.toString();
+                if (&#39;$&#39; == runText.charAt(0) &amp;&amp; &#39;{&#39; == runText.charAt(1)) {
+                    start = i;
+                }
+                if ((start != -1)) {
+                    str += runText;
+                }
+                if (&#39;}&#39; == runText.charAt(runText.length() - 1)) {
+                    if (start != -1) {
+                        end = i;
+                        break;
+                    }
+                }
+            }
+
+            for (int i = start; i &lt;= end; i++) { 
+                para.removeRun(i); 
+                i--;
+                end--;
+            }
+            for (Map.Entry&lt;String, Object&gt; entry : params.entrySet()) {
+                String key = entry.getKey(); 
+                if (str.indexOf(key) != -1) {
+                    Object value = entry.getValue();
+                    if (value instanceof String) {
+                        str = str.replace(key, value.toString());
+                        if(str.indexOf(&quot;\n&quot;)&gt;-1) { //如果有 \n 需要换行
+                            String[] text = value.toString().split(&quot;\n&quot;);
+                            para.removeRun(0);
+                            XWPFRun run = para.insertNewRun(0);
+                            for(int f=0;f&lt;text.length;f++) {
+                                if(f==0){
+                                    //此处不缩进因为word模板已经缩进了。
+                                    run.setText(text[f].trim());
+                                }else{
+                                    run.addBreak();//换行
+                                    run.setText(text[f].trim());
+                                }
+                            }
+                        }else{
+                            para.createRun().setText(str, 0);
+                            break;
+                        }
+
+                    } else if (value instanceof Map) {//map 为图片类型
+                        str = str.replace(key, &quot;&quot;);
+                        Map pic = (Map) value;
+                        int width = Integer.parseInt(pic.get(&quot;width&quot;).toString());
+                        int height = Integer.parseInt(pic.get(&quot;height&quot;).toString());
+                        int picType = getPictureType(pic.get(&quot;type&quot;).toString());
+                        byte[] byteArray = (byte[]) pic.get(&quot;content&quot;);
+                        ByteArrayInputStream byteInputStream = new ByteArrayInputStream(byteArray);
+                        try {
+                            int ind = doc.addPicture(byteInputStream,picType);
+                            doc.createPicture(ind, width , height,para);
+                            para.createRun().setText(str, 0);
+                            break;
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+
+
+    /**
+     * 替换表格里面的变量
+     * @param doc    要替换的文档
+     * @param params 参数
+     *  @param tablemap 参数
+     */
+    private void replaceInTable(CustomXWPFDocument doc, Map&lt;String, Object&gt; params,Map&lt;String, Object&gt; tablemap) {
+        Iterator&lt;XWPFTable&gt; iterator = doc.getTablesIterator();
+        XWPFTable table;
+        List&lt;XWPFTableRow&gt; rows;
+        XWPFTableRow row ;
+        List&lt;XWPFTableCell&gt; cells;
+        List&lt;XWPFParagraph&gt; paras;
+        while (iterator.hasNext()) {
+            table = iterator.next();
+            if (table.getRows().size() &gt; 1) {
+                    rows = table.getRows();
+                    for (int i=0 ;i&lt;rows.size();i++) {
+                        row =rows.get(i);
+                        cells = row.getTableCells();
+                        for ( int j =0; j&lt; cells.size();j++) {
+                            XWPFTableCell cell =cells.get(j);
+                            paras = cell.getParagraphs();
+                            if (this.matcher(cell.getText()).find()) {
+                                //替换单元格
+                                for (XWPFParagraph para : paras) {
+                                    this.replaceInPara(para, params, doc);
+                                }
+                            }else if(this.matchers(cell.getText()).find()){
+                                //替换表格数据 #{tablemap中key值-world中当前表格已有行数}
+                                String str =cell.getText();
+                                for (XWPFParagraph para : paras) {
+                                    para.removeRun(0);para.removeRun(0);para.removeRun(0);
+                                }
+                                String tablemapkey =str.substring((str.indexOf(&quot;{&quot;)+1),str.indexOf(&quot;-&quot;));
+                                String tablerowsstr =str.substring((str.indexOf(&quot;-&quot;)+1),str.indexOf(&quot;}&quot;));
+                                int tablerows =Integer.parseInt(tablerowsstr);
+                                List &lt;List&gt;   tableList = (List) tablemap.get(tablemapkey);
+                                insertTable(table, tableList,tablerows,row,i);  //插入数据 
+                            }
+                        }
+                    }
+            }
+        }
+    }
+
+     /**
+     * 为表格插入数据，行数不够添加新行
+     *
+     * @param table     需要插入数据的表格
+     * @param tableList 插入数据集合
+     * @param tablerows 模板中已有数据条数
+     * @param row 当前行数据
+     *  @param i 当前所在行数
+     */
+    private static void insertTable(XWPFTable table, List&lt;List&gt; tableList,int tablerows,XWPFTableRow row ,int i) {
+        int rows = tableList.size() - tablerows;
+        if(rows &gt; 0){//如果行数不够。添加新的行
+            for(int j =0 ;j&lt;rows ;j++){
+                createNew(table,row,i);
+            }
+            rows = tableList.size() +i;
+        }else{
+            rows = tablerows +i;
+        }
+        //插入行数据
+        for(int j= 0; j&lt; tableList.size(); j++){
+            XWPFTableRow newRow = table.getRow(i+j);
+            List&lt;XWPFTableCell&gt; cells = newRow.getTableCells();
+
+            for (int x = 0; x &lt; tableList.get(j).size() ; x++) {
+                XWPFTableCell cell = cells.get(x+1);//因为单元格有一个合并列。所以现在统一向右移动一个单元格
+                String s = (String) tableList.get(j).get(x); 
+                cell.setText(s);
+            }
+        }
+    }
+    public static void createNew(XWPFTable table,XWPFTableRow sourceRow,int rowIndex){
+        //在表格指定位置新增一行
+        XWPFTableRow targetRow = table.insertNewTableRow(rowIndex);
+        //复制行属性
+        targetRow.getCtRow().setTrPr(sourceRow.getCtRow().getTrPr());
+        List&lt;XWPFTableCell&gt; cellList = sourceRow.getTableCells();
+        if (null == cellList) {
+            return;
+        }
+        //复制列及其属性和内容
+        XWPFTableCell targetCell = null;
+        for (XWPFTableCell sourceCell : cellList) {
+            targetCell = targetRow.addNewTableCell();
+            //列属性
+            targetCell.getCTTc().setTcPr(sourceCell.getCTTc().getTcPr());
+            //段落属性
+            if(sourceCell.getParagraphs()!=null&amp;&amp;sourceCell.getParagraphs().size()&gt;0){                     
+                targetCell.getParagraphs().get(0).getCTP().setPPr(sourceCell.getParagraphs().get(0).getCTP().getPPr());
+                if(sourceCell.getParagraphs().get(0).getRuns()!=null&amp;&amp;sourceCell.getParagraphs().get(0).getRuns().size()&gt;0){
+                    XWPFRun cellR = targetCell.getParagraphs().get(0).createRun();
+                    cellR.setText(sourceCell.getText());
+                    cellR.setBold(sourceCell.getParagraphs().get(0).getRuns().get(0).isBold());
+                }else{
+                    targetCell.setText(sourceCell.getText());
+                }
+            }else{
+                targetCell.setText(sourceCell.getText());
+            }
+        }
+    }
+
+    /**
+     * 正则匹配$
+     *
+     * @param str
+     * @return
+     */
+    private Matcher matcher(String str) {
+        Pattern pattern = Pattern.compile(&quot;\\$\\{(.+?)\\}&quot;, Pattern.CASE_INSENSITIVE);
+        Matcher matcher = pattern.matcher(str);
+        return matcher;
+    }
+    /**
+     * 正则匹配#
+     *
+     * @param str
+     * @return
+     */
+    private Matcher matchers(String str) {
+        Pattern pattern = Pattern.compile(&quot;\\#\\{(.+?)\\}&quot;, Pattern.CASE_INSENSITIVE);
+        Matcher matcher = pattern.matcher(str);
+        return matcher;
+    }
+
+    /**
+     * 根据图片类型，取得对应的图片类型代码
+     *
+     * @param picType
+     * @return int
+     */
+    private static int getPictureType(String picType) {
+        int res = CustomXWPFDocument.PICTURE_TYPE_PICT;
+        if (picType != null) {
+            if (picType.equalsIgnoreCase(&quot;png&quot;)) {
+                res = CustomXWPFDocument.PICTURE_TYPE_PNG;
+            } else if (picType.equalsIgnoreCase(&quot;dib&quot;)) {
+                res = CustomXWPFDocument.PICTURE_TYPE_DIB;
+            } else if (picType.equalsIgnoreCase(&quot;emf&quot;)) {
+                res = CustomXWPFDocument.PICTURE_TYPE_EMF;
+            } else if (picType.equalsIgnoreCase(&quot;jpg&quot;) || picType.equalsIgnoreCase(&quot;jpeg&quot;)) {
+                res = CustomXWPFDocument.PICTURE_TYPE_JPEG;
+            } else if (picType.equalsIgnoreCase(&quot;wmf&quot;)) {
+                res = CustomXWPFDocument.PICTURE_TYPE_WMF;
+            }
+        }
+        return res;
+    }
+
+    /**
+     * 将输入流中的数据写入字节数组
+     *
+     * @param in
+     * @return
+     */
+    public static byte[] inputStream2ByteArray(InputStream in, boolean isClose) {
+        byte[] byteArray = null;
+        try {
+            int total = in.available();
+            byteArray = new byte[total];
+            in.read(byteArray);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (isClose) {
+                try {
+                    in.close();
+                } catch (Exception e2) {
+                    e2.getStackTrace();
+                }
+            }
+        }
+        return byteArray;
+    }
+
+
+    /**
+     * 关闭输入流
+     *
+     * @param is
+     */
+    private void close(InputStream is) {
+        if (is != null) {
+            try {
+                is.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    /**
+     * 关闭输出流
+     *
+     * @param os
+     */
+    private void close(OutputStream os) {
+        if (os != null) {
+            try {
+                os.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+}
+</code></pre><p>3.工具类就写好了，现在我们可以来测试一把。由于我在项目中是使用的servlet 所以我把相关sql给去掉了。</p>
+<pre><code>package daying;
+
+import java.io.*;
+import javax.servlet.*;
+import javax.servlet.http.*;
+import java.sql.*;
+
+import java.util.Date;
+import java.text.DateFormat;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Iterator;
+import java.util.Map;
+
+import java.util.Calendar;
+import java.text.SimpleDateFormat;
+import iHR.iHR_env;
+import iHR.i_log;
+import iHR.Tools;
+import iHR.getdatetime;
+import iHR.iHR_chk_global;
+import iHR.sessionbean;
+
+import dbconn.getDB;
+import iHR.loadEnv;
+import iHR.get_default;
+import database.Chk_Privi_On_SetId;
+import database.iHR_Chk_Bound;
+
+import org.json.JSONObject;
+import org.json.JSONArray;
+
+import javax.naming.*;
+import javax.xml.parsers.*;
+import org.w3c.dom.*;
+import java.net.URLEncoder;
+import java.net.URL;
+import java.net.URLConnection;
+
+import org.dom4j.Document;
+import org.dom4j.DocumentHelper;
+import org.dom4j.Element;
+import org.dom4j.io.SAXReader;
+import org.dom4j.Attribute;
+/**
+ * @author chenhao
+ * 1400675645@qq.com
+ */
+public class pingtlnservlet extends HttpServlet {
+    public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+        try {
+            Connection conn = getDB.getConnection();
+
+            request.setCharacterEncoding(&quot;gb2312&quot;);
+            response.setContentType(&quot;text/html;charset=gb2312&quot;);
+            String A0100=(String)request.getParameter(&quot;A0100&quot;);
+            Statement stmt = conn.createStatement();
+            ResultSet rs = null;
+            String sql = &quot;&quot;;
+            WordUtils wordUtil=new WordUtils();
+
+            //字符替换
+            Map&lt;String, Object&gt; params = new HashMap&lt;String, Object&gt;();
+            //简历中表格
+            Map&lt;String,Object&gt; tablemap = new HashMap&lt;String, Object&gt;();
+
+            String username=&quot;&quot;;
+
+             sql =&quot;********************&quot;;
+            rs = stmt.executeQuery(sql);
+            while (rs.next()) {
+                username =Tools.str_chk_in(rs.getString(&quot;A0101&quot;));
+                params.put(&quot;${j01}&quot;, Tools.str_chk_in(rs.getString(&quot;A0101&quot;)));
+                params.put(&quot;${j02}&quot;, Tools.str_chk_in(rs.getString(&quot;B&quot;)));
+                params.put(&quot;${j03}&quot;, Tools.str_chk_in(rs.getString(&quot;C&quot;)));
+                params.put(&quot;${j04}&quot;, Tools.str_chk_in(rs.getString(&quot;D&quot;)));
+                params.put(&quot;${j05}&quot;, Tools.str_chk_in(rs.getString(&quot;X0214&quot;)));
+                params.put(&quot;${j06}&quot;, Tools.str_chk_in(rs.getString(&quot;A0111&quot;)));
+                params.put(&quot;${j12}&quot;, Tools.str_chk_in(rs.getString(&quot;X0413&quot;)));
+                params.put(&quot;${j13}&quot;, Tools.str_chk_in(rs.getString(&quot;X0726&quot;)));
+                params.put(&quot;${j14}&quot;, Tools.str_chk_in(rs.getString(&quot;X0727&quot;)));
+                params.put(&quot;${j16}&quot;, Tools.str_chk_in(rs.getString(&quot;X0271&quot;)));
+                params.put(&quot;${j17}&quot;, Tools.str_chk_in(rs.getString(&quot;A0141&quot;)));
+                params.put(&quot;${j18}&quot;, Tools.str_chk_in(rs.getString(&quot;A0177&quot;)));
+                params.put(&quot;${j19}&quot;, Tools.str_chk_in(rs.getString(&quot;X0728&quot;)));
+                params.put(&quot;${j21}&quot;, Tools.str_chk_in(rs.getString(&quot;X1106&quot;)));
+            }
+
+            sql =&quot;********************&quot;;
+        rs = stmt.executeQuery(sql);
+        while (rs.next()) {
+            params.put(&quot;${j08}&quot;, Tools.str_chk_in(rs.getString(&quot;B&quot;)));
+            params.put(&quot;${j09}&quot;, Tools.str_chk_in(rs.getString(&quot;C&quot;)));
+            String str = Tools.str_chk_in(rs.getString(&quot;A0435&quot;)) + &quot; - &quot; + Tools.str_chk_in(rs.getString(&quot;A0410&quot;));
+            params.put(&quot;${j11}&quot;,str );
+        }
+         sql =&quot;********************&quot;;
+        rs = stmt.executeQuery(sql);
+        while (rs.next()) {
+            params.put(&quot;${j10}&quot;, Tools.str_chk_in(rs.getString(&quot;B&quot;)));
+            params.put(&quot;${j15}&quot;, Tools.str_chk_in(rs.getString(&quot;A2210&quot;)));
+        }
+         sql =&quot;********************&quot;;
+        rs = stmt.executeQuery(sql);
+        while (rs.next()) {
+            String str = Tools.str_chk_in(rs.getString(&quot;B&quot;)) + &quot; \n &quot; + Tools.str_chk_in(rs.getString(&quot;A1015&quot;));
+            params.put(&quot;${j20}&quot;,str );
+        }
+        List table = new ArrayList();
+        sql =&quot;********************&quot;;
+        rs = stmt.executeQuery(sql);
+        while (rs.next()) {
+            List list = new ArrayList();
+            list.add(Tools.str_chk_in(rs.getString(&quot;A0415&quot;)));
+            list.add(Tools.str_chk_in(rs.getString(&quot;A0430&quot;)));
+            list.add(Tools.str_chk_in(rs.getString(&quot;A0435&quot;)));
+            list.add(Tools.str_chk_in(rs.getString(&quot;A0425&quot;)));
+            list.add(Tools.str_chk_in(rs.getString(&quot;B&quot;)));
+            table.add(list);
+        }
+        tablemap.put(&quot;table&quot;,table);
+
+
+        sql = &quot;select X0181 ,E2807  from a028 where  A0100=&#39;&quot;+A0100+&quot;&#39;&quot;;
+        rs = stmt.executeQuery(sql);
+        String j22 =&quot;&quot;;
+       while (rs.next()) {
+           j22= j22+ Tools.str_chk_in(rs.getString(&quot;X0181&quot;))  + Tools.str_chk_in(rs.getString(&quot;E2807&quot;)) +&quot;\n&quot;;
+
+       }
+       params.put(&quot;${j22}&quot;,j22);
+
+
+        List gzjl = new ArrayList();
+        sql =&quot;********************&quot;;
+        rs = stmt.executeQuery(sql);
+        while (rs.next()) {
+            List list = new ArrayList();
+            list.add(Tools.str_chk_in(rs.getString(&quot;A7905&quot;)));
+            list.add(Tools.str_chk_in(rs.getString(&quot;B&quot;)));
+            list.add(Tools.str_chk_in(rs.getString(&quot;A7915&quot;)));
+            list.add(Tools.str_chk_in(rs.getString(&quot;C&quot;)));
+            list.add(Tools.str_chk_in(rs.getString(&quot;D&quot;)));
+            list.add(Tools.str_chk_in(rs.getString(&quot;A7920&quot;)));
+            gzjl.add(list);
+        }
+
+        List shgx = new ArrayList();
+        sql =&quot;********************&quot;;
+        rs = stmt.executeQuery(sql);
+        while (rs.next()) {
+            List list = new ArrayList();
+            list.add(Tools.str_chk_in(rs.getString(&quot;A1905&quot;)));
+            list.add(Tools.str_chk_in(rs.getString(&quot;A1910&quot;)));
+            list.add(Tools.str_chk_in(rs.getString(&quot;A1915&quot;)));
+            list.add(Tools.str_chk_in(rs.getString(&quot;X0213&quot;)));
+            list.add(Tools.str_chk_in(rs.getString(&quot;X0211&quot;)));
+            shgx.add(list);
+        }
+        tablemap.put(&quot;shgx&quot;,gzjl);
+        tablemap.put(&quot;gzjl&quot;,shgx);
+
+
+        sql = &quot;********************&quot;;
+        rs = stmt.executeQuery(sql);
+        String j23 =&quot;&quot;;
+       while (rs.next()) {
+        j23= j23+ Tools.str_chk_in(rs.getString(&quot;X0520&quot;))  +&quot;,&quot;+ Tools.str_chk_in(rs.getString(&quot;X0521&quot;))+&quot;,&quot;+  Tools.str_chk_in(rs.getString(&quot;X0522&quot;))+&quot;,&quot;+  Tools.str_chk_in(rs.getString(&quot;X0523&quot;))+&quot;,&quot;+  Tools.str_chk_in(rs.getString(&quot;X0607&quot;))+&quot;,&quot;+  Tools.str_chk_in(rs.getString(&quot;X0524&quot;))
+        +&quot;,&quot;+  Tools.str_chk_in(rs.getString(&quot;X0525&quot;))+&quot;,&quot;+  Tools.str_chk_in(rs.getString(&quot;X0526&quot;))+&quot;,&quot;+  Tools.str_chk_in(rs.getString(&quot;X0527&quot;)) +&quot;。&quot;+ &quot;\n&quot;;
+
+       }
+       params.put(&quot;${j23}&quot;,j23);
+
+
+
+
+        //简历头像
+        sql=&quot;********************&quot;;
+        rs=stmt.executeQuery(sql);
+        String photo=&quot;&quot;;
+        if(rs.next()){
+            photo=Tools.str_chk_in(rs.getString(&quot;FILENAME&quot;));
+        }
+        String photopath=request.getRealPath(&quot;/&quot;)+&quot;multi_media\\&quot;+photo;
+            try{
+                Map&lt;String,Object&gt; header = new HashMap&lt;String, Object&gt;();
+                header.put(&quot;width&quot;, 100);
+                header.put(&quot;height&quot;, 150);
+                header.put(&quot;type&quot;, &quot;jpg&quot;);
+                header.put(&quot;content&quot;, WordUtils.inputStream2ByteArray(new FileInputStream(photopath), true));
+                params.put(&quot;${j07}&quot;,header);
+            }catch(Exception e){
+                e.printStackTrace();
+            }
+            try{
+                username= username +&quot;_个人基本情况登记表.docx&quot;;
+                String path=request.getRealPath(&quot;/&quot;)+&quot;download\\个人基本情况登记表.docx&quot;;  //模板文件位置
+                String fileName= new String(username.getBytes(&quot;GB2312&quot;),&quot;iso-8859-1&quot;);    //生成word文件的文件名
+                wordUtil.getWord(path,params,tablemap,fileName,response);
+            }catch(Exception e){ 
+                e.printStackTrace();
+            }
+
+            rs.close();
+            stmt.close();
+            conn.close();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println(&quot;error&quot; + e);
+        }
+    }
+
+    public void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws javax.servlet.ServletException, java.io.IOException {
+        doGet(request, response);
+    }
+}
+</code></pre><h2 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h2><p>由于时间紧任务重。所以目前就完善了这么一个功能。个人的想法是，为了提高效率 后续会把这个方法再次封装一下，然后提供一次下载多个文件打包成zip的格式。</p>
+
+            </div>
+            <hr>
+
+            
+            <style>
+    #reward {
+        margin: 40px 0;
+        text-align: center;
+    }
+
+    #reward .reward-link {
+        font-size: 1.88rem;
+    }
+
+    #reward .btn-floating:hover {
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2), 0 5px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    #rewardModal {
+        width: 320px;
+        height: 350px;
+    }
+
+    #rewardModal .reward-title {
+        margin: 15px auto;
+        padding-bottom: 5px;
+    }
+
+    #rewardModal .modal-content {
+        padding: 10px;
+    }
+
+    #rewardModal .close {
+        position: absolute;
+        right: 15px;
+        top: 15px;
+        color: rgba(0, 0, 0, 0.5);
+        font-size: 1.3rem;
+        line-height: 20px;
+        cursor: pointer;
+    }
+
+    #rewardModal .close:hover {
+        color: #ef5350;
+        transform: scale(1.3);
+        -moz-transform:scale(1.3);
+        -webkit-transform:scale(1.3);
+        -o-transform:scale(1.3);
+    }
+
+    #rewardModal .reward-tabs {
+        margin: 0 auto;
+        width: 210px;
+    }
+
+    .reward-tabs .tabs {
+        height: 38px;
+        margin: 10px auto;
+        padding-left: 0;
+    }
+
+    .reward-content ul {
+        padding-left: 0 !important;
+    }
+
+    .reward-tabs .tabs .tab {
+        height: 38px;
+        line-height: 38px;
+    }
+
+    .reward-tabs .tab a {
+        color: #fff;
+        background-color: #ccc;
+    }
+
+    .reward-tabs .tab a:hover {
+        background-color: #ccc;
+        color: #fff;
+    }
+
+    .reward-tabs .wechat-tab .active {
+        color: #fff !important;
+        background-color: #22AB38 !important;
+    }
+
+    .reward-tabs .alipay-tab .active {
+        color: #fff !important;
+        background-color: #019FE8 !important;
+    }
+
+    .reward-tabs .reward-img {
+        width: 210px;
+        height: 210px;
+    }
+</style>
+
+<div id="reward">
+    <a href="#rewardModal" class="reward-link modal-trigger btn-floating btn-large waves-effect waves-light red">赏</a>
+
+    <!-- Modal Structure -->
+    <div id="rewardModal" class="modal">
+        <div class="modal-content">
+            <a class="close modal-close"><i class="fa fa-close"></i></a>
+            <h4 class="reward-title">你的赏识是我前进的动力</h4>
+            <div class="reward-content">
+                <div class="reward-tabs">
+                    <ul class="tabs row">
+                        <li class="tab col s6 alipay-tab waves-effect waves-light"><a href="#alipay">支付宝</a></li>
+                        <li class="tab col s6 wechat-tab waves-effect waves-light"><a href="#wechat">微 信</a></li>
+                    </ul>
+                    <div id="alipay">
+                        <img src="/medias/reward/alipay.jpg" class="reward-img" alt="支付宝打赏二维码">
+                    </div>
+                    <div id="wechat">
+                        <img src="/medias/reward/wechat.png" class="reward-img" alt="微信打赏二维码">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(function () {
+        $('.tabs').tabs();
+    });
+</script>
+            
+
+            <link rel="stylesheet" type="text/css" href="/libs/share/css/share.min.css">
+
+<div id="article-share">
+    
+    <div class="social-share" data-disabled="qzone" data-wechat-qrcode-helper="<p>微信里点“发现”->“扫一扫”二维码便可查看分享。</p>"></div>
+    
+</div>
+
+<script src="/libs/share/js/social-share.min.js"></script>
+
+            <div class="reprint">
+                <p>
+                    <span class="reprint-tip">
+                        <i class="fa fa-exclamation-circle"></i>&nbsp;&nbsp;转载请注明:
+                    </span>
+                    <a href="http://yoursite.com" class="b-link-green">陈豪 - JAVA软件开发工程师</a>
+                    <i class="fa fa-angle-right fa-lg fa-fw text-color"></i>
+                    <a href="/2018/09/03/java-downloadWorld/" class="b-link-green">java下载world文件</a>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+<article id="prenext-posts" class="prev-next articles">
+    <div class="row article-row">
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge left-badge text-color">
+                <i class="fa fa-dot-circle-o"></i>&nbsp;本篇
+            </div>
+            <div class="card">
+                <a href="/2018/09/03/java-downloadWorld/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/19.jpg" class="responsive-img" alt="java下载world文件">
+                        
+                        <span class="card-title">java下载world文件</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary">写在前边&nbsp;&nbsp;前几天接到一个新需求，做一个导出world的功能。听到需求，我就立马想到了poi，应为之前使用过poi 操作导出excel，顺便也了解了一下导出world。相关jar包：poi-ooxml-3.7.jar ，</div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="fa fa-clock-o fa-fw icon-date"></i>2018-09-03
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fa fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/算法/" class="post-category" target="_blank">
+                                    算法
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/java-IO流/" target="_blank">
+                        <span class="chip bg-color">java IO流</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge right-badge text-color">
+                下一篇&nbsp;<i class="fa fa-chevron-right"></i>
+            </div>
+            <div class="card">
+                <a href="/2018/08/07/mysql-optimization-2/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/3.jpg" class="responsive-img" alt="MYSQL常用优化(二)">
+                        
+                        <span class="card-title">MYSQL常用优化(二)</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary">写在前边原因：性能低、执行时间太长、等待时间太长、SQL语句欠佳（连接查询）、索引失效、服务器参数设置不合理（缓冲、线程数）
+
+sql 编写过程 select dinstinct  ..from  ..join ..on ..where .</div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="fa fa-clock-o fa-fw icon-date"></i>2018-08-07
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fa fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/数据库/" class="post-category" target="_blank">
+                                    数据库
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/mysql数据库/" target="_blank">
+                        <span class="chip bg-color">mysql数据库</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+    </div>
+</article>
+</div>
+
+
+<script>
+    $('#articleContent').on('copy', function (e) {
+        // IE8 or earlier browser is 'undefined'
+        if (typeof window.getSelection === 'undefined') return;
+
+        var selection = window.getSelection();
+        // if the selection is short let's not annoy our users.
+        if (('' + selection).length < Number.parseInt('50')) {
+            return;
+        }
+
+        // create a div outside of the visible area and fill it with the selected text.
+        var bodyElement = document.getElementsByTagName('body')[0];
+        var newdiv = document.createElement('div');
+        newdiv.style.position = 'absolute';
+        newdiv.style.left = '-99999px';
+        bodyElement.appendChild(newdiv);
+        newdiv.appendChild(selection.getRangeAt(0).cloneContents());
+
+        // we need a <pre> tag workaround.
+        // otherwise the text inside "pre" loses all the line breaks!
+        if (selection.getRangeAt(0).commonAncestorContainer.nodeName === 'PRE') {
+            newdiv.innerHTML = "<pre>" + newdiv.innerHTML + "</pre>";
+        }
+
+        var url = document.location.href;
+        newdiv.innerHTML += '<br />'
+            + '来源: 陈豪 - JAVA软件开发工程师<br />'
+            + '作者: Chen Hao<br />'
+            + '链接: <a href="' + url + '">' + url + '</a><br />'
+            + '本文章著作权归陈豪所有，任何形式的转载都请注明出处。';
+
+        selection.selectAllChildren(newdiv);
+        window.setTimeout(function () {bodyElement.removeChild(newdiv);}, 200);
+    });
+</script>
+
+    </div>
+    <div class="col l3 hide-on-med-and-down">
+        <div class="toc-widget">
+            <div class="toc-title"><i class="fa fa-list-alt"></i>&nbsp;&nbsp;目录</div>
+            <div id="toc-content"></div>
+        </div>
+    </div>
+</div>
+
+<script src="/libs/tocbot/tocbot.min.js"></script>
+<script>
+    $(function () {
+        tocbot.init({
+            tocSelector: '#toc-content',
+            contentSelector: '#articleContent',
+            headingsOffset: -($(window).height() * 0.4 - 45),
+            // headingsOffset: -205,
+            headingSelector: 'h2, h3, h4'
+        });
+
+        // modify the toc link href to support Chinese.
+        let i = 0;
+        let tocHeading = 'toc-heading-';
+        $('#toc-content a').each(function () {
+            $(this).attr('href', '#' + tocHeading + (++i));
+        });
+
+        // modify the heading title id to support Chinese.
+        i = 0;
+        $('#articleContent').children('h2, h3, h4').each(function () {
+            $(this).attr('id', tocHeading + (++i));
+        });
+
+        // Set scroll toc fixed.
+        let tocHeight = parseInt($(window).height() * 0.4 - 64);
+        let $tocWidget = $('.toc-widget');
+        $(window).scroll(function () {
+            let scroll = $(window).scrollTop();
+            /* add post toc fixed. */
+            if (scroll > tocHeight) {
+                $tocWidget.addClass('toc-fixed');
+            } else {
+                $tocWidget.removeClass('toc-fixed');
+            }
+        });
+    });
+</script>
+    
+
+</main>
+
+
+<footer class="page-footer bg-color">
+    <div class="container row center-align">
+        <div class="col s12 m8 l8 copy-right">
+            本站由&copy;<a href="https://chenhaocto.github.io/" target="_blank">ChenHao</a>搭建
+			<br>
+			GitHub提供计算服务
+            
+            
+			
+        </div>
+        <div class="col s12 m4 l4 social-link ">
+
+
+    <a href="mailto:1400675645@qq.com" class="tooltipped" target="_blank" data-tooltip="邮件联系我" data-position="top" data-delay="50">
+        <i class="fa fa-envelope-open"></i>
+    </a>
+
+
+
+    <a href="tencent://AddContact/?fromId=50&fromSubId=1&subcmd=all&uin=1400675645" class="tooltipped" data-tooltip="QQ联系我: 1400675645" data-position="top" data-delay="50">
+        <i class="fa fa-qq"></i>
+    </a>
+
+
+</div>
+    </div>
+</footer>
+
+<div class="progress-bar"></div>
+
+
+<!-- 搜索遮罩框 -->
+<div id="searchModal" class="modal">
+    <div class="modal-content">
+        <div class="search-header">
+            <span class="title"><i class="fa fa-search"></i>&nbsp;&nbsp;搜索</span>
+            <input type="search" id="searchInput" name="s" placeholder="请输入搜索的关键字" class="search-input">
+        </div>
+        <div id="searchResult"></div>
+    </div>
+</div>
+
+<script src="/js/search.js"></script>
+<script type="text/javascript">
+$(function () {
+    searchFunc("/" + "search.xml", 'searchInput', 'searchResult');
+});
+</script>
+<!-- 回到顶部按钮 -->
+<div id="backTop" class="top-scroll">
+    <a class="btn-floating btn-large waves-effect waves-light" href="#!">
+        <i class="fa fa-angle-up"></i>
+    </a>
+</div>
+
+
+<script src="/libs/materialize/materialize.min.js"></script>
+<script src="/libs/masonry/masonry.pkgd.min.js"></script>
+<script src="/libs/aos/aos.js"></script>
+<script src="/libs/scrollprogress/scrollProgress.min.js"></script>
+<script src="/libs/lightGallery/js/lightgallery-all.min.js"></script>
+<script src="/js/matery.js"></script>
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+
+
+
+    <script src="/libs/others/clicklove.js"></script>
+
+
+
+</body>
+</html>
