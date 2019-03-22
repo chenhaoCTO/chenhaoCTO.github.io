@@ -4,12 +4,9 @@
 
 <head><meta name="generator" content="Hexo 3.8.0">
     <meta charset="utf-8">
-    <meta name="keywords" content="Java和javascript日期详解, 陈豪-java软件开发工程师">
-    <meta name="description" content="java，js日期转换：
-日期表示类型
-获取long类型的日期格式long time = System.currentTimeMillis();
-System.out.printf(time+&amp;quot;&amp;quot;);
-Date date">
+    <meta name="keywords" content="java 乐观锁和悲观锁的基本原理和实现方式, 陈豪-java软件开发工程师">
+    <meta name="description" content="各自的适用场景悲观锁: 比较适合写入操作比较频繁的场景，如果出现大量的读取操作，每次读取的时候都会进行加锁，这样会增加大量的锁的开销，降低了系统的吞吐量。
+乐观锁: 比较适合读取操作比较频繁的场景，如果出现大量的写入操作，数据发生冲突的可能">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -17,7 +14,7 @@ Date date">
     <meta name="format-detection" content="telephone=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>Java和javascript日期详解 | 陈豪</title>
+    <title>java 乐观锁和悲观锁的基本原理和实现方式 | 陈豪</title>
     <link rel="icon" type="image/jpeg" href="/images/chenhao1.jpg">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/font-awesome.min.css">
@@ -165,13 +162,13 @@ Date date">
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/18.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/13.jpg')">
     <div class="container">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
                     <div class="description center-align post-title">
-                        Java和javascript日期详解
+                        java 乐观锁和悲观锁的基本原理和实现方式
                     </div>
                 </div>
             </div>
@@ -263,8 +260,8 @@ Date date">
                     
                     <div class="article-tag">
                         
-                            <a href="/tags/日期转换/" target="_blank">
-                                <span class="chip bg-color">日期转换</span>
+                            <a href="/tags/乐观锁和悲观锁/" target="_blank">
+                                <span class="chip bg-color">乐观锁和悲观锁</span>
                             </a>
                         
                     </div>
@@ -275,8 +272,8 @@ Date date">
                     <div class="post-cate">
                         <i class="fa fa-bookmark fa-fw icon-category"></i>
                         
-                            <a href="/categories/算法/" class="post-category" target="_blank">
-                                算法
+                            <a href="/categories/数据库/" class="post-category" target="_blank">
+                                数据库
                             </a>
                         
                     </div>
@@ -287,7 +284,7 @@ Date date">
             <div class="post-info">
                 <div class="post-date info-break-policy">
                     <i class="fa fa-calendar-minus-o fa-fw"></i>发布日期:&nbsp;&nbsp;
-                    2018-04-04
+                    2018-10-05
                 </div>
 
                 
@@ -298,77 +295,18 @@ Date date">
         <hr class="clearfix">
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <p>java，js日期转换：</p>
-<h2 id="日期表示类型"><a href="#日期表示类型" class="headerlink" title="日期表示类型"></a>日期表示类型</h2><ol>
-<li>获取long类型的日期格式<pre><code>long time = System.currentTimeMillis();
-System.out.printf(time+&quot;&quot;);
-Date date =new Date();
-System.out.println(date.getTime());
-</code></pre></li>
-<li><p>获取制定格式的日期</p>
-<pre><code>  SimpleDateFormat sdf = new SimpleDateFormat(&quot;yyyy-MM-dd hh:mm:ss&quot;);
-  Date date =new Date();
-  System.out.println(sdf.format(date) );
-</code></pre></li>
-<li><p>把制定格式的日期转为date或者毫秒值</p>
-<pre><code>  SimpleDateFormat sdf = new SimpleDateFormat(&quot;yyyy-MM-dd hh:mm:ss&quot;);
-    Date date = sdf.parse(&quot;2016-05-22 10:15:21&quot;);
-    long mills = date.getTime();
-</code></pre><h2 id="日期计算"><a href="#日期计算" class="headerlink" title="日期计算"></a>日期计算</h2></li>
-<li><p>最方便的方式是将时间转为毫秒值进行计算</p>
-<pre><code>Date from =new Date();
-Thread.sleep(200);//线程休眠2ms
-Date to =new Date();
-System.out.println(to.getTime()-from.getTime());
-
-</code></pre></li>
-</ol>
-<h2 id="高精度时间"><a href="#高精度时间" class="headerlink" title="高精度时间"></a>高精度时间</h2><ol>
-<li>最方便的方式是将时间转为毫秒值进行计算<pre><code>long time1 =System.nanoTime();
-System.out.printf(time1+&quot;&quot;);
-</code></pre></li>
-</ol>
-<h2 id="javascript日期"><a href="#javascript日期" class="headerlink" title="javascript日期"></a>javascript日期</h2><ol>
-<li>获取时间的毫秒值，获取月份，时间<pre><code>var myDate = new Date();
-myDate.getYear(); //获取当前年份(2位)
-myDate.getFullYear(); //获取完整的年份(4位,1970-????)
-myDate.getMonth(); //获取当前月份(0-11,0代表1月)
-myDate.getDate(); //获取当前日(1-31)
-myDate.getDay(); //获取当前星期X(0-6,0代表星期天)
-myDate.getTime(); //获取当前时间(从1970.1.1开始的毫秒数)
-myDate.getHours(); //获取当前小时数(0-23)
-myDate.getMinutes(); //获取当前分钟数(0-59)
-myDate.getSeconds(); //获取当前秒数(0-59)
-myDate.getMilliseconds(); //获取当前毫秒数(0-999)
-myDate.toLocaleDateString(); //获取当前日期
-var mytime=myDate.toLocaleTimeString(); //获取当前时间
-myDate.toLocaleString( ); //获取日期与时间
-</code></pre></li>
-<li><p>时间戳获取   –&gt;注意，java，php等生成的时间戳是秒，不是毫秒，所以需要签名时间戳的时候，需要转为秒时间戳</p>
-<pre><code> var time = new Date();
-var timestamp = parseInt(time.getTime()/1000);
-
-</code></pre></li>
-<li><p>格式化时间</p>
-<pre><code> //获取当前时间，格式YYYY-MM-DD
-function getNowFormatDate() {
-    var date = new Date();
-    var seperator1 = &quot;-&quot;;
-    var year = date.getFullYear();
-    var month = date.getMonth() + 1;
-    var strDate = date.getDate();
-    if (month &gt;= 1 &amp;&amp; month &lt;= 9) {
-        month = &quot;0&quot; + month;
-    }
-    if (strDate &gt;= 0 &amp;&amp; strDate &lt;= 9) {
-        strDate = &quot;0&quot; + strDate;
-    }
-    var currentdate = year + seperator1 + month + seperator1 + strDate;
-    return currentdate;
+                <h2 id="各自的适用场景"><a href="#各自的适用场景" class="headerlink" title="各自的适用场景"></a>各自的适用场景</h2><p>悲观锁: 比较适合写入操作比较频繁的场景，如果出现大量的读取操作，每次读取的时候都会进行加锁，这样会增加大量的锁的开销，降低了系统的吞吐量。</p>
+<p>乐观锁: 比较适合读取操作比较频繁的场景，如果出现大量的写入操作，数据发生冲突的可能性就会增大，为了保证数据的一致性，应用层需要不断的重新获取数据，这样会增加大量的查询操作，降低了系统的吞吐量。</p>
+<h2 id="一、乐观锁"><a href="#一、乐观锁" class="headerlink" title="一、乐观锁"></a>一、乐观锁</h2><p>每次获取数据的时候，都不会担心数据被修改，所以每次获取数据的时候都不会进行加锁，由于数据没有进行加锁，期间该数据可以被其他线程进行读写操作。</p>
+<h3 id="乐观锁原理"><a href="#乐观锁原理" class="headerlink" title="乐观锁原理"></a>乐观锁原理</h3><p>乐观锁，大多是基于数据版本   Version 记录机制实现。何谓数据版本？即为数据增加一个版本标识，在基于数据库表的版本解决方案中，一般是通过为数据库表增加一个 “version” 字段来 实现。 读取出数据时，将此版本号一同读出，之后更新时，对此版本号加一。此时，将提 交数据的版本数据与数据库表对应记录的当前版本信息进行比对，如果提交的数据 版本号大于数据库表当前版本号，则予以更新，否则认为是过期数据。</p>
+<h3 id="乐观锁的实现"><a href="#乐观锁的实现" class="headerlink" title="乐观锁的实现"></a>乐观锁的实现</h3><pre><code>public interface ArticleRepository extends CrudRepository&lt;Article, Long&gt; {
+@Modifying
+@Query(value = &quot;update article set comment_count = :commentCount, version = version + 1 where id = :id and version = :version&quot;, nativeQuery = true)
+int updateArticleWithVersion(Long id, Long commentCount, Long version);
 }
-</code></pre></li>
-</ol>
 
+可以看到update的where有一个判断version的条件，并且会set version = version + 1。这就保证了只有当数据库里的版本号和要更新的实体类的版本号相同的时候才会更新数据。
+</code></pre>
             </div>
             <hr>
 
@@ -515,7 +453,7 @@ function getNowFormatDate() {
                     </span>
                     <a href="http://yoursite.com" class="b-link-green">陈豪</a>
                     <i class="fa fa-angle-right fa-lg fa-fw text-color"></i>
-                    <a href="/2018/04/04/java-date/" class="b-link-green">Java和javascript日期详解</a>
+                    <a href="/2018/10/05/mysql-loking/" class="b-link-green">java 乐观锁和悲观锁的基本原理和实现方式</a>
                 </p>
             </div>
         </div>
@@ -538,23 +476,71 @@ function getNowFormatDate() {
         
         <div class="article col s12 m6" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="fa fa-chevron-left"></i>&nbsp;上一篇</div>
+                <i class="fa fa-dot-circle-o"></i>&nbsp;本篇
+            </div>
             <div class="card">
-                <a href="/2018/05/12/java-reptile-1/">
+                <a href="/2018/10/05/mysql-loking/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/10.jpg" class="responsive-img" alt="java爬虫从入门到熟练(一)爬虫理论基础">
+                        <img src="/medias/featureimages/13.jpg" class="responsive-img" alt="java 乐观锁和悲观锁的基本原理和实现方式">
                         
-                        <span class="card-title">java爬虫从入门到熟练(一)爬虫理论基础</span>
+                        <span class="card-title">java 乐观锁和悲观锁的基本原理和实现方式</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
-                    <div class="summary">初识爬虫&nbsp;&nbsp;随着互联网的迅速发展，网络资源越来越丰富，信息需求者如何从网络中抽取信息变得至关重要。目前，有效的获取网络数据资源的重要方式，便是网络爬虫技术。简单的理解，比如您对百度贴吧的一个帖子内容特别感兴趣，而帖子的回</div>
+                    <div class="summary">各自的适用场景悲观锁: 比较适合写入操作比较频繁的场景，如果出现大量的读取操作，每次读取的时候都会进行加锁，这样会增加大量的锁的开销，降低了系统的吞吐量。
+乐观锁: 比较适合读取操作比较频繁的场景，如果出现大量的写入操作，数据发生冲突的可能</div>
                     <div class="publish-info">
-                        <span class="publish-date">
-                            <i class="fa fa-clock-o fa-fw icon-date"></i>2018-05-12
+                            <span class="publish-date">
+                                <i class="fa fa-clock-o fa-fw icon-date"></i>2018-10-05
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fa fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/数据库/" class="post-category" target="_blank">
+                                    数据库
+                                </a>
+                            
+                            
                         </span>
+                    </div>
+                </div>
+
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/乐观锁和悲观锁/" target="_blank">
+                        <span class="chip bg-color">乐观锁和悲观锁</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge right-badge text-color">
+                下一篇&nbsp;<i class="fa fa-chevron-right"></i>
+            </div>
+            <div class="card">
+                <a href="/2018/09/03/java-downloadWorld/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/19.jpg" class="responsive-img" alt="java下载world文件">
+                        
+                        <span class="card-title">java下载world文件</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary">写在前边&nbsp;&nbsp;前几天接到一个新需求，做一个导出world的功能。听到需求，我就立马想到了poi，应为之前使用过poi 操作导出excel，顺便也了解了一下导出world。相关jar包：poi-ooxml-3.7.jar ，</div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="fa fa-clock-o fa-fw icon-date"></i>2018-09-03
+                            </span>
                         <span class="publish-author">
                             
                             <i class="fa fa-bookmark fa-fw icon-category"></i>
@@ -570,58 +556,8 @@ function getNowFormatDate() {
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/java爬虫/" target="_blank">
-                        <span class="chip bg-color">java爬虫</span>
-                    </a>
-                    
-                </div>
-                
-            </div>
-        </div>
-        
-        
-        <div class="article col s12 m6" data-aos="fade-up">
-            <div class="article-badge right-badge text-color">
-                下一篇&nbsp;<i class="fa fa-chevron-right"></i>
-            </div>
-            <div class="card">
-                <a href="/2018/03/05/mysql-1/">
-                    <div class="card-image">
-                        
-                        
-                        <img src="/medias/featureimages/8.jpg" class="responsive-img" alt="mysql基础">
-                        
-                        <span class="card-title">mysql基础</span>
-                    </div>
-                </a>
-                <div class="card-content article-content">
-                    <div class="summary">mysql的特点1.  关系型数据库，免费使用。
-2.  插入式存储引擎。
-3.  性能高。
-mysql的版本 5.0-5.1:早期产品的延续，升级维护
- 5.4 - 5.x :  MySQL整合了三方公司的新存储引擎 （推荐5.5）
-安装</div>
-                    <div class="publish-info">
-                            <span class="publish-date">
-                                <i class="fa fa-clock-o fa-fw icon-date"></i>2018-03-05
-                            </span>
-                        <span class="publish-author">
-                            
-                            <i class="fa fa-bookmark fa-fw icon-category"></i>
-                            
-                            <a href="/categories/数据库/" class="post-category" target="_blank">
-                                    数据库
-                                </a>
-                            
-                            
-                        </span>
-                    </div>
-                </div>
-                
-                <div class="card-action article-tags">
-                    
-                    <a href="/tags/mysql数据库/" target="_blank">
-                        <span class="chip bg-color">mysql数据库</span>
+                    <a href="/tags/java-IO流/" target="_blank">
+                        <span class="chip bg-color">java IO流</span>
                     </a>
                     
                 </div>

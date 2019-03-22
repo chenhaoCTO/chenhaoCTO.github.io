@@ -4,6 +4,31 @@
   
     
     <entry>
+      <title>java 乐观锁和悲观锁的基本原理和实现方式</title>
+      <link href="/2018/10/05/mysql-loking/"/>
+      <url>/2018/10/05/mysql-loking/</url>
+      
+        <content type="html"><![CDATA[<h2 id="各自的适用场景"><a href="#各自的适用场景" class="headerlink" title="各自的适用场景"></a>各自的适用场景</h2><p>悲观锁: 比较适合写入操作比较频繁的场景，如果出现大量的读取操作，每次读取的时候都会进行加锁，这样会增加大量的锁的开销，降低了系统的吞吐量。</p><p>乐观锁: 比较适合读取操作比较频繁的场景，如果出现大量的写入操作，数据发生冲突的可能性就会增大，为了保证数据的一致性，应用层需要不断的重新获取数据，这样会增加大量的查询操作，降低了系统的吞吐量。</p><h2 id="一、乐观锁"><a href="#一、乐观锁" class="headerlink" title="一、乐观锁"></a>一、乐观锁</h2><p>每次获取数据的时候，都不会担心数据被修改，所以每次获取数据的时候都不会进行加锁，由于数据没有进行加锁，期间该数据可以被其他线程进行读写操作。</p><h3 id="乐观锁原理"><a href="#乐观锁原理" class="headerlink" title="乐观锁原理"></a>乐观锁原理</h3><p>乐观锁，大多是基于数据版本   Version 记录机制实现。何谓数据版本？即为数据增加一个版本标识，在基于数据库表的版本解决方案中，一般是通过为数据库表增加一个 “version” 字段来 实现。 读取出数据时，将此版本号一同读出，之后更新时，对此版本号加一。此时，将提 交数据的版本数据与数据库表对应记录的当前版本信息进行比对，如果提交的数据 版本号大于数据库表当前版本号，则予以更新，否则认为是过期数据。</p><h3 id="乐观锁的实现"><a href="#乐观锁的实现" class="headerlink" title="乐观锁的实现"></a>乐观锁的实现</h3><pre><code>public interface ArticleRepository extends CrudRepository&lt;Article, Long&gt; {@Modifying@Query(value = &quot;update article set comment_count = :commentCount, version = version + 1 where id = :id and version = :version&quot;, nativeQuery = true)int updateArticleWithVersion(Long id, Long commentCount, Long version);}可以看到update的where有一个判断version的条件，并且会set version = version + 1。这就保证了只有当数据库里的版本号和要更新的实体类的版本号相同的时候才会更新数据。</code></pre>]]></content>
+      
+      
+      <categories>
+          
+          <category> 数据库 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 乐观锁和悲观锁 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>java下载world文件</title>
       <link href="/2018/09/03/java-downloadWorld/"/>
       <url>/2018/09/03/java-downloadWorld/</url>
